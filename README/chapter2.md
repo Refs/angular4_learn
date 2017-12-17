@@ -98,6 +98,54 @@ ng new projectName
 
 * tsconfig.json typescript编译器的一个配置，按angular的项目标准都已经配好了，不用去改它；
 
+#### 第三层 app目录
+
+> angular的程序 只要要包含一个模块与一个组件，而angular-cli已经帮我们生成出来了
+
+* app.module.ts angular程序的模块文件
+
+* app.component.ts angular程序的组件文件
+
+
+
+> 与组件相关的基本概念：
+
+* @component() 组件元数据装饰器，简称装饰器, 用来告知angualr框架，如何去处理一个typescript类，装饰器包含有多个属性，这这些属性的值，被称之为元数据，angular会根据这些元数据的值，来渲染组件，并去执行组件的逻辑
+
+* Template 我们通过组件自带的模板来定义组件的外观，模板以html 的形式存在，告知angualr 如何来渲染组件，一般来说模板看起来很像html,但是在模板当中我们可以去使用angular的数据绑定语法，来呈现控制器当中的数据
+
+* Controller 控制器就是一个普通的typescript类，其会被component这个装饰器来装饰，controller会包含组件所有的属性书方法，绝大多数的页面逻辑都是写在控制器里面的，控制器通过数据绑定与模板来进行通讯，模板展现控制器的数据，控制器处理模板上面发生的事件，
+
+> 上面介绍的三个概念，称之为组件的必备元素，所有的组件，都必须要包含上述三个元素；
+
+```js
+// app.compoment.ts是整个应用的基础，可以将其理解成为一个地基，我们将在其上面，建立起我们的整个应用;
+
+//1. 从angular的核心模块里面 引入了一个叫做Component的装饰器；
+import { Component } from '@angular/core';
+
+//2. 用装饰器定义了一个组件  @Component：组件元数据装饰器
+// 2.1 组件元数据装饰器，所有的组件都必须使用@component装饰器来注解，@就是装饰器的标志； 
+@Component({
+  //组件相关的属性一，slelector如同jquery是一个选择器； selector: 'app-root' 意思是：此组件可以利用html标签<app-root>来调用，
+  selector: 'app-root',
+  //  templateUrl 指定了一个html文件，作为组件的模板，最终在html文件中，在<app-root>这个tag的位置，展示指定template html里面的内容，若没有模板，一个组件就不能称之为组件，模板是一个组件的必备属性（如同boostrap中的组件，都依赖于固定的模板），模板定义了用户最终看到的页面布局与内容
+  templateUrl: './app.component.html',
+  // styleUrls 指向了一组css文件，可以在css中编写这个组件 模板中要用到的样式
+  styleUrls: ['./app.component.css']
+})
+//3、 AppComponent就是一个标准的typescript标准类 ，这个类里面一点框架的痕迹都没有，就是没有出现一点angualr的字样，实际上其就是一个普通的typescript类，我们需要告诉angular这个AppConponent是一个组件，而我们若想实现这一点，需要将一些元数据 附加到这个类上，而在typescript中我们利用@component装饰器将元数据附加到这个类上，装饰器中的属性就叫做元数据，；
+
+
+export class AppComponent {
+// 定义了一个组件的控制器(一个被@component装饰器装饰的typescript类，其包含于模板相关的所有属性与方法，与页面相关的大部分逻辑都是编写在这一个控制器当中的)；
+// 这个控制器只有一个属性：title， 这个属性的值，最终会展示到模板html中的页面里 <h1>{{title}}</h1> ；
+  title = 'app';
+}
+
+// 结论： 通过装饰器@component将元数据附加到一个标准的typescript类AppComponent上面，angular就知道了，我们要将这个typescript类变成angualr框架中的一个组件；@Component：组件元数据装饰器，会告诉angular,如何将指定的typescript类 处理成一个 angular框架内的组件，
+```
+
 
 
 ### 分析Angular项目的目录结构及Angular CLI 生成的基础代码
