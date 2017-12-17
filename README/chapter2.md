@@ -41,6 +41,7 @@ npm install -g @angular/cli
 
 ```
 
+
 * 利用angular cli 初始化一个项目
 
 ```
@@ -107,6 +108,7 @@ ng new projectName
 * app.component.ts angular程序的组件文件
 
 
+### 组件 component
 
 > 与组件相关的基本概念：
 
@@ -118,6 +120,8 @@ ng new projectName
 
 > 上面介绍的三个概念，称之为组件的必备元素，所有的组件，都必须要包含上述三个元素；
 
+![angualr  component 架构 ](../images/angualr_component.png)
+
 ```js
 // app.compoment.ts是整个应用的基础，可以将其理解成为一个地基，我们将在其上面，建立起我们的整个应用;
 
@@ -127,11 +131,11 @@ import { Component } from '@angular/core';
 //2. 用装饰器定义了一个组件  @Component：组件元数据装饰器
 // 2.1 组件元数据装饰器，所有的组件都必须使用@component装饰器来注解，@就是装饰器的标志； 
 @Component({
-  //组件相关的属性一，slelector如同jquery是一个选择器； selector: 'app-root' 意思是：此组件可以利用html标签<app-root>来调用，
+  //组件相关的属性一 :slelector如同jquery是一个选择器； selector: 'app-root' 意思是：此组件可以利用html标签<app-root>来调用，
   selector: 'app-root',
-  //  templateUrl 指定了一个html文件，作为组件的模板，最终在html文件中，在<app-root>这个tag的位置，展示指定template html里面的内容，若没有模板，一个组件就不能称之为组件，模板是一个组件的必备属性（如同boostrap中的组件，都依赖于固定的模板），模板定义了用户最终看到的页面布局与内容
+  //组件相关的属性二:  templateUrl 指定了一个html文件，作为组件的模板，最终在html文件中，在<app-root>这个tag的位置，展示指定template html里面的内容，若没有模板，一个组件就不能称之为组件，模板是一个组件的必备属性（如同boostrap中的组件，都依赖于固定的模板），模板定义了用户最终看到的页面布局与内容
   templateUrl: './app.component.html',
-  // styleUrls 指向了一组css文件，可以在css中编写这个组件 模板中要用到的样式
+  //组件相关的属性三: styleUrls 指向了一组css文件，可以在css中编写这个组件 模板中要用到的样式
   styleUrls: ['./app.component.css']
 })
 //3、 AppComponent就是一个标准的typescript标准类 ，这个类里面一点框架的痕迹都没有，就是没有出现一点angualr的字样，实际上其就是一个普通的typescript类，我们需要告诉angular这个AppConponent是一个组件，而我们若想实现这一点，需要将一些元数据 附加到这个类上，而在typescript中我们利用@component装饰器将元数据附加到这个类上，装饰器中的属性就叫做元数据，；
@@ -140,14 +144,178 @@ import { Component } from '@angular/core';
 export class AppComponent {
 // 定义了一个组件的控制器(一个被@component装饰器装饰的typescript类，其包含于模板相关的所有属性与方法，与页面相关的大部分逻辑都是编写在这一个控制器当中的)；
 // 这个控制器只有一个属性：title， 这个属性的值，最终会展示到模板html中的页面里 <h1>{{title}}</h1> ；
+// 组件相关的属性四: 数据绑定，数据绑定就是让模板的各个部分，即html的各个部分，对控制器的相应部分，相互作用的一个机制；我们向html中添加绑定标记，来告诉angular,如何将二者（模板与控制器）联系起来， <h1>{{title}}</h1>是最常见将组件中的值，绑定到模板中的方法，叫做插值表达式，在实际的运行时，angular会利用AppComponent中的title属性和值，替换掉{{title}}; 后期会频繁的使用该语法，来在模板中显示数据； 还有其它三种形式绑定： 属性绑定、事件绑定、双向绑定、
   title = 'app';
 }
 
 // 结论： 通过装饰器@component将元数据附加到一个标准的typescript类AppComponent上面，angular就知道了，我们要将这个typescript类变成angualr框架中的一个组件；@Component：组件元数据装饰器，会告诉angular,如何将指定的typescript类 处理成一个 angular框架内的组件，
 ```
 
+* 输入属性 @inputs() 是用来接收外部传入的数据的，其使得父组件可以直接传递数据给子组件；angular程序实际上就是‘组件树’ 而这个输入属性，允许我们在组件树中传递数据，
+
+* 提供器 providers  是用来做依赖注入的，
+
+* 生命周期钩子 LifeCycle Hooks  从一个组件从创建到销毁的过程中，有多个钩子，被用来 触发和执行 各种业务逻辑 ； 例如 在一个组件被实例化之后，执行一段初始化的逻辑，从后台读取一串数据，进到组件里面，
+
+* styles 样式表 组件可以关联一些样式表文件，来提供一系列组件专用的样式，但是这个可选的，没有样式表，只用模板也是可以的；
+
+* Animations 动画  angular提供一个动画包 来方便我们去创建 与 组件相关的动画效果，
+
+* @Outputs 输出属性 与@Inputs()相对，用来定义其它组件可能会感兴趣的事件，或者用来在组件之间 共享数据； 
 
 
-### 分析Angular项目的目录结构及Angular CLI 生成的基础代码
+### 模块modules
+
+```js
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+
+>  与component类似 module也是一个带着装饰器的 typescript类，在这个类里面，最上面是import 引入 模块需要的东西，然后利用@NgModule这样一个装饰器，声明了一个module; 
+
+* 首先利用declarations 声明了，模块中包含有什么（现在模块中指包含一个组件AppComponent ）， 注意在 元数据declarations: 后面只能声明 组件、指令、管道 ； 
+
+* 其次利用了imports属性，声明了 若想要 应用正常运转 还需要什么东西，也就是module AppModule  所依赖的其它模块module(此处声明了三个angualr框架中提供的模块 BrowserModule、FormsModule、HttpModule)，其中BrowserModule是开发web应用的一个必选依赖，因为最终我们的应用是跑在浏览器里面，FormsModule 是处理表单的模块，HttpModule模块 提供http服务的； 当我们引用了某一个模块之后，就可以使用该模块所提供的组件、指令、服务
+
+* providers 用来声明 模块中提供了什么服务
+
+* bootstrap 声明了模块的主组件是什么
+
+## Angular的启动过程
+
+> 要了解angualr的启动过程需要能清除三个问题： 1、启动时加载了那个页面？ 2、启动时加载了那些脚本？ 3、这些脚本做了什么事情？
+
+1. 启动时加载了那个页面？
+
+2. 启动时加载了那些脚本？
+
+3. 这些脚本做了什么事情？
+
+```js
+// .angular-cli.json 中
+
+  "apps": [
+    {
+      "root": "src",
+      "outDir": "dist",
+      "assets": [
+        "assets",
+        "favicon.ico"
+      ],
+      //index 默认指向 src/index.html 该页面是angualr应用启动是加载的页面，
+      "index": "index.html",
+      // main 默认指向 src/main.ts文件 是angualr应用启动是加载的脚本，负责引导angular应用启动，
+      "main": "main.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "app",
+      "styles": [
+        "styles.css"
+      ],
+      "scripts": [],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      }
+    }
+  ],
+
+```
+
+
+### main.ts 整个angular应用的启动，主入口，整个angular应用是从这里开始运行的
+
+```js
+// 从angular的核心模块core中导入 enableProdMode 方法 ，此方法用来关闭angular的开发者模式，
+import { enableProdMode } from '@angular/core';
+
+// 从模块platform-browser-dynamic 导入一个platformBrowserDynamic 方法，而这个方法会告诉浏览器，应该使用那个模块来启动浏览器；
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
+// 导入angular-cli 生成的主模块
+import { AppModule } from './app/app.module';
+
+// 导入环境配置
+import { environment } from './environments/environment';
+
+
+// 若当前是生产环境，就去调用enableProdMode() 去关闭angular的开发者模式，
+if (environment.production) {
+  enableProdMode();
+}
+
+// 调用bootstrapModule()传入AppModule作为启动模块，来启动应用
+platformBrowserDynamic().bootstrapModule(AppModule)
+  .catch(err => console.log(err));
+```
+
+* 当angular知道要用AppModule模块作为启动模块的时候，其会首先加载这个模块；然后angular会分析AppModule 需要依赖那些模块，并加载相关的模块(如BrowserModule);而在加载相关模块的同时，期又会去分析，相关模块又会依赖那些模块，以此类推 直到加载完所有的依赖； 
+
+
+
+```js
+// app.nodules.ts 即main.ts中指定的启动模块
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+```
+
+* 当所有模块以及依赖都加载完毕，angular会在index.html中，寻找启动模块AppModule所指定的主组件AppComponent 对应的 `selector selector: 'app-root',` ; 选择器找到后，angular会利用主组件 指定的模板内容`app.component.html`，替换掉selector指定的标签，整个过程完成之前 页面会展示 <app-root> 标签中的内容`loadinng...` 
+
+```js
+// app.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  title = 'app';
+}
+
+```
+
+
+
+
+ 
+
+
+
+
+
 
 
