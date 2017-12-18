@@ -291,7 +291,7 @@ export class AppModule { }
 
 ```
 
-* 当所有模块以及依赖都加载完毕，angular会在index.html中，寻找启动模块AppModule所指定的主组件AppComponent 对应的 `selector selector: 'app-root',` ; 选择器找到后，angular会利用主组件 指定的模板内容`app.component.html`，替换掉selector指定的标签，整个过程完成之前 页面会展示 <app-root> 标签中的内容`loadinng...` 
+* 当所有模块以及依赖都加载完毕，angular会在index.html中，寻找启动模块AppModule所指定的主组件AppComponent 对应的 `selector selector: 'app-root',` ; 选择器找到后，angular会利用主组件 指定的模板内容`app.component.html`，替换掉selector指定的标签里面的内容，整个过程完成之前 页面会展示 <app-root> 标签中的内容`loadinng...` 
 
 ```js
 // app.component.ts
@@ -306,6 +306,57 @@ export class AppComponent {
   title = 'app';
 }
 
+```
+
+
+* 当前建立起来的开发环境，会自动的检测 src 目录下面的改变，任何对src目录下文件的改变，都会使服务器自动加载修改后的文件，而后自动去刷新页面，整体的效果类似于browser-sync,以后这个扩展可以不使用了；
+
+
+## Angular 开发准备工作
+
+### 如何设置第三方的依赖，即在auction的项目中我们会用到bootstrap与jquery这两个第三方的库，所以在正式的开发之前，我们需要将这些类库引入到我们的项目之中，一般情况下 若想在anguular项目中使用第三方类库，需要做三步：
+
+1. 将第三方类库安装到本地 
+
+```js
+// 在当前项目auction的根目录 下，利用npm工具进行安装；
+npm install jquery --save
+npm install bootstrap --save
+
+```
+
+2. 将安装的本地类库，引入到我们的项目之中，通过修改angular-cli.json来实现
+
+```js
+ "apps": [
+    {
+      "root": "src",
+      "outDir": "dist",
+      "assets": [
+        "assets",
+        "favicon.ico"
+      ],
+      "index": "index.html",
+      "main": "main.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "app",
+      // 其中styles与scripts就是用来配置 第三方库的位置，将要引得第三方css与js文件路径，添加到下面两个字段里面，就可以了，
+      "styles": [
+        "styles.css"
+      ],
+      "scripts": [
+        
+      ],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      }
+    }
+  ],
 ```
 
 
