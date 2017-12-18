@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list id="9a56d7c4-79ce-4d10-bf1a-ae0834609342" name="Default" comment="">
+    <list id="9a56d7c4-79ce-4d10-bf1a-ae0834609342" name="Default" comment="" />
+    <list default="true" id="f8564bb5-90da-48d5-bd6f-fbc5827f2933" name="New changelist" comment="qwer">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/README/chapter2.md" afterPath="$PROJECT_DIR$/README/chapter2.md" />
-      <change beforePath="$PROJECT_DIR$/auction/package.json" afterPath="$PROJECT_DIR$/auction/package.json" />
-      <change beforePath="$PROJECT_DIR$/auction/src/app/app.component.ts" afterPath="$PROJECT_DIR$/auction/src/app/app.component.ts" />
     </list>
-    <list default="true" id="f8564bb5-90da-48d5-bd6f-fbc5827f2933" name="New changelist" comment="qwer" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -43,38 +40,38 @@
             <entry file="file://$PROJECT_DIR$/README/chapter2.md">
               <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
                 <state split_layout="FIRST">
-                  <first_editor relative-caret-position="155">
-                    <caret line="351" column="8" lean-forward="false" selection-start-line="351" selection-start-column="8" selection-end-line="351" selection-end-column="8" />
+                  <first_editor relative-caret-position="362">
+                    <caret line="360" column="3" lean-forward="true" selection-start-line="360" selection-start-column="3" selection-end-line="360" selection-end-column="3" />
                     <folding>
-                      <marker date="1513560190331" expanded="true" signature="2041:2083" ph="..." />
-                      <marker date="1513560190331" expanded="true" signature="2993:3097" ph="//..." />
-                      <marker date="1513560190331" expanded="true" signature="3142:3234" ph="//..." />
-                      <marker date="1513560190331" expanded="true" signature="3246:3679" ph="{&quot;selector&quot;: 'app-root'...}" />
-                      <marker date="1513560190331" expanded="true" signature="3925:4367" ph="{...}" />
-                      <marker date="1513560190331" expanded="true" signature="3927:4348" ph="//..." />
-                      <marker date="1513560190331" expanded="true" signature="5002:5234" ph="..." />
-                      <marker date="1513560190331" expanded="true" signature="5246:5403" ph="{...}" />
-                      <marker date="1513560190331" expanded="true" signature="5264:5286" ph="[...]" />
-                      <marker date="1513560190331" expanded="true" signature="5299:5355" ph="[...]" />
-                      <marker date="1513560190331" expanded="true" signature="5428:5431" ph="{...}" />
-                      <marker date="1513560190331" expanded="true" signature="6146:6877" ph="[...]" />
-                      <marker date="1513560190331" expanded="true" signature="6152:6873" ph="{&quot;root&quot;: &quot;src&quot;...}" />
-                      <marker date="1513560190331" expanded="true" signature="6215:6264" ph="[...]" />
-                      <marker date="1513560190331" expanded="true" signature="6628:6658" ph="[...]" />
-                      <marker date="1513560190331" expanded="true" signature="6761:6867" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
-                      <marker date="1513560190331" expanded="true" signature="7445:7468" ph="{...}" />
-                      <marker date="1513560190331" expanded="true" signature="7815:7939" ph="{...}" />
-                      <marker date="1513560190331" expanded="true" signature="7833:7855" ph="[...]" />
-                      <marker date="1513560190331" expanded="true" signature="7868:7891" ph="[...]" />
-                      <marker date="1513560190331" expanded="true" signature="7964:7967" ph="{...}" />
-                      <marker date="1513560190331" expanded="true" signature="8286:8389" ph="{&quot;selector&quot;: 'app-root'...}" />
-                      <marker date="1513560190331" expanded="true" signature="8417:8437" ph="{...}" />
-                      <marker date="1513560190331" expanded="true" signature="8883:9580" ph="[...]" />
-                      <marker date="1513560190331" expanded="true" signature="8889:9576" ph="{&quot;root&quot;: &quot;src&quot;...}" />
-                      <marker date="1513560190331" expanded="true" signature="8952:9001" ph="[...]" />
-                      <marker date="1513560190331" expanded="true" signature="9315:9345" ph="[...]" />
-                      <marker date="1513560190331" expanded="true" signature="9364:9382" ph="[...]" />
-                      <marker date="1513560190331" expanded="true" signature="9464:9570" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
+                      <marker date="1513567149823" expanded="true" signature="2041:2083" ph="..." />
+                      <marker date="1513567149823" expanded="true" signature="2993:3097" ph="//..." />
+                      <marker date="1513567149823" expanded="true" signature="3142:3234" ph="//..." />
+                      <marker date="1513567149823" expanded="true" signature="3246:3679" ph="{&quot;selector&quot;: 'app-root'...}" />
+                      <marker date="1513567149823" expanded="true" signature="3925:4367" ph="{...}" />
+                      <marker date="1513567149823" expanded="true" signature="3927:4348" ph="//..." />
+                      <marker date="1513567149823" expanded="true" signature="5002:5234" ph="..." />
+                      <marker date="1513567149823" expanded="true" signature="5246:5403" ph="{...}" />
+                      <marker date="1513567149823" expanded="true" signature="5264:5286" ph="[...]" />
+                      <marker date="1513567149823" expanded="true" signature="5299:5355" ph="[...]" />
+                      <marker date="1513567149823" expanded="true" signature="5428:5431" ph="{...}" />
+                      <marker date="1513567149823" expanded="true" signature="6146:6877" ph="[...]" />
+                      <marker date="1513567149823" expanded="true" signature="6152:6873" ph="{&quot;root&quot;: &quot;src&quot;...}" />
+                      <marker date="1513567149823" expanded="true" signature="6215:6264" ph="[...]" />
+                      <marker date="1513567149823" expanded="true" signature="6628:6658" ph="[...]" />
+                      <marker date="1513567149823" expanded="true" signature="6761:6867" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
+                      <marker date="1513567149823" expanded="true" signature="7445:7468" ph="{...}" />
+                      <marker date="1513567149823" expanded="true" signature="7815:7939" ph="{...}" />
+                      <marker date="1513567149823" expanded="true" signature="7833:7855" ph="[...]" />
+                      <marker date="1513567149823" expanded="true" signature="7868:7891" ph="[...]" />
+                      <marker date="1513567149823" expanded="true" signature="7964:7967" ph="{...}" />
+                      <marker date="1513567149823" expanded="true" signature="8286:8389" ph="{&quot;selector&quot;: 'app-root'...}" />
+                      <marker date="1513567149823" expanded="true" signature="8417:8437" ph="{...}" />
+                      <marker date="1513567149823" expanded="true" signature="8883:9580" ph="[...]" />
+                      <marker date="1513567149823" expanded="true" signature="8889:9576" ph="{&quot;root&quot;: &quot;src&quot;...}" />
+                      <marker date="1513567149823" expanded="true" signature="8952:9001" ph="[...]" />
+                      <marker date="1513567149823" expanded="true" signature="9315:9345" ph="[...]" />
+                      <marker date="1513567149823" expanded="true" signature="9364:9382" ph="[...]" />
+                      <marker date="1513567149823" expanded="true" signature="9464:9570" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
                     </folding>
                   </first_editor>
                   <second_editor />
@@ -206,12 +203,27 @@
       <workItem from="1513564792029" duration="716000" />
       <workItem from="1513566123953" duration="117000" />
       <workItem from="1513566284582" duration="85000" />
-      <workItem from="1513566413778" duration="529000" />
+      <workItem from="1513566413778" duration="1102000" />
     </task>
+    <task id="LOCAL-00001" summary=".">
+      <created>1513567073474</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1513567073474</updated>
+    </task>
+    <task id="LOCAL-00002" summary="qwer">
+      <created>1513567176141</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1513567176141</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15868000" />
+    <option name="totallyTimeSpent" value="16441000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -225,6 +237,7 @@
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
+      <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.0890411" sideWeight="0.49568966" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -239,7 +252,6 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -250,6 +262,11 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="." />
+    <MESSAGE value="qwer" />
+    <option name="LAST_COMMIT_MESSAGE" value="qwer" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -270,35 +287,35 @@
           <first_editor relative-caret-position="0">
             <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
             <folding>
-              <marker date="1513560190331" expanded="true" signature="2041:2083" ph="..." />
-              <marker date="1513560190331" expanded="true" signature="2993:3097" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="3142:3234" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="3246:3679" ph="{&quot;selector&quot;: 'app-root'...}" />
-              <marker date="1513560190331" expanded="true" signature="3925:4367" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="3927:4348" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="5002:5234" ph="..." />
-              <marker date="1513560190331" expanded="true" signature="5246:5403" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="5264:5286" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="5299:5355" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="5428:5431" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="6146:6877" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6152:6873" ph="{&quot;root&quot;: &quot;src&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="6215:6264" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6628:6658" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6761:6867" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="7445:7468" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="7815:7939" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="7833:7855" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="7868:7891" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="7964:7967" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="8286:8389" ph="{&quot;selector&quot;: 'app-root'...}" />
-              <marker date="1513560190331" expanded="true" signature="8417:8437" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="8883:9580" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="8889:9576" ph="{&quot;root&quot;: &quot;src&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="8952:9001" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9315:9345" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9364:9382" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9464:9570" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="2041:2083" ph="..." />
+              <marker date="1513567149823" expanded="true" signature="2993:3097" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="3142:3234" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="3246:3679" ph="{&quot;selector&quot;: 'app-root'...}" />
+              <marker date="1513567149823" expanded="true" signature="3925:4367" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="3927:4348" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="5002:5234" ph="..." />
+              <marker date="1513567149823" expanded="true" signature="5246:5403" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="5264:5286" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="5299:5355" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="5428:5431" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="6146:6877" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6152:6873" ph="{&quot;root&quot;: &quot;src&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="6215:6264" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6628:6658" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6761:6867" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="7445:7468" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="7815:7939" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="7833:7855" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="7868:7891" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="7964:7967" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="8286:8389" ph="{&quot;selector&quot;: 'app-root'...}" />
+              <marker date="1513567149823" expanded="true" signature="8417:8437" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="8883:9580" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="8889:9576" ph="{&quot;root&quot;: &quot;src&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="8952:9001" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9315:9345" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9364:9382" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9464:9570" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
             </folding>
           </first_editor>
           <second_editor />
@@ -319,35 +336,35 @@
           <first_editor relative-caret-position="0">
             <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
             <folding>
-              <marker date="1513560190331" expanded="true" signature="2041:2083" ph="..." />
-              <marker date="1513560190331" expanded="true" signature="2993:3097" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="3142:3234" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="3246:3679" ph="{&quot;selector&quot;: 'app-root'...}" />
-              <marker date="1513560190331" expanded="true" signature="3925:4367" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="3927:4348" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="5002:5234" ph="..." />
-              <marker date="1513560190331" expanded="true" signature="5246:5403" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="5264:5286" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="5299:5355" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="5428:5431" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="6146:6877" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6152:6873" ph="{&quot;root&quot;: &quot;src&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="6215:6264" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6628:6658" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6761:6867" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="7445:7468" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="7815:7939" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="7833:7855" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="7868:7891" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="7964:7967" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="8286:8389" ph="{&quot;selector&quot;: 'app-root'...}" />
-              <marker date="1513560190331" expanded="true" signature="8417:8437" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="8883:9580" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="8889:9576" ph="{&quot;root&quot;: &quot;src&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="8952:9001" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9315:9345" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9364:9382" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9464:9570" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="2041:2083" ph="..." />
+              <marker date="1513567149823" expanded="true" signature="2993:3097" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="3142:3234" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="3246:3679" ph="{&quot;selector&quot;: 'app-root'...}" />
+              <marker date="1513567149823" expanded="true" signature="3925:4367" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="3927:4348" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="5002:5234" ph="..." />
+              <marker date="1513567149823" expanded="true" signature="5246:5403" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="5264:5286" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="5299:5355" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="5428:5431" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="6146:6877" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6152:6873" ph="{&quot;root&quot;: &quot;src&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="6215:6264" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6628:6658" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6761:6867" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="7445:7468" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="7815:7939" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="7833:7855" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="7868:7891" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="7964:7967" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="8286:8389" ph="{&quot;selector&quot;: 'app-root'...}" />
+              <marker date="1513567149823" expanded="true" signature="8417:8437" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="8883:9580" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="8889:9576" ph="{&quot;root&quot;: &quot;src&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="8952:9001" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9315:9345" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9364:9382" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9464:9570" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
             </folding>
           </first_editor>
           <second_editor />
@@ -368,35 +385,35 @@
           <first_editor relative-caret-position="0">
             <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
             <folding>
-              <marker date="1513560190331" expanded="true" signature="2041:2083" ph="..." />
-              <marker date="1513560190331" expanded="true" signature="2993:3097" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="3142:3234" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="3246:3679" ph="{&quot;selector&quot;: 'app-root'...}" />
-              <marker date="1513560190331" expanded="true" signature="3925:4367" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="3927:4348" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="5002:5234" ph="..." />
-              <marker date="1513560190331" expanded="true" signature="5246:5403" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="5264:5286" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="5299:5355" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="5428:5431" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="6146:6877" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6152:6873" ph="{&quot;root&quot;: &quot;src&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="6215:6264" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6628:6658" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6761:6867" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="7445:7468" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="7815:7939" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="7833:7855" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="7868:7891" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="7964:7967" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="8286:8389" ph="{&quot;selector&quot;: 'app-root'...}" />
-              <marker date="1513560190331" expanded="true" signature="8417:8437" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="8883:9580" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="8889:9576" ph="{&quot;root&quot;: &quot;src&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="8952:9001" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9315:9345" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9364:9382" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9464:9570" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="2041:2083" ph="..." />
+              <marker date="1513567149823" expanded="true" signature="2993:3097" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="3142:3234" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="3246:3679" ph="{&quot;selector&quot;: 'app-root'...}" />
+              <marker date="1513567149823" expanded="true" signature="3925:4367" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="3927:4348" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="5002:5234" ph="..." />
+              <marker date="1513567149823" expanded="true" signature="5246:5403" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="5264:5286" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="5299:5355" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="5428:5431" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="6146:6877" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6152:6873" ph="{&quot;root&quot;: &quot;src&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="6215:6264" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6628:6658" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6761:6867" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="7445:7468" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="7815:7939" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="7833:7855" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="7868:7891" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="7964:7967" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="8286:8389" ph="{&quot;selector&quot;: 'app-root'...}" />
+              <marker date="1513567149823" expanded="true" signature="8417:8437" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="8883:9580" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="8889:9576" ph="{&quot;root&quot;: &quot;src&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="8952:9001" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9315:9345" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9364:9382" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9464:9570" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
             </folding>
           </first_editor>
           <second_editor />
@@ -417,35 +434,35 @@
           <first_editor relative-caret-position="0">
             <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
             <folding>
-              <marker date="1513560190331" expanded="true" signature="2041:2083" ph="..." />
-              <marker date="1513560190331" expanded="true" signature="2993:3097" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="3142:3234" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="3246:3679" ph="{&quot;selector&quot;: 'app-root'...}" />
-              <marker date="1513560190331" expanded="true" signature="3925:4367" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="3927:4348" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="5002:5234" ph="..." />
-              <marker date="1513560190331" expanded="true" signature="5246:5403" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="5264:5286" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="5299:5355" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="5428:5431" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="6146:6877" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6152:6873" ph="{&quot;root&quot;: &quot;src&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="6215:6264" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6628:6658" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6761:6867" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="7445:7468" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="7815:7939" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="7833:7855" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="7868:7891" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="7964:7967" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="8286:8389" ph="{&quot;selector&quot;: 'app-root'...}" />
-              <marker date="1513560190331" expanded="true" signature="8417:8437" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="8883:9580" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="8889:9576" ph="{&quot;root&quot;: &quot;src&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="8952:9001" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9315:9345" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9364:9382" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9464:9570" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="2041:2083" ph="..." />
+              <marker date="1513567149823" expanded="true" signature="2993:3097" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="3142:3234" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="3246:3679" ph="{&quot;selector&quot;: 'app-root'...}" />
+              <marker date="1513567149823" expanded="true" signature="3925:4367" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="3927:4348" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="5002:5234" ph="..." />
+              <marker date="1513567149823" expanded="true" signature="5246:5403" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="5264:5286" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="5299:5355" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="5428:5431" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="6146:6877" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6152:6873" ph="{&quot;root&quot;: &quot;src&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="6215:6264" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6628:6658" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6761:6867" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="7445:7468" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="7815:7939" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="7833:7855" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="7868:7891" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="7964:7967" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="8286:8389" ph="{&quot;selector&quot;: 'app-root'...}" />
+              <marker date="1513567149823" expanded="true" signature="8417:8437" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="8883:9580" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="8889:9576" ph="{&quot;root&quot;: &quot;src&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="8952:9001" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9315:9345" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9364:9382" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9464:9570" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
             </folding>
           </first_editor>
           <second_editor />
@@ -458,35 +475,35 @@
           <first_editor relative-caret-position="7245">
             <caret line="315" column="0" lean-forward="false" selection-start-line="315" selection-start-column="0" selection-end-line="315" selection-end-column="0" />
             <folding>
-              <marker date="1513560190331" expanded="true" signature="2041:2083" ph="..." />
-              <marker date="1513560190331" expanded="true" signature="2993:3097" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="3142:3234" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="3246:3679" ph="{&quot;selector&quot;: 'app-root'...}" />
-              <marker date="1513560190331" expanded="true" signature="3925:4367" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="3927:4348" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="5002:5234" ph="..." />
-              <marker date="1513560190331" expanded="true" signature="5246:5403" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="5264:5286" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="5299:5355" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="5428:5431" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="6146:6877" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6152:6873" ph="{&quot;root&quot;: &quot;src&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="6215:6264" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6628:6658" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6761:6867" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="7445:7468" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="7815:7939" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="7833:7855" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="7868:7891" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="7964:7967" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="8286:8389" ph="{&quot;selector&quot;: 'app-root'...}" />
-              <marker date="1513560190331" expanded="true" signature="8417:8437" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="8883:9580" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="8889:9576" ph="{&quot;root&quot;: &quot;src&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="8952:9001" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9315:9345" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9364:9382" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9464:9570" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="2041:2083" ph="..." />
+              <marker date="1513567149823" expanded="true" signature="2993:3097" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="3142:3234" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="3246:3679" ph="{&quot;selector&quot;: 'app-root'...}" />
+              <marker date="1513567149823" expanded="true" signature="3925:4367" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="3927:4348" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="5002:5234" ph="..." />
+              <marker date="1513567149823" expanded="true" signature="5246:5403" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="5264:5286" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="5299:5355" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="5428:5431" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="6146:6877" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6152:6873" ph="{&quot;root&quot;: &quot;src&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="6215:6264" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6628:6658" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6761:6867" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="7445:7468" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="7815:7939" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="7833:7855" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="7868:7891" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="7964:7967" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="8286:8389" ph="{&quot;selector&quot;: 'app-root'...}" />
+              <marker date="1513567149823" expanded="true" signature="8417:8437" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="8883:9580" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="8889:9576" ph="{&quot;root&quot;: &quot;src&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="8952:9001" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9315:9345" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9364:9382" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9464:9570" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
             </folding>
           </first_editor>
           <second_editor />
@@ -507,35 +524,35 @@
           <first_editor relative-caret-position="361">
             <caret line="19" column="64" lean-forward="false" selection-start-line="19" selection-start-column="64" selection-end-line="19" selection-end-column="64" />
             <folding>
-              <marker date="1513560190331" expanded="true" signature="2041:2083" ph="..." />
-              <marker date="1513560190331" expanded="true" signature="2993:3097" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="3142:3234" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="3246:3679" ph="{&quot;selector&quot;: 'app-root'...}" />
-              <marker date="1513560190331" expanded="true" signature="3925:4367" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="3927:4348" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="5002:5234" ph="..." />
-              <marker date="1513560190331" expanded="true" signature="5246:5403" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="5264:5286" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="5299:5355" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="5428:5431" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="6146:6877" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6152:6873" ph="{&quot;root&quot;: &quot;src&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="6215:6264" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6628:6658" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6761:6867" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="7445:7468" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="7815:7939" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="7833:7855" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="7868:7891" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="7964:7967" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="8286:8389" ph="{&quot;selector&quot;: 'app-root'...}" />
-              <marker date="1513560190331" expanded="true" signature="8417:8437" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="8883:9580" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="8889:9576" ph="{&quot;root&quot;: &quot;src&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="8952:9001" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9315:9345" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9364:9382" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9464:9570" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="2041:2083" ph="..." />
+              <marker date="1513567149823" expanded="true" signature="2993:3097" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="3142:3234" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="3246:3679" ph="{&quot;selector&quot;: 'app-root'...}" />
+              <marker date="1513567149823" expanded="true" signature="3925:4367" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="3927:4348" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="5002:5234" ph="..." />
+              <marker date="1513567149823" expanded="true" signature="5246:5403" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="5264:5286" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="5299:5355" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="5428:5431" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="6146:6877" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6152:6873" ph="{&quot;root&quot;: &quot;src&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="6215:6264" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6628:6658" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6761:6867" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="7445:7468" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="7815:7939" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="7833:7855" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="7868:7891" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="7964:7967" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="8286:8389" ph="{&quot;selector&quot;: 'app-root'...}" />
+              <marker date="1513567149823" expanded="true" signature="8417:8437" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="8883:9580" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="8889:9576" ph="{&quot;root&quot;: &quot;src&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="8952:9001" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9315:9345" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9364:9382" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9464:9570" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
             </folding>
           </first_editor>
           <second_editor />
@@ -590,35 +607,35 @@
           <first_editor relative-caret-position="380">
             <caret line="20" column="0" lean-forward="true" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
             <folding>
-              <marker date="1513560190331" expanded="true" signature="2041:2083" ph="..." />
-              <marker date="1513560190331" expanded="true" signature="2993:3097" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="3142:3234" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="3246:3679" ph="{&quot;selector&quot;: 'app-root'...}" />
-              <marker date="1513560190331" expanded="true" signature="3925:4367" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="3927:4348" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="5002:5234" ph="..." />
-              <marker date="1513560190331" expanded="true" signature="5246:5403" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="5264:5286" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="5299:5355" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="5428:5431" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="6146:6877" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6152:6873" ph="{&quot;root&quot;: &quot;src&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="6215:6264" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6628:6658" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6761:6867" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="7445:7468" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="7815:7939" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="7833:7855" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="7868:7891" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="7964:7967" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="8286:8389" ph="{&quot;selector&quot;: 'app-root'...}" />
-              <marker date="1513560190331" expanded="true" signature="8417:8437" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="8883:9580" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="8889:9576" ph="{&quot;root&quot;: &quot;src&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="8952:9001" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9315:9345" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9364:9382" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9464:9570" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="2041:2083" ph="..." />
+              <marker date="1513567149823" expanded="true" signature="2993:3097" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="3142:3234" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="3246:3679" ph="{&quot;selector&quot;: 'app-root'...}" />
+              <marker date="1513567149823" expanded="true" signature="3925:4367" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="3927:4348" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="5002:5234" ph="..." />
+              <marker date="1513567149823" expanded="true" signature="5246:5403" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="5264:5286" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="5299:5355" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="5428:5431" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="6146:6877" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6152:6873" ph="{&quot;root&quot;: &quot;src&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="6215:6264" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6628:6658" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6761:6867" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="7445:7468" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="7815:7939" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="7833:7855" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="7868:7891" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="7964:7967" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="8286:8389" ph="{&quot;selector&quot;: 'app-root'...}" />
+              <marker date="1513567149823" expanded="true" signature="8417:8437" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="8883:9580" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="8889:9576" ph="{&quot;root&quot;: &quot;src&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="8952:9001" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9315:9345" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9364:9382" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9464:9570" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
             </folding>
           </first_editor>
           <second_editor />
@@ -690,38 +707,38 @@
     <entry file="file://$PROJECT_DIR$/README/chapter2.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="FIRST">
-          <first_editor relative-caret-position="155">
-            <caret line="351" column="8" lean-forward="false" selection-start-line="351" selection-start-column="8" selection-end-line="351" selection-end-column="8" />
+          <first_editor relative-caret-position="362">
+            <caret line="360" column="3" lean-forward="true" selection-start-line="360" selection-start-column="3" selection-end-line="360" selection-end-column="3" />
             <folding>
-              <marker date="1513560190331" expanded="true" signature="2041:2083" ph="..." />
-              <marker date="1513560190331" expanded="true" signature="2993:3097" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="3142:3234" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="3246:3679" ph="{&quot;selector&quot;: 'app-root'...}" />
-              <marker date="1513560190331" expanded="true" signature="3925:4367" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="3927:4348" ph="//..." />
-              <marker date="1513560190331" expanded="true" signature="5002:5234" ph="..." />
-              <marker date="1513560190331" expanded="true" signature="5246:5403" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="5264:5286" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="5299:5355" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="5428:5431" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="6146:6877" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6152:6873" ph="{&quot;root&quot;: &quot;src&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="6215:6264" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6628:6658" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="6761:6867" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="7445:7468" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="7815:7939" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="7833:7855" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="7868:7891" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="7964:7967" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="8286:8389" ph="{&quot;selector&quot;: 'app-root'...}" />
-              <marker date="1513560190331" expanded="true" signature="8417:8437" ph="{...}" />
-              <marker date="1513560190331" expanded="true" signature="8883:9580" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="8889:9576" ph="{&quot;root&quot;: &quot;src&quot;...}" />
-              <marker date="1513560190331" expanded="true" signature="8952:9001" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9315:9345" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9364:9382" ph="[...]" />
-              <marker date="1513560190331" expanded="true" signature="9464:9570" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="2041:2083" ph="..." />
+              <marker date="1513567149823" expanded="true" signature="2993:3097" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="3142:3234" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="3246:3679" ph="{&quot;selector&quot;: 'app-root'...}" />
+              <marker date="1513567149823" expanded="true" signature="3925:4367" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="3927:4348" ph="//..." />
+              <marker date="1513567149823" expanded="true" signature="5002:5234" ph="..." />
+              <marker date="1513567149823" expanded="true" signature="5246:5403" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="5264:5286" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="5299:5355" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="5428:5431" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="6146:6877" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6152:6873" ph="{&quot;root&quot;: &quot;src&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="6215:6264" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6628:6658" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="6761:6867" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="7445:7468" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="7815:7939" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="7833:7855" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="7868:7891" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="7964:7967" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="8286:8389" ph="{&quot;selector&quot;: 'app-root'...}" />
+              <marker date="1513567149823" expanded="true" signature="8417:8437" ph="{...}" />
+              <marker date="1513567149823" expanded="true" signature="8883:9580" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="8889:9576" ph="{&quot;root&quot;: &quot;src&quot;...}" />
+              <marker date="1513567149823" expanded="true" signature="8952:9001" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9315:9345" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9364:9382" ph="[...]" />
+              <marker date="1513567149823" expanded="true" signature="9464:9570" ph="{&quot;dev&quot;: &quot;environments/environment.ts&quot;...}" />
             </folding>
           </first_editor>
           <second_editor />
