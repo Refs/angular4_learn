@@ -498,6 +498,182 @@ body {
 
 ```
 
+### 编写search组件
+
+```html
+<!--search.component.html中-->
+<form action="" name="searchForm" role="form">
+  <div class="form-group">
+    <label for="productTitle">商品名称</label>
+    <input type="text" id="productTitle" placeholder="商品名称" class="form-control">
+  </div>
+  <div class="form-group">
+    <label for="productPrice">商品价格</label>
+    <input type="number" id="productPrice" placeholder="商品价格" class="form-control">
+  </div>
+  <div class="form-group">
+    <label for="productCategory">商品类别</label>
+    <select  id="productCategory"  class="form-control"></select>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary btn-block"> 提交</button>
+  </div>
+</form>
+```
+
+### 编写carousel组件
+
+> 学会使用用图片占位符http://via.placeholder.com/350x150 后面的尺寸多少就能生成多大的图片； http://placehold.it/320x150 这个也可以使用
+
+
+```html
+ <!--http://via.placeholder.com/350x150-->
+ <div class="carousel slide" data-ride="carousel ">
+   <!--索引-->
+   <ol class="carousel-indicators">
+     <li class="active"></li>
+     <li></li>
+     <li></li>
+   </ol>
+    <!--item-->
+   <div class="carousel-inner">
+     <div class="item active">
+       <img src="http://via.placeholder.com/800x300" alt="" class="slide-image">
+     </div>
+     <div class="item">
+       <img src="http://via.placeholder.com/800x300" alt="" class="slide-image">
+     </div>
+     <div class="item">
+       <img src="http://via.placeholder.com/800x300" alt="" class="slide-image">
+     </div>
+   </div>
+   <!--注意下面a链接 href属性值的写法-->
+   <a class="left carousel-control" href="javascript:$('.carousel').carousel('prev')" role="button">
+     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+   </a>
+   <a class="right carousel-control" href="javascript:$('.carousel').carousel('next')" role="button">
+     <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+   </a>
+ </div>
+ <!--<h1>我是一个轮播图</h1>-->
+```
+
+### 编写product组件
+
+> 商品列表组将，相比较前面写的组件就比较复杂一点了，其复杂之处在于，其在首页展示的商品信息，并非是直接在页面上面写死的，而是根据后台服务返回的数据来决定的，我们会在服务器通讯处，了解如何从后台去获取数据；此处我们利用一个数组来模拟从服务端获取的数据；
+
+> 因为是使用typescript来写程序，所以需要向外暴露一个对象，来封装产品信息，
+
+```typescript
+// product.component.ts中
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-product',
+  templateUrl: './product.component.html',
+  styleUrls: ['./product.component.css']
+})
+export class ProductComponent implements OnInit {
+  //2、需要在ProductComponent控制器里面，去声明一个数组，来存储页面中将要展示商品的数据；
+  private products: Array<Product>;
+
+  constructor() { }
+  //3、在ngOnInit方法里面去初始化数组，ngOnInit是组件生命周期的其中一个钩子，这个方法会在组件被实例化之后，调用一次，用来初始化组件里面的数据；
+  ngOnInit() {
+   this.products = [
+         new Product(1, '第一个商品', 1.99, 3.5, '我是第一个商品，看清楚没有', ['电子产品', '硬件设施']),
+         new Product(2, '第二个商品', 2.99, 2.5, '我是第二个商品，看清楚没有', ['电子产品']),
+         new Product(3, '第三个商品', 3.99, 3.5, '我是第三个商品，看清楚没有', [ '硬件设施']),
+         new Product(4, '第四个商品', 4.99, 4.5, '我是第四个商品，看清楚没有', ['图书', '硬件设施']),
+         new Product(5, '第五个商品', 5.99, 1.5, '我是第五个商品，看清楚没有', [ '图书']),
+         new Product(6, '第六个商品', 6.99, 2.5, '我是第六个商品，看清楚没有', ['电子产品', '硬件设施']),
+   ];
+
+  }
+
+}
+//1、下面的类描述了我们产品所包含的信息；
+// 因为是使用typescript来写程序，所以需要向外暴露一个对象，这个对象里面封装了所有的产品信息，
+export class Product{
+//  在对象里面有一个构造函数
+  constructor(
+    //下面的数据分别对应商品的id 名称 价格 评分 描述 类别
+    public id: number,
+    public title: string,
+    public price: number,
+    public rating: number,
+    public desc: string,
+    public categories: Array<string>
+  ){
+  }
+}
+```
+
+```html
+<!--这个缩略图是写死的，若我们想让其与后台的数据绑定起来，需要用到 ngFor指令-->
+<!--*ngFor="let product of products" products与product.component组件中的products是绑定在一块的，ngFor指令的意思是，我们要去循环 products这个属性，然后将每次循环的元素 放入一个叫product的变量里， 这样后面的html中就可以使用product这个变量，利用插值表达式 显示出product里面所绑定的属性-->
+<div *ngFor="let product of products" class="col-lg-4 col-md-4 col-sm-4">
+  <div class="thumbnail">
+    <img src="http://placehold.it/320x150" alt="">
+    <div class="caption">
+      <h4 class="pull-right">{{product.price}}</h4>
+      <h4><a href="">{{product.title}}</a></h4>
+      <p>{{product.desc}}</p>
+    </div>
+    <div>
+      <app-stars></app-stars>
+    </div>
+  </div>
+</div>
+
+<!--angular 看到 *ngFor="let product of products" 指令之后，就会去循环products数组，根据数组中元素的个数，生成相应数量的模板代码（指令加在那个标签上，那个标签就会连同其子节点生成n次）-->
+<!--*ngFor 用来循环一个数组，在页面中反复的生成一段html-->
+```
+
+> *ngFor 指令 所表现出来的思想是angualr框架比较核心的一个思想，就是数据绑定，也就是数据驱动，即我们的页面长什么样子，是由后台的数据来决定的，其与jquery的一个明显的区别是，jquery要操作页面的dom, 如在页面生成六个缩略图，jquery肯定是先拿到六个缩略图外面的父节点，将其转换为jquery对象，然后生成六个缩略图的html 并插入到父节点里面，这属于操作页面的dom元素； 而在angualr里面，我们是不需要做这些dom操作的，我们要做的是声明一个包含所需数据的一个属性 `this.products=[...]`然后将模板与数据绑定起来，然后根据数据的变化，来呈现相应的页面， 如我们现在若想再增加一个缩略图只需要向products数组里面 再推一个缩略图的对象数据，这时候页面就会多出一个缩略图，我们不需要去前台的页面里面，去搜索某一个元素，然后去页面里面插入一段html代码，在angular中永远不要这么去做，而我们要做的永远是去操作后台的数据，通过后台数据的变化去改变我们的前台页面；  我们学angular就是学如何通过操作后台的数据，去操作前台的页面；这样我们才可以真正写出一个angular程序，而不是说用了angular的技术，就是写angular程序，这只是表面的；核心就是数据驱动页面；
+
+```typescript
+ this.products.push(new Product(7, '第六个商品', 6.99, 2.5, '我是第六个商品，看清楚没有', ['电子产品', '硬件设施']));
+```  
+
+### 编写stars组件
+
+> 会根据当前商品星级的分数来显示实心的星星与空心的星星； 而若想实现星级评价需要首先解决六个问题：
+
+1. 如何显示一颗星星 - 直接利用bootstrap 提供的图标类
+
+```html
+<span class="glyphicon glyphicon-star "></span>
+```
+
+2. 如何显示一颗空心的星星
+
+```html
+<span class="glyphicon glyphicon-star glyphicon-star-empty"></span>
+```
+
+3. 如何显示5颗星星，利用数据驱动页面的思想，若想在前台显示五颗星星需要在后台，包含五个元素的数据；
+
+```html
+<span *ngFor="let star of stars" class="glyphicon glyphicon-star glyphicon-star-empty"></span>
+```
+
+4. 解决上面生成的5颗星星里面有的是实心，而有的是空心；解决这个问题，需要了解angular的一个概念--属性绑定；
+
+> 属性绑定是数据绑定的一种，如 `<img src="http://placeholder.it/320x150">` 中src的属性不是写死的，而是和后台的一个属性绑定起来的，
+
+```typescript
+export class ProductComponent implements OnInit {
+  //  此处在组件上定义一个属性；
+  private imgUrl = 'http://placehold.it/320x150';
+  }
+```
+ 
+```html
+//html 标签的属性通过下面的方式，与后台组件绑定在一起；
+<img [src]="imgUrl" alt=""> 
+<!--这样就将img标签的src属性与后台组件的imgUrl绑定在了一起，即将html标签的一个属性，与控制器上面的属性，做绑定就叫做属性绑定-->
+```
 
 
 
