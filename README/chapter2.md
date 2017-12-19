@@ -318,7 +318,7 @@ export class AppComponent {
 
 1. 将第三方类库安装到本地 
 
-```js
+```
 // 在当前项目auction的根目录 下，利用npm工具进行安装；
 npm install jquery --save
 npm install bootstrap --save
@@ -327,7 +327,8 @@ npm install bootstrap --save
 
 2. 将安装的本地类库，引入到我们的项目之中，通过修改angular-cli.json来实现
 
-```js
+```json
+// angular-cli.json中
  "apps": [
     {
       "root": "src",
@@ -345,22 +346,165 @@ npm install bootstrap --save
       "prefix": "app",
       // 其中styles与scripts就是用来配置 第三方库的位置，将要引得第三方css与js文件路径，添加到下面两个字段里面，就可以了，
       "styles": [
-        "styles.css"
+        "styles.css",
+        "node_modules/bootstrap/dist/css/bootstrap.css"
       ],
       "scripts": [
-        
+        "node_modules/jquery/dist/jquery.js",
+        "node_modules/bootstrap/dist/js/bootstrap.js"
       ],
+      //加了上面三行之后，bootstrap与jquery就被加到我们的项目里面去了；
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
         "prod": "environments/environment.prod.ts"
       }
     }
-  ],
+  ],;
+```
+
+3. 安装引入的类库的 类型描述文件，以便typescript可以正确识别；
+
+>  虽然现在我们已经将jquery与bootstrap引到我们的项目中去了，但jquery与bootstrap本身就是javascript里面的东西，所以就不能直接运用到typescript里面， 我们需要将jquery与bootstrap的类型描述文件，同样引入也安装到本地的库里面去，在项目里，其才能正常的使用; 装类型描述文件的意义是能让typescript代码认识jquery与bootstrap; 这样我们就可以在typescript代码中去调用jquery的东西了； 至此我们就可以使用jquery的方法与bootstrap的样式了；
+
+```
+// 安装jquery 与 bootstrap的类型描述文件，即在姓名前面加上@types/ 
+npm install @types/jquery --save-dev
+npm install @types/bootstrap --save-dev
+```
+
+## 正式开发Angular项目
+
+### Angular项目的开发思路
+
+> angular框架的设计目标中，最主要的是帮助开发人员很方便的开发出克重用的组件，即angular的很多特性都是为这个目标来服务的，所有我们在开发过程中，也要用一种组件化的思路，来思考我们要解决的问题，例如我们auction的主页面，可以分为7个组件来开发；
+
+![auction_home](../images/auction_home.png)
+ 
+
+### 利用angular-cli 生成基本的组件代码
+1. app.component.ts组件，angular-cli帮我们生成的，是整个应用的地基，是最大的一个组件；
+
+2. 导航栏组件
+
+3. 页脚组件
+
+4. 搜索表单组件
+
+5. 轮播图组件
+
+6. 商品展示组件
+
+7. 星级评价组件
+
+
+* angular-cli 提供了自动生成组件的功能；
+
+```text
+//因为app.component.ts组件在项目生成的时候已经生成了，所以只需要将其余六个组件生成就可以了；
+//意思是在 auction项目下生成一个 叫navbar的组件
+ng g component navbar
+ng g component footer
+ng g component search
+ng g component carousel
+ng g component product
+ng g component starts
+```
+
+```text
+  ng g component stars
+  create src/app/stars/stars.component.html (24 bytes)
+  create src/app/stars/stars.component.spec.ts (621 bytes)
+  create src/app/stars/stars.component.ts (265 bytes)
+  create src/app/stars/stars.component.css (0 bytes)
+  update src/app/app.module.ts (816 bytes)
+  //每执行一次组件生成命令 都会同时生成4个文件，并且会更新app.module.ts模块，将我们新生成的组件，注册到模块之中，
+```
+
+### 编写app.component组件；
+
+* 首先更改一下app组件的html文件
+
+```html
+<!--因为每一个组件都可以利用其selector声明的标签来引入-->
+<app-navbar></app-navbar>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <app-search></app-search>
+    </div>
+    <div class="col-md-9">
+      <div class="row">
+        <app-carousel></app-carousel>
+      </div>
+      <div class="row">
+        <app-product></app-product>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>
 
 ```
 
-* 我就是试一下，看webstorm 的git 行不行；
+### 编写navbar组件
+
+```html
+<!--navbar.component.html中-->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="#" class="navbar-brand">在线竞拍</a>
+    </div>
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="#">关于我们</a></li>
+        <li><a href="#">联系我们</a></li>
+        <li><a href="#">网站地图</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+```
+```css
+/*最外层的styles.css中*/
+/*由于navbar 通过navbar-fixed-top 给固定到了顶部，且脱离了标准文档流，故其会将后面的内容挡住，此处在全局的css样式中，为body 增加一个默认的margin就行了。*/
+body {
+  padding-top: 70px;
+}
+```
+
+### 编写footer组件
+
+```html
+<!--footer.component.html中-->
+<div class="container">
+  <hr>
+  <footer>
+    <div class="row">
+      <div class="col-lg-12">
+        <p>angular is a very good framework!</p>
+      </div>
+    </div>
+  </footer>
+</div>
+
+```
+
+
+
+
+
+
+
+
 
 
 
