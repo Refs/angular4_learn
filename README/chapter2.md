@@ -674,7 +674,81 @@ export class ProductComponent implements OnInit {
 <img [src]="imgUrl" alt=""> 
 <!--这样就将img标签的src属性与后台组件的imgUrl绑定在了一起，即将html标签的一个属性，与控制器上面的属性，做绑定就叫做属性绑定-->
 ```
+> 而如何解决5颗星中，有的是空心，有的是实心，就需要用到属性绑定中的特例---样式绑定
 
+```html
+<span *ngFor="let star of stars" class="glyphicon glyphicon-star "             ="star"></span>
+
+ <!--[class.glyphicon-star-empty]="star"   glyphicon-star-empty前面有class,意思是说class后面绑定的东西是一个css样式，它的值要绑定到当前star循环变量里，-->
+ 
+ <!--上面的样式绑定的含义是span这个标签是否会出现glyphicon-star-empty 这个css样式，是由star这个属性决定的，若star为 true则span 就会多出一个glyphicon-star-empty样式，如果star为false则其就不会有这样一个样式，-->
+```
+
+5. 如何将商品的星级评价的数值传递给星级评价组件，因为我们现在的stars组件，并不知道商品真正的星级评分是几分，知道这个信息的是product组件， 即如何将product组件中的信息，传递给星级评价组件，这就需要用到组件的另外一个概念，输入属性；
+
+```typescript
+// stars.component.ts中
+import { Component, OnInit, Input} from '@angular/core';
+// import {Input} from '@angular/compiler/src/core';
+//注意在@angular/core中引入 input 而不是在@angular/compiler/src/core 去引入；后则后面写的代码， 都会报错，这是一个bug ;自己乱试的结果；
+
+export class StarsComponent implements OnInit {
+  //声明一个属性rating 用来接收产品组件传递过来的星级评价的数值，默认值是0；
+  //而要想使product组件将商品的信息，传递给star组件，需要在接受信息的属性上面加上一个装饰器；
+  //input装饰其的意思是，星级评价的rating属性值，应该由其父组件传递给它；
+  @Input()
+  private rating: number = 0;
+  private stars: boolean[];
+  constructor() { }
+
+  ngOnInit() {
+    this.stars = [false, false, true, true, true];
+  }
+
+}
+```
+
+```html
+<!--product.component.html中-->
+<div *ngFor="let product of products" class="col-lg-4 col-md-4 col-sm-4">
+  <div class="thumbnail">
+    <img [src]="imgUrl">
+    <!--<img src="http://placehold.it/320x150">-->
+    <div class="caption">
+      <h4 class="pull-right">{{product.price}}</h4>
+      <h4><a href="">{{product.title}}</a></h4>
+      <p>{{product.desc}}</p>
+    </div>
+    <div>
+    <!--这句话的意思是 子组件app-stars 的rating属性，应该由当前product的rating属性传进去，-->
+      <app-stars [rating]="product.rating"></app-stars>
+    </div>
+  </div>
+</div>
+```
+
+6. 如何根据商品的星级，来决定商品是空心的还是实心的，因为当前空心与否是写死的；
+
+```typescript
+export class StarsComponent implements OnInit {
+  @Input()
+  private rating = 0;
+  private stars: boolean[];
+  constructor() {}
+
+  ngOnInit() {
+    this.stars = [];
+    for (let i = 1; i <= 5; i++){
+      //注意这个boolean值的生成方式，若传入的rating为3.5 则前面三个i 都会是false 后面两个为true;
+      //即其会根据父组件传入的rating值的大小，而生成不同的数组，前台根据不同的boolean去生成相应的实心的货空心的星星； 
+      this.stars.push(i > this.rating);
+    }
+    // this.stars = [false, false, true, true, true];
+    // this.rating = 0;
+  }
+
+}
+```
 
 
 
