@@ -1,0 +1,9 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<h2>{{title}}</h2>
+
+<input type="button" value="商品详情" (click)="toProductDetails()" >
+
+<a [routerLink]="['/home']">主页</a>
+<a [routerLink]="['/product',1]" >商品详情</a>
+
+<router-outlet></router-outlet>

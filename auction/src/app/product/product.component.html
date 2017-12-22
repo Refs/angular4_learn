@@ -1,0 +1,20 @@
+
+<!--这个缩略图是写死的，若我们想让其与后台的数据绑定起来，需要用到 ngFor指令-->
+<!--*ngFor="let product of products" products与product.component组件中的products是绑定在一块的，ngFor指令的意思是，我们要去循环 products这个属性，然后将每次循环的元素 放入一个叫product的变量里， 这样后面的html中就可以使用product这个变量，利用插值表达式 显示出product里面所绑定的属性-->
+<div *ngFor="let product of products" class="col-lg-4 col-md-4 col-sm-4">
+  <div class="thumbnail">
+    <img [src]="imgUrl">
+    <!--<img src="http://placehold.it/320x150">-->
+    <div class="caption">
+      <h4 class="pull-right">{{product.price}}</h4>
+      <h4><a href="">{{product.title}}</a></h4>
+      <p>{{product.desc}}</p>
+    </div>
+    <div>
+      <app-stars [rating]="product.rating" ></app-stars>
+    </div>
+  </div>
+</div>
+
+<!--angular 看到 *ngFor="let product of products" 指令之后，就会去循环products数组，根据数组中元素的个数，生成相应数量的模板代码（指令加在那个标签上，那个标签就会连同其子节点生成n次）-->
+<!--*ngFor 用来循环一个数组，在页面中反复的生成一段html-->
