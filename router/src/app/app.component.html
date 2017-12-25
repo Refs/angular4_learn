@@ -6,4 +6,11 @@
 <a [routerLink]="['/home']">主页</a>
 <a [routerLink]="['/product',1]" >商品详情</a>
 
+<!--控制辅助路由的链接，其[routerLink]就不是一个具体的地址，而是一个对象，对象中有一个outlets属性，而ourlets属性又是一个对象，在对象中我们就可以指明 name为 aux 的插座 对应的路径为 'chat' -->
+<a [routerLink]="{outlets:{primary: 'home',aux:'chat'}}" > 开始聊天</a>
+
+<!--当我们 点击结束聊天是， name 为aux的插座 对应的路由为null-->
+<a [routerLink]="{outlets:{aux:null}}" > 结束聊天</a>
+
 <router-outlet></router-outlet>
+<router-outlet name="aux"></router-outlet>

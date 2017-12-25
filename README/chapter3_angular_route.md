@@ -494,8 +494,287 @@ ngOnInit() {
  
 ## 辅助路由-- 插座之间的（兄弟）关系
 
+### 辅助路由的语法：声明一个辅助路由需要三步：
 
-## 、保护路由
+1. 在组件的模板上面 除了 ’主插座‘ 之外，我们还要声明一个带有name 属性的插座；、
+
+```html
+<router-outlet></router-outlet>
+<router-outlet name="aux"></router-outlet>
+```
+
+2. 在路由配置中，我们需要配置，指定name名称的’插座‘上面可以显示那些组件 
+
+```
+{path: 'xxx', component: XxxComponent, outlet: 'aux'}
+{path: 'yyy', component: YyyComponent, outlet: 'aux'}
+```
+
+3. 导航的时候我们需要指定 ，当路由到某一个地址的时候，在辅助的路由上面 需要显示那个组件；
+
+```html
+<!--当我们点击Xxx链接的时候，我们的主插座会导航到'/home', 我们的辅助插座aux上面， 会显示’xxx‘ 路径对应的组件； 按照上面的路由配置，显示的就是XxxComponent组件； 这样在我们的页面上看来，  <router-outlet>主插座，就会显示'/home' 对应的组件， 辅助插座<router-outlet name="aux">就会显示 'xxx'对应的组件XxxComponent-->
+<a [routerLink] = "['/home', {outlets: {aux: xxx}}]">Xxx</a>
+<a [routerLink] = "['/product', {outlets: {aux: yyy}}]">Yyy</a>
+```
+
+> 前面的例子中，在某一个组件的模板上面，只有一个插座，而辅助路由则会允许定义多个插座’ 并同时控制，每一个插座上面显示的内容，--- 假如我们在在线拍卖系统中，想加入一个即时聊天的功能，让用户与我们的客服实时进行沟通，这个功能可以在任何的页面中去使用，不管是商品列表页 还是商品详情页，下面我们就用辅助路由来实现这个功能；
+
+### 辅助路由应用实例
+
+#### 案例说明
+![要实现的效果](../images/辅助路由.png)
+
+* 目的在任何的页面上我们都需要有一个聊天控件，来随时聊天；
+有两个链接--开始聊天与结束聊天，通过这两个链接，控制聊天组件的显示与隐藏，但不管聊天的组件显示与否， 我们商品的详情与主页的路由都是独立跳转，也就是说 同一个页面中的两块内容，是由两组链接分别控制的； 其不会因为主的路由跳走了，另外一块内容 就会刷新，或者消失，其永远都在那显示，除非点击结束聊天将其关掉；
+
+#### 实现步骤
+
+1. 在app组件的模板上再定义一个插座来显示聊天面板；
+
+```html
+<!--app.component.html中-->
+<h2>{{title}}</h2>
+
+<input type="button" value="商品详情" (click)="toProductDetails()" >
+
+<a [routerLink]="['/home']">主页</a>
+<a [routerLink]="['/product',1]" >商品详情</a>
+
+<router-outlet></router-outlet>
+<router-outlet name="aux"></router-outlet>
+```
+
+2. 单独开发一个聊天室组件，只显示在新定义的插座上；
+
+```
+ng g component chat
+```
+
+```html
+<!--chat.component.html  中-->
+<textarea name="" id="" cols="30" rows="10" class="chat" placeholder="请输入聊天内容"></textarea>
+```
+
+```css
+/*chat.component.css中*/ 
+.chat {
+  background: green;
+  height: 100px;
+  width: 30%;
+  float: left;
+  box-sizing: border-box;
+}
+```
+
+> 改造主页组件 与 商品详情组件 分别利用一个盒子 将两个组件 的 模板内容整体包起来，然后通过设置css属性，使其浮动在页面左侧，并且占页面宽度的70%；然后聊天组件会占页面的30%； 这也是一种angular 主页 这很重要， 因为在牵涉到 页面的布局方式； 
+
+```html
+<!-- product.component.html中-->
+<div class="product">
+  <p>
+    这里是商品详情组件
+  </p>
+  <p>商品的ID：{{productId}}</p>
+  <a [routerLink]="['./']">商品描述</a>
+  <a [routerLink]="['./seller', 99]">销售员信息</a>
+  <router-outlet></router-outlet>
+</div>
+```
+
+```css
+/*product.component.css中*/
+.product{
+  background: yellow;
+  height: 100px;
+  width: 70%;
+  float: left;
+  box-sizing: border-box;
+}
+```
+
+```html
+<!-- home.component.html中-->
+<div class="home">
+  <p>
+    这里是主页组件
+  </p>
+</div>
+```
+
+```css
+/*home.component.css中*/
+.home{
+  background: red;
+  height: 100px;
+  width: 70%;
+  float: left;
+  box-sizing: border-box;
+}
+
+```
+
+
+
+
+3. 通过路由参数来控制新插座是否显示聊天面板；（通过路由的配置 与 路由的参数来决定聊天组件是否显示；）
+
+```
+// 路由配置： app-routing.module.ts中；
+ {path: '', redirectTo: '/home', pathMatch: 'full' },
+// 辅助路由配置的方式与主路由的配置方式类似，只不过其要多一个配置outlet, 即指明当前的路由要显示在哪一个‘插座上面’，其它的没有定义outlet属性的路由，都会显示没有name属性的‘主插座’上面，
+  {path: 'chat', component: ChatComponent, outlet: 'aux'},
+  {path: 'home', component: HomeComponent},
+```
+
+```html
+<!--路由参数配置 app.component.html中-->
+<a [routerLink]="['/home']">主页</a>
+<a [routerLink]="['/product',1]" >商品详情</a>
+
+<!--控制辅助路由的链接，其[routerLink]就不是一个具体的地址，而是一个对象，对象中有一个outlets属性，而ourlets属性又是一个对象，在对象中我们就可以指明 name为 aux 的插座 对应的路径为 'chat' -->
+<a [routerLink]="{outlets:{aux:'chat'}}" > 开始聊天</a>
+ 
+<!--当我们 点击结束聊天是， name 为aux的插座 对应的路由为null-->
+<a [routerLink]="{outlets:{aux:null}}" > 结束聊天</a>
+
+<router-outlet></router-outlet>
+<router-outlet name="aux"></router-outlet>
+```
+
+>  最终的效果是:主路由与辅助路由之间是独立变化的；； 主页与商品详情页 是独立的，即不管我们导航到那个页面上，辅助路由的区域是单独存在的，即我们随时可以跟我们的客服去聊天； 
+
+> 在这种路由参数配置中`<a [routerLink]="{outlets:{primary: 'home',aux:'chat'}}" > 开始聊天</a>` 若我们指定 辅助插座的路径`<router-outlet name="aux"></router-outlet>` 可以利用 `routerOutletName: 'path'`的形式 如： `aux:'chat'` ; 若指定主插座的的路径 可以利用`primary: 'path'` primary 就引用到主插座； 如下的形式：点击开始聊天， 主插座的内容会变，辅助插座 同样会变；
+
+```html
+<a [routerLink]="{outlets:{primary: 'home',aux:'chat'}}" > 开始聊天</a>
+```
+
+## 路由守卫
+
+### 路由守卫介绍
+
+> 现在我们已经可以通过控制路由来控制页面的视图状态了，下面让我们来考虑一些特殊的场景，在这些场景中，只有当用户满足了特殊的条件之后才会被允许进入或者离开一个路由，比如：`1、只有当用户已经登录并拥有某些权限的时候，才能进入某些路由；`  ; `2、一个由多个表单组件组成的向导，例如注册流程，用户只有在当前路由的组件中填写了，满足要求的信息才可以导航到下一个路由（点击下一步）；`  ; `3、当用户未执行保存操作而试图离开当前导航时提醒用户；` 这些场景 都是用户 满足某一个场景之后，才会被允许 进入或者离开某个路由，angular的路由系统 提供了一些钩子，来帮助我们控制，进入或离开路由； 我们可以使用这些钩子，来实现前面我们所描述的场景，我们称这些钩子为路由护卫，也叫路由守卫； 在我们的课程里，我们将介绍三种 路由守卫：
+
+1. CanActivate : 处理导航到某路由的情况；但不满足指定的要求的时候，就不能导航到指定的路由，
+
+2. CanDeactivate : 处理从当前路由离开的情况； 若不满足这个守卫的要求，就不能从当前路由离开；
+
+3. Resolve : 在路由激活之前获取路由数据；这样在进入路由的时候，就可以立刻将这些数据展示给用户；
+
+### 登陆守卫CanActivate案例：只有登陆过的用户，才能进入产品信息路由；
+
+> 为了案例简单，我们不会去真实的去调用一个登陆服务，只是通过一个随机数，来判断一下；
+
+1. 新建 src/app/guard/login.guard.ts
+
+```typescript
+import {CanActivate} from '@angular/router';
+
+// 这个类实现angular 框架提供的一个接口，实现了Angular框架的接口CanActivate
+export class LoginGuard implements CanActivate {
+  // 实现了一个方法canActivate()这个方法 要返回一个布尔值， angular会根据返回的布尔值true或false来决定当前的路由请求，是通过 或者是不通过；
+  canActivate() {
+    // 声明一个变量loggedIn用来表示当前的用户 是否已经登陆了,此处利用一个随机数来模拟,大于0.5的视为未登陆状态；否则视为已经登陆；
+    const loggedIn: boolean = Math.random() < 0.5;
+    if (!loggedIn) {
+      console.log('用户为未登录状态');
+    }
+    return loggedIn;
+  }
+}
+
+// 这样我们就完成了一个路由守卫，守卫的名字为登陆守卫，
+```
+
+2. 修改路由配置，将路由守卫加到产品信息的路由上，
+
+```typescript
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import {HomeComponent} from './home/home.component';
+import {ProductComponent} from './product/product.component';
+import {Code404Component} from './code404/code404.component';
+import {ProductDescComponent} from './product-desc/product-desc.component';
+import {SellerInfoComponent} from './seller-info/seller-info.component';
+import {ChatComponent} from './chat/chat.component';
+import {LoginGuard} from './guard/login.guard';
+
+const routes: Routes = [
+
+  {path: '', redirectTo: '/home', pathMatch: 'full' },
+  {path: 'chat', component: ChatComponent, outlet: 'aux'},
+  {path: 'home', component: HomeComponent},
+  {path: 'product/:id', component: ProductComponent, children: [
+      {path: '', component: ProductDescComponent},
+      {path: 'seller/:id', component: SellerInfoComponent}
+      //1. canActivate 属性的值可以是一个数组，这就意味着其可以接受多个路由守卫 当应用试图进入到此路由时，这个数组中指定的所有的守卫，会被依次去调用，若一旦有其中一个守卫返回为false 则路由请求，会被拒绝掉；我们现在只有loginGuard这一个守卫
+    ], canActivate: [LoginGuard]},
+  //2. 我们在这地方只是指定了，路由护卫的类型，是LoginGuard这个类，但是谁来实例化这个类；angular将会使用依赖注入的机制来实例化这个类，依赖注入是后面的内容，现在我们只要在该模块@NgModule装饰器中的参数对象的providers属性中声明一下LoginGuard就可以了；
+  {path: '**', component: Code404Component}
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+   // 3. 此处声明一下LoginGuard类；
+  providers: [LoginGuard]
+})
+export class AppRoutingModule { }
+```
+
+### 离开守卫canDeactivate的案例：提醒用户 执行保存操作之后，才能离开当前页面，
+
+1. 新建src/app/guard/unsaved.guard.ts
+
+```typescript
+// 这个守卫确保当前用户执行保存操作之后，才能离开当前的页面；
+
+import {CanDeactivate} from '@angular/router';
+import {ProductComponent} from '../product/product.component';
+
+// CanDeactivate接口与CanActivate接口的区别是，CanDeactivate这个接口，有一个泛型-- 指定当前组件的类型，
+// 因为我们要保护的组件是ProductComponent组件，所以泛型 写ProductComponent; 同样其也有一个方法需要实现--canDeactivate()这个方法中的第一个参数，方法的第一个参数，就是泛型指定的组件，这样会将当前要保护的组件的信息 传递进来；
+// 因为我们是想要离开，根据要保护组件的状态-- 组件中会有很多属性，同样我们可以在要保护组件中写一些方法，我们可以根据组件的某一个属性，或者去调用组件的方法，用以判断，当前的用户 是否可以离开；这就是其中的使用逻辑
+// 此处我们不写那么复杂，
+export class UnsavedGuard implements CanDeactivate<ProductComponent> {
+    canDeactivate(component: ProductComponent) {
+      // 当用户试图离开ProductComponent组件的时候，提示就会跳出来，若用户点击确认，则用户会离开当前，若用户点否，即方法返回的是false则会继续留在当前页面；
+      return window.confirm('你还没有保存，确定要离开么');
+    }
+}
+```
+
+2. 修改路由配置，将路由守卫加到产品信息的路由上，与配置canActivate守卫一样，先为指定路由添加一个属性canDeactivate , 属性值是一个数组； 将自定的守卫类放在数组里面； 同样要放到$NgModule装饰器的配置对象的provider属性里面；
+
+```
+  {path: 'product/:id', component: ProductComponent, children: [
+      {path: '', component: ProductDescComponent},
+      {path: 'seller/:id', component: SellerInfoComponent}
+    ], canActivate: [LoginGuard],
+    canDeactivate: [UnsavedGuard]
+  },
+  
+  @NgModule({
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule],
+    providers: [LoginGuard,UnsavedGuard]
+  })
+```
+
+### resolve守卫
+
+1. resolve守卫想要解决的问题：
+
+*　当我们想进入一个路由，如商品详情路由的时候，我们进去之后，一般的传统办法是 进路由的时候 ，让路由上带着参数（如商品的ID）, 然后在组件内部，我们获取路由上传递的数据（拿到商品的ID)， 在onInit()钩子里面，利用ID 去拼接一个字符串，发送一个http请求，去拿到商品的信息；
+*  而若在一个真正的程序中，我们去发送一个http请求，而这个请求很有可能返回是有延迟的，导致组件的模板，无法立刻显示出来；在这种情况下，直到数据返回之前，在模板中所有需要用插值表达式显示控制器上某一个值的地方都是空的，而这种用户体验，肯定不是最好的一种用户体验；resolve守卫就是用来解决上面所说的问题；
+ 
+2. resolve守卫解决问题的方式
+ 使用resolve守卫我们可以在预先进入路由之前，去服务器上面去读数据，然后将需要的数据都读取完毕之后，带着数据进入路由里面，这样立刻就能将数据在模板中显示出来；
+ 
+ #### 具体使用resolve守卫
+ 
+ 1. 新建src/app/guard/
 
 ## 在在线拍卖系统项目中去添加路由；
 

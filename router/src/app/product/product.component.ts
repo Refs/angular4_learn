@@ -17,3 +17,8 @@ export class ProductComponent implements OnInit {
  }
 
 }
+
+export class Product {
+  constructor(public id: number, public name: string) {
+  }
+}
