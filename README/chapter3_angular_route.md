@@ -774,7 +774,7 @@ export class UnsavedGuard implements CanDeactivate<ProductComponent> {
  
  #### 具体使用resolve守卫
  
- 1. 新建src/app/guard/
+ 1. 新建src/app/guard/product.resolve.ts
 
 ## 在在线拍卖系统项目中去添加路由；
 
