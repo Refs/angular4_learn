@@ -13,7 +13,7 @@
 
 ## Angular的程序架构
 
- ![angularjs架构](../images/angularjs架构.png) 
+ ![angularjs架构](../images/angular架构.png) 
 
 * angular 本身是一个客户端框架，即开发的也是一个客户端程序，客户端程序需要与服务器做交互，来获取数据，或者像服务器传递一些数据；
 
@@ -22,7 +22,7 @@
  
  *  组件： 组件是angular应用的基本构建块，可以将一个组件理解为一段带有业务逻辑和数据的Html;类似于html中的tag，component之间可以有父子关系，类似ul 可以包含几个子li ; 组件可以有子组件，子组件又可以包含孙子组件，组件可以去调用服务，也就是service;
  
- * service服务，就是用来封装可以重用的业务逻辑，如获取商品信息的逻辑，在商品详情页需要调用，在订单详情页依旧需要；这时候我们将就可以将获取商品心里的逻辑封装到一个服务里；然后在不同的组件中去调用，service 服务之间也是可以互相调用的，即组件可以调用服务，而服务也是可以去调用服务的，
+ * service服务，就是用来封装可以重用的业务逻辑，如获取商品信息的逻辑，在商品详情页需要调用，在订单详情页依旧需要；这时候我们将就可以将获取商品信息的逻辑封装到一个服务里；然后在不同的组件中去调用，service 服务之间也是可以互相调用的，即组件可以调用服务，而服务也是可以去调用服务的，
  
  * 指令： 允许你向html元素上面去添加自定义的行为，如我们写一个自动完成的指令，将指令添加到html元素上则该元素就会有自动完成的功能；
  
@@ -101,7 +101,7 @@ ng new projectName
 
 #### 第三层 app目录
 
-> angular的程序 只要要包含一个模块与一个组件，而angular-cli已经帮我们生成出来了
+> angular的程序 只要包含一个模块与一个组件，而angular-cli已经帮我们生成出来了
 
 * app.module.ts angular程序的模块文件
 
@@ -116,7 +116,7 @@ ng new projectName
 
 * Template 我们通过组件自带的模板来定义组件的外观，模板以html 的形式存在，告知angualr 如何来渲染组件，一般来说模板看起来很像html,但是在模板当中我们可以去使用angular的数据绑定语法，来呈现控制器当中的数据
 
-* Controller 控制器就是一个普通的typescript类，其会被component这个装饰器来装饰，controller会包含组件所有的属性书方法，绝大多数的页面逻辑都是写在控制器里面的，控制器通过数据绑定与模板来进行通讯，模板展现控制器的数据，控制器处理模板上面发生的事件，
+* Controller 控制器就是一个普通的typescript类，其会被component这个装饰器来装饰，controller会包含组件所有的属性方法，绝大多数的页面逻辑都是写在控制器里面的，控制器通过数据绑定与模板来进行通讯，模板展现控制器的数据，控制器处理模板上面发生的事件，
 
 > 上面介绍的三个概念，称之为组件的必备元素，所有的组件，都必须要包含上述三个元素；
 
@@ -134,6 +134,8 @@ import { Component } from '@angular/core';
   //组件相关的属性一 :slelector如同jquery是一个选择器； selector: 'app-root' 意思是：此组件可以利用html标签<app-root>来调用，
   selector: 'app-root',
   //组件相关的属性二:  templateUrl 指定了一个html文件，作为组件的模板，最终在html文件中，在<app-root>这个tag的位置，展示指定template html里面的内容，若没有模板，一个组件就不能称之为组件，模板是一个组件的必备属性（如同boostrap中的组件，都依赖于固定的模板），模板定义了用户最终看到的页面布局与内容
+
+  // 这一点的理解参考官方文档：angular components are a subset of derictives. unlike derictives, components always have a templete and only one component can  be instantiated in a template.  是directive的子集，即component要实现的目的是与derictive一样的，类似于angularjs的指令直接标注到element上面，与bootstrap的组件。只不过component换了一种形式，用selector指定要标注的位置；
   templateUrl: './app.component.html',
   //组件相关的属性三: styleUrls 指向了一组css文件，可以在css中编写这个组件 模板中要用到的样式
   styleUrls: ['./app.component.css']
@@ -748,7 +750,33 @@ export class StarsComponent implements OnInit {
   }
 
 }
+
+
 ```
+
+## angular-cli中的几个概念
+
+* --vendor-chunk : https://segmentfault.com/q/1010000009276145/a-1020000009279643/revision : webpack build后生成的app、vendor、manifest三者有何职能不同？
+
+> CommonsChunkPlugin 抽取的是公共部分而不是"经常变动的部分";2,观察了一下，webpack应该是会在最后一个（manidest）CommonsChunkPlugin产出的chunk注入webpackJsonp的定义,以及异步加载相关的定义,而就是这个会涉及到所有entry及chunk的md5,所以会"经常变动"，同时vue-cli默认的vendor是打包node_module下的所有依赖，会很大，在生产环境，过大的文件要尽量利用缓存来加快载入速度，但“经常变动”不利于缓存，所以为了将entry(这里可认为是app.js)的变动隔离在vendor之外，vue-cli在vendor之后多做了一个manifest的chunk,这样entry只要不引入新的node_modules里的包就不会影响到vendor了.ps:所以其实跟编译次数没什么关系,所有文件每次打包都会再编译一次的,重点是大文件，缓存，变动代码的拆分.
+
+> `app.js`：基本就是你实际编写的那个app.vue(.vue或.js?),没这个页面跑不起来.
+`vendor.js`:vue-cli全家桶默认配置里面这个chunk就是将所有从node_modules/里require(import)的依赖都打包到这里，所以这个就是所有node_modules/下的被require(import)的js文件
+`manifest.js`: 最后一个chunk，被注入了webpackJsonp的定义及异步加载相关的定义(webpack调用CommonsChunkPlugin处理后模块管理的核心,因为是核心,所以要第一个进行加载,不然会报错).
+
+> 精简:由于默认的vendor的打包策略导致这个chunk很大,按照默认配置这基本没什么好精简了,要精简的话基本要针对项目实际来修改各个chunk的打包策略(尽量减少包的大小来提速首屏加载)
+
+> 优化:单页面基本就跟精简同个道理吧,多页面的话感觉还是自定义一下vendor的打包策略,毕竟不一定所有页面都会用到全量的第三方依赖，适当减少vendor的体积能提高不少加载速度.
+
+
+* Bundling : https://www.genuitec.com/module-bundling-webpack-introduction/ 打包的意思
+
+* tree-shaking : https://www.zhihu.com/question/41922432 
+
+> Tree-shaking 是无用代码移除（DCE, dead code elimination）的一个方法，但和传统的方法不太一样。Tree-shaking 找到需要的代码，灌入最终的结果；传统 DCE 找到执行不到的代码，从 AST 里清除。（在我看来传统的这种方式更应该被称为 tree-shaking，即摇一下把 AST 中的 dead branch 给抖下来。）
+
+* -prod : production 生产环境的缩写
+
 
 
 
