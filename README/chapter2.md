@@ -756,7 +756,9 @@ export class StarsComponent implements OnInit {
 
 ## angular-cli中的几个概念
 
-* --vendor-chunk : https://segmentfault.com/q/1010000009276145/a-1020000009279643/revision : webpack build后生成的app、vendor、manifest三者有何职能不同？
+### wiki--Build
+
+1. --vendor-chunk : https://segmentfault.com/q/1010000009276145/a-1020000009279643/revision : webpack build后生成的app、vendor、manifest三者有何职能不同？
 
 > CommonsChunkPlugin 抽取的是公共部分而不是"经常变动的部分";2,观察了一下，webpack应该是会在最后一个（manidest）CommonsChunkPlugin产出的chunk注入webpackJsonp的定义,以及异步加载相关的定义,而就是这个会涉及到所有entry及chunk的md5,所以会"经常变动"，同时vue-cli默认的vendor是打包node_module下的所有依赖，会很大，在生产环境，过大的文件要尽量利用缓存来加快载入速度，但“经常变动”不利于缓存，所以为了将entry(这里可认为是app.js)的变动隔离在vendor之外，vue-cli在vendor之后多做了一个manifest的chunk,这样entry只要不引入新的node_modules里的包就不会影响到vendor了.ps:所以其实跟编译次数没什么关系,所有文件每次打包都会再编译一次的,重点是大文件，缓存，变动代码的拆分.
 
@@ -769,13 +771,24 @@ export class StarsComponent implements OnInit {
 > 优化:单页面基本就跟精简同个道理吧,多页面的话感觉还是自定义一下vendor的打包策略,毕竟不一定所有页面都会用到全量的第三方依赖，适当减少vendor的体积能提高不少加载速度.
 
 
-* Bundling : https://www.genuitec.com/module-bundling-webpack-introduction/ 打包的意思
+2. Bundling : https://www.genuitec.com/module-bundling-webpack-introduction/ 打包的意思
 
-* tree-shaking : https://www.zhihu.com/question/41922432 
+3. tree-shaking : https://www.zhihu.com/question/41922432 
 
 > Tree-shaking 是无用代码移除（DCE, dead code elimination）的一个方法，但和传统的方法不太一样。Tree-shaking 找到需要的代码，灌入最终的结果；传统 DCE 找到执行不到的代码，从 AST 里清除。（在我看来传统的这种方式更应该被称为 tree-shaking，即摇一下把 AST 中的 dead branch 给抖下来。）
 
-* -prod : production 生产环境的缩写
+4. UglifyJS 代码压缩工具
+
+5. -prod : production 生产环境的缩写
+
+6. Service Worker ：https://www.jianshu.com/p/0e2dee4c77bc  https://www.2cto.com/kf/201701/588402.html这个就比较牛了，打开了一扇门；
+
+> 原生App拥有web应用通常所不具备的离线体验，定时的默默更新，消息通知推送等功能。而新的Service Worker标准让在web app上拥有这些功能成为可能。
+
+> 一个Service Worker是一段运行在浏览器后台进程里的脚本，他独立于当前页面，提供了那些不需要与web页面交互的功能在网页背后悄悄执行的能力。在将来，基于它可以实现消息推送，静静更新以及地理围栏等服务，但是目前它首先要具备的功能是拦截和处理网络请求的功能，包括可编程的消息缓存管理能力。 `ionic 有专门的篇幅进行研究`；
+
+7. 国外angular 好的学习网站： https://scotch.io/tutorials?hFR%5Bcategory%5D%5B0%5D=Tutorials&dFR%5B_tags%5D%5B0%5D=angular
+
 
 
 
