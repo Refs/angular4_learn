@@ -798,6 +798,11 @@ export class StarsComponent implements OnInit {
 // That's where Contonuous integration servers come in. You can set up your project repository so that your tests run on every commit and pull request.
 
 // This practice will allow you to ensure that serving the contents of your dist dir will be closer to how your application will behave when it is deployed.
+
+// I personally like creating Sass files for project variables and for project mixins, this way , we can bring in any variables/mixin we'll need quickly and easily.
+
+
+
 ```
 
 9. Continuous Integration : 持续集成 http://blog.csdn.net/inter_peng/article/details/53131831 
@@ -813,13 +818,75 @@ export class StarsComponent implements OnInit {
 
 11. angular flex : angular 所使用的流式布局 https://github.com/angular/flex-layout
 
->  迫切需要更新的知识：flex流式布局、sass(biitstrap默认)、Material、 d3(solaredge) 正式的项目开始之前，起码先会使用；这些东西都是cli 所支持的东西，不使用太可惜了；
+>  迫切需要更新的知识：flex流式布局、sass(biitstrap默认)、bootstrap4、Material、 d3(solaredge) 正式的项目开始之前，起码先会使用；这些东西都是cli 所支持的东西，不使用太可惜了；
 
 12. font awesome 与iconfont 一样的东东；
 
 13. i18n（其来源是英文单词 internationalization的首末字符i和n，18为中间的字符数）是“国际化”的简称。在资讯领域，国际化(i18n)指让产品（出版物，软件，硬件等）无需做大的改变就能够适应不同的语言和地区的需要。对程序来说，在不修改内部代码的情况下，能根据不同语言及地区显示相应的界面。 在全球化的时代，国际化尤为重要，因为产品的潜在用户可能来自世界的各个角落。通常与i18n相关的还有L10n（“本地化”的简称）。 i18next是一个用来支持应用国际化的javascript库。 
 
-14. AOT：Ahead-of-Time Compilation  http://blog.csdn.net/liuborama/article/details/53998811
+14. AOT：Ahead-of-Time Compilation  http://blog.csdn.net/liuborama/article/details/53998811 http://blog.mgechev.com/2016/08/14/ahead-of-time-compilation-angular-offline-precompilation/ 
+
+> Just-in-Time (JiT) vs Ahead-of-Time (AoT)
+
+
+## 使用scss来开发angular程序
+
+> https://scotch.io/tutorials/using-sass-with-the-angular-cli
+
+### scss环境的搭建 
+
+```bash
+
+  // 初始化项目的时候，直接去配置 scss是sass的升级版；
+  ng new my-sassy-app --style=scss | --style=less | --style=sass
+
+  // 将当前环境改为 scss环境 
+  // 命令执行后 angular-cli.json 中 defaults.styleExt 的value值 会被设成scss;
+  ng set defaults.styleExt scss  
+
+```
+
+```ts
+
+  // set extension of css files of current project to extension of scss;
+  // when the name of files above change , we need revise the reference of those file by changing the extension of css to scss in angular-cli.json and components;
+  @Component({
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
+  })
+
+```
+
+### angular-cli 1.6 不再使用 tilde 破折号 指示相对路径 
+
+> 所以上述网站中的教程，都需要替换成relative的形式： https://github.com/angular/angular-cli/issues/9061
+
+```ts
+// Version ~ 1.5.4
+// A tilde in the fa-font-path works fine:
+
+// Checkout branch https://github.com/yogeshgadge/demo-app2/tree/tilde-works-in-version-154
+
+$fa-font-path: "~font-awesome/fonts" !default;
+@import "~font-awesome/scss/font-awesome";
+
+```
+
+```ts
+// Version 1.6.3
+
+//  This does not work
+// $fa-font-path: "~font-awesome/fonts" !default;
+// `must be relative`
+$fa-font-path: "../node_modules/font-awesome/fonts" !default;
+// This is not good for library applications that depend on (say font-awesome) because now that tilde does not work in $fa-font-path it is no longer portable i.e. there has to be a manual step for every application to reset $fa-font-path according to where they are are importing any scss.
+
+// One ugly workaround may be to adjust the location of your scss files so that the distance from node_modules to the source is same as the distance in the npm distribution.
+
+// My question is why did we take out this functionality/feature?
+
+```
 
 
 
