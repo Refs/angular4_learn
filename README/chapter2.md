@@ -789,6 +789,38 @@ export class StarsComponent implements OnInit {
 
 7. 国外angular 好的学习网站： https://scotch.io/tutorials?hFR%5Bcategory%5D%5B0%5D=Tutorials&dFR%5B_tags%5D%5B0%5D=angular
 
+8. hot module replacement（HMR） : 模块热替换 交换, 添加, 或者删除模块, 同时应用持续运行, 不需要页面刷新. 理解起来类似于 usb热插拔 更换模块不需要去刷新页面，这是webpack中的一个概念，而angular-cli中也有实现的方式https://segmentfault.com/a/1190000003872635；
+
+```ts
+// Code coverage reports allow us to see any parts of our code base that may not be properly tested by our unit tests.
+
+// one of the best ways to keep your project bug free is through a test suite, but it's easy to forget to run tests all the time.
+// That's where Contonuous integration servers come in. You can set up your project repository so that your tests run on every commit and pull request.
+
+// This practice will allow you to ensure that serving the contents of your dist dir will be closer to how your application will behave when it is deployed.
+```
+
+9. Continuous Integration : 持续集成 http://blog.csdn.net/inter_peng/article/details/53131831 
+
+> 持续集成的出现是为了配合敏捷开发（相对于瀑布开发）的速度和效率而产生的一个用于编译、测试、发布、部署的工具。开发人员的每一次代码提交，都自动地把Repository中所有代码Check out到一个空目录，并且自动运行所有Test Case。如果成功则接受这次提交，否则告诉所有人，这是一个失败的Revision。
+> 不管是哪一个持续集成工具，它本质上只不过是一个定时器，时间一到，做你脚本里让它去做的事。如果，想要扩展持续集成的作用，则需要将这个工具与其他的工具结合，才能显示出持续集成的本色。
+
+10. Angular Material:   https://material.angular.io/
+
+> Material Design，中文名：材料设计语言，是由Google推出的全新的设计语言，谷歌表示，这种设计语言旨在为手机、平板电脑、台式机和“其他平台”提供更一致、更广泛的“外观和感觉”。
+
+> 由 Google 倡导，以 Material Design 为方法论，做出来的一套横跨智能手机、平板、web、汽车以及可穿戴设备的整体 UI 风格，就是 Google Design
+
+11. angular flex : angular 所使用的流式布局 https://github.com/angular/flex-layout
+
+>  迫切需要更新的知识：flex流式布局、sass(biitstrap默认)、Material、 d3(solaredge) 正式的项目开始之前，起码先会使用；这些东西都是cli 所支持的东西，不使用太可惜了；
+
+12. font awesome 与iconfont 一样的东东；
+
+13. i18n（其来源是英文单词 internationalization的首末字符i和n，18为中间的字符数）是“国际化”的简称。在资讯领域，国际化(i18n)指让产品（出版物，软件，硬件等）无需做大的改变就能够适应不同的语言和地区的需要。对程序来说，在不修改内部代码的情况下，能根据不同语言及地区显示相应的界面。 在全球化的时代，国际化尤为重要，因为产品的潜在用户可能来自世界的各个角落。通常与i18n相关的还有L10n（“本地化”的简称）。 i18next是一个用来支持应用国际化的javascript库。 
+
+14. AOT：Ahead-of-Time Compilation  http://blog.csdn.net/liuborama/article/details/53998811
+
 
 
 
