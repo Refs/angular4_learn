@@ -375,6 +375,51 @@ npm install @types/jquery --save-dev
 npm install @types/bootstrap --save-dev
 ```
 
+#### 使用jquery 插件
+
+1. 插件一般都是在组件中使用：引入插件
+
+> 原文链接：https://medium.com/@NetanelBasal/typescript-integrate-jquery-plugin-in-your-project-e28c6887d8dc
+> 相关文章: https://hackernoon.com/wrap-any-jquery-plugin-with-angular-2-component-case-study-8b00eacec998
+
+```ts
+import 'bootstrap-daterangepicker';
+
+// 插件引入之后 依旧会报错： Property ‘daterangepicker’ does not exist on type ‘JQuery’
+// 原因在于： The daterangepicker doesn’t have definition file. | jQuery plugins are defined on the prototype of the jQuery object.
+
+```
+
+2. 通过查看jquery的td.s文件 找到解决方法
+
+> After digging into the source of the jQuery definition file, I’ve found out that jQuery has an interface called jQuery that defines all its prototype functions. For example:
+
+```ts
+interface JQuery {
+   addClass(className: string): JQuery;
+   attr(attributeName: string, value: string|number): JQuery;
+}
+```
+
+> Great, we now need to add the declaration of our jQuery plugin under interface with the same name.
+> We don’t want to mess with the jQuery source code, so we need to create our own type definition file. I’m using angular-cli, so I will add the code in a file called typings.d.ts.
+
+```ts
+interface JQuery {
+   daterangepicker(options?: any, callback?: Function) : any;
+}
+```
+> I’m declaring the daterangepicker function (this is the actual function that the API expose) and setting all its arguments as any ( You can go further and use specific types, but in this case, I will keep it simple ).
+
+> Now when the typescript compiler sees our interface, it will merge it with the jQuery interface and the error is gone.
+
+
+
+
+
+
+
+
 ## 正式开发Angular项目
 
 ### Angular项目的开发思路
@@ -872,6 +917,8 @@ $fa-font-path: "~font-awesome/fonts" !default;
 @import "~font-awesome/scss/font-awesome";
 
 ```
+
+### 使用jquery 插件： https://medium.com/@NetanelBasal/typescript-integrate-jquery-plugin-in-your-project-e28c6887d8dc
 
 7. 国外angular 好的学习网站： https://scotch.io/tutorials?hFR%5Bcategory%5D%5B0%5D=Tutorials&dFR%5B_tags%5D%5B0%5D=angular
 
