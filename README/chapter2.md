@@ -820,7 +820,40 @@ export class StarsComponent implements OnInit {
 
 ### 使用google devtools 去调试sass
 
+
+![sass-debug-error](../images/sass-debug-error.png)
+
+You can notice that on the right, next to the h1[_ngcontent-c0], the “<style></style>” means that this style rule is actually in the <head> tag.
+
+Because with angular cli, webpack compiles our scss to css, bundles them in one big js file. So we lost all references back to our scss files !
+
+What we need to do here, basically is try to remove the style of the component that we want to change from the js bundle file and put them into a separate file.
+
+```bash
+# 而 angular-cli 的serve命令（build命令一样有）
+
+# Extract css from global styles onto css files instead of js ones.
+--extract-css (aliases: -ec)
+
+# Output sourcemaps.
+--sourcemap (aliases: -sm, sourcemaps) 
+
+# 完整的命令 : 可以在正常在devtools中看到样式所引用的scss文件；
+ng serve -ec -sm
+
+# 看到的文件不包括 "_" 开头的文件，如bootstrap中的 “_bootstrap.scss” 等文件； 我们看到的依旧是webpack compile 过的 styles.bundle.css文件；原因是：
+# 在sass文档的编译语法中： 如果你有一个 SCSS 或 Sass 文件需要引入， 但是你又不希望它被编译为一个 CSS 文件， 这时，你就可以在文件名前面加一个下划线，就能避免被编译。 这将告诉 Sass 不要把它编译成 CSS 文件。 然后，你就可以像往常一样引入这个文件了，而且还可以省略掉文件名前面的下划线。 
+
+```
+
+
+
 > https://medium.com/@lampt2509/set-up-persistence-scss-from-chrome-devtools-for-angular-220ce0818568
+
+> https://stackoverflow.com/questions/40162982/how-to-source-map-angular-cli-css-files-in-chrome-dev-tools
+
+
+
 
 
 ## angular-cli中的几个概念
@@ -869,6 +902,9 @@ export class StarsComponent implements OnInit {
 // This practice will allow you to ensure that serving the contents of your dist dir will be closer to how your application will behave when it is deployed.
 
 // I personally like creating Sass files for project variables and for project mixins, this way , we can bring in any variables/mixin we'll need quickly and easily.
+
+// Why we have that problem that make us slow to make the design that we love? Because with angular-cli, webpack compiles our scss to css, bundles the into one big js file. So we lost all reference back to our scss files.
+// What we need to do here, basically is try to remove the style of the component that we want to change frome the js bundle file and put them into a separate file.
 
 
 
