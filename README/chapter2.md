@@ -873,22 +873,17 @@ $fa-font-path: "~font-awesome/fonts" !default;
 
 ```
 
+7. 国外angular 好的学习网站： https://scotch.io/tutorials?hFR%5Bcategory%5D%5B0%5D=Tutorials&dFR%5B_tags%5D%5B0%5D=angular
+
+> Wrap any jQuery plugin with Angular 2 component — case study. https://hackernoon.com/wrap-any-jquery-plugin-with-angular-2-component-case-study-8b00eacec998 这篇文章太重要了，值得深入研究一下；
+
+
+
 ```ts
-// Version 1.6.3
+// if you will wrap your llibaray into so called "dummy component" you can benefit from all goodness, that unidirectional data flow programming is coming with.
 
-//  This does not work
-// $fa-font-path: "~font-awesome/fonts" !default;
-// `must be relative`
-$fa-font-path: "../node_modules/font-awesome/fonts" !default;
-// This is not good for library applications that depend on (say font-awesome) because now that tilde does not work in $fa-font-path it is no longer portable i.e. there has to be a manual step for every application to reset $fa-font-path according to where they are are importing any scss.
-
-// One ugly workaround may be to adjust the location of your scss files so that the distance from node_modules to the source is same as the distance in the npm distribution.
-
-// My question is why did we take out this functionality/feature?
 
 ```
-
-
 
 
 
