@@ -812,6 +812,17 @@ export class StarsComponent implements OnInit {
 
 ```
 
+## angular的调试工具
+
+### Augury 用来查看与调试component route
+
+> https://scotch.io/tutorials/debugging-angular-2-apps-with-augury
+
+### 使用google devtools 去调试sass
+
+> https://medium.com/@lampt2509/set-up-persistence-scss-from-chrome-devtools-for-angular-220ce0818568
+
+
 ## angular-cli中的几个概念
 
 ### wiki--Build
