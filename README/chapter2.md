@@ -468,6 +468,19 @@ ng g component starts
   //每执行一次组件生成命令 都会同时生成4个文件，并且会更新app.module.ts模块，将我们新生成的组件，注册到模块之中，
 ```
 
+### 删除生成的组件： 学会利用git工具，查看cli的命令导致那些文件被更改了；
+
+原文： https://stackoverflow.com/questions/41354755/what-is-the-best-way-to-delete-a-component-with-cli
+
+destroy or something similar may come to the CLI, but it is not a primary focus at this time. So you will need to do this manually.
+Delete the component directory (assuming you didn't use --flat) and then remove it from the NgModule in which it is declared.
+
+`If you are unsure of what to do, I suggest you have a "clean" app meaning no current git changes. Then generate a component and see what is changed in the repo so you can backtrack from there what you will need to do to delete a component.`
+
+Update
+`If you're just experimenting about what you want to generate, you can use the --dry-run flag to not produce any files on disk, just see the updated file list.`
+
+
 ### 编写app.component组件；
 
 * 首先更改一下app组件的html文件
