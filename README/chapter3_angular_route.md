@@ -1,8 +1,8 @@
 # 使用Angular Route导航
 
-spa页面中，浏览器不会跳转，会永远停留在index.html中，只是将页面中的一部分的内容给替换掉，angular应用就是spa应用，在angular应用中使用路由器来实现，根据用户的操作，来改变页面的内容，而不会去重新加载页面这样一个特性，在现阶段我们可以将路由器理解为，控制整个应用视图状态的对象，每一个应用都有一个路由器，我们需要配置路由器，来使其满足特定的需求， 路由器的另外一个作用就是为每一个视图，分配一个单独的url; 这样我们就可以利用url使应用跳转到没有一个特定的视图状态 ， 比如说某个指定商品的详情页，其会有一个由路由器分配的特殊的url; 这样我们就可以利用url 直接跳到某个商品的详情页中，但是我们展示的页面 仍然是index.html;
+spa页面中，浏览器不会跳转，会永远停留在index.html中，只是将页面中的一部分的内容给替换掉，angular应用就是spa应用，在angular应用中使用路由器来实现，根据用户的操作，来改变页面的内容，而不会去重新加载页面这样一个特性，在现阶段我们可以将路由器理解为，`控制整个应用视图状态的对象`，每一个应用都有一个路由器，我们需要配置路由器，来使其满足特定的需求， `路由器的另外一个作用就是为每一个视图，分配一个单独的url`; 这样我们就可以利用url使应用跳转到特定的视图状态 ， 比如说某个指定商品的详情页，其会有一个由路由器分配的特殊的url; 这样我们就可以利用url 直接跳到某个商品的详情页中，但是我们展示的页面 仍然是index.html;
 
-视图状态，我们可以将spa理解为一组视图状态的集合， 在auction页面中顶部nav 与 左侧的search 与 底部的footer 我们希望 不管应用处于什么样的视图状态，上述的组件都是一直显示的，在剩下的区域里面有两个组件，一个是carousel组件，一个是product组件，我们希望根据用户的操作，在上述两个区域里面，去显示不同的内容。为了实现这一目标，我们需要将现在放置carousel组件与product组件的区域，定义成为一个“插座”，然后通过配置路由器，让在线拍卖应用在不同的视图状态中，在“插座”上显示不同的组件，`按照单页的规定，在一个插座上面，只能展示一个组件`，而前面我们并没有将carousel组件与product组件封装在一起，所以 我们会`先封装一个home组件，来作为carousel组件与product组件的父组件`，还会`开发一个商品的详情组件来展示商品的详情信息；然后会配置路由器，让应用在这两个视图状态间切换`，
+视图状态，我们可以将spa理解为一组视图状态的集合， 在auction页面中顶部nav 与 左侧的search 与 底部的footer 我们希望 不管应用处于什么样的视图状态，上述的组件都是一直显示的，在剩下的区域里面有两个组件，一个是carousel组件，一个是product组件，我们希望根据用户的操作，在上述两个区域里面，去显示不同的内容。为了实现这一目标，我们需要将现在放置carousel组件与product组件的区域，定义成为一个“插座”，然后通过配置路由器，让在线拍卖应用在`不同的视图状态中，在“插座”上显示不同的组件`，`按照单页的规定，在一个插座上面，只能展示一个组件`，而前面我们并没有将carousel组件与product组件封装在一起，所以 我们会`先封装一个home组件，来作为carousel组件与product组件的父组件`，还会`开发一个商品的详情组件来展示商品的详情信息；然后会配置路由器，让应用在这两个视图状态间切换`，
 
 ## 了解路由的基础知识
 
@@ -20,6 +20,11 @@ spa页面中，浏览器不会跳转，会永远停留在index.html中，只是�
 
 5. ActivateRoute : 在当前激活的路由对象，保存着当前的路由信息，如路由地址，路由参数等；
 
+```ts
+routes RouteOutlet Router navigate navigateUrl RouterLink ActivateRoute
+
+```
+
 ### 路由对象在整个angular应用中的位置
 
 ![router结构图](../images/router_结构.png)
@@ -28,7 +33,7 @@ spa页面中，浏览器不会跳转，会永远停留在index.html中，只是�
 
 2. routers对象有一组配置信息组成，每个配置信息都至少包含两个属性：path属性 用来指定浏览器中的url, component属性用来指定相应的组件，如：`path: /user, component: A || path: /older,component:B`--- 当我们的浏览器地址是 /user时，我们的应用展示的是A 组件； 当我们的浏览器地址是/older的时候，我们的应用展示的B组件；
 
-3. 而appComponent的组件模板app.component.html里面，可能会包含很多的内容，如有很多的div, 而当我们的浏览器地址切换到 /user是，我们的组件应该展示到app.component.html中的额什么位置？ 值就应该在app的组件模板app.component.html中使用 RouterOutlet指令，来指定组件A的位置，我们将RouterOutlet写在什么位置，组件componentA 就会展示在什么位置; 
+3. 而appComponent的组件模板app.component.html里面，可能会包含很多的内容，如有很多的div, 而当我们的浏览器地址切换到 /user是，我们的组件应该展示到app.component.html中的额什么位置？ 这就应该在app的组件模板app.component.html中使用 RouterOutlet指令，来指定组件A的位置，我们将RouterOutlet写在什么位置，组件componentA 就会展示在什么位置; 
 
 4. 如果我们想显示B组件的话，可以在页面上通过一个链接，来改变浏览器的地址，而RouterLink指令就是用于在模板中生成这样一个链接； 另外我们也可以通过在组件控制器app.component.ts中，调用Router对象的navigate()方法，来改变浏览器的地址，从而实现路由的转换；
 
@@ -57,6 +62,27 @@ const routes: Routes = [];
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
+// it can interpret a browser URL as instruction to navigate to a client-generated view. it can pass optional parameters along to the supporting view compornnt that can help it decide what specific content to present.
+
+// the router logs activity in the browser's history journal ao the back and forward buttons work as well.
+
+// it can interpret a broser URL as an instruction to navigate to a client-generated view. it can pass optional parameters along to a client-generated view. 
+// it can pass optional parameters along to the supporting view component that can help it decide what specific content to present. you can bind the router to links on a page and it will navigate to th  appropriate view when the user clicks a link . you can navigate imperatively when the user clicks a button, selects frome a drop box, or in response to some other stimulus from any resource. And the router logs activity in the browser's history journal so the back and forward buttons work as well.
+
+// This guide proceeds in phases, marked by milestones , strating from a simple two-pager and building toward a modular, multi-view design with child routes.
+
+//  an instruction to a few core router concepts will help orient you to the details that follow.
+
+//  if the app folder is the application root , as it is for the sample application, set the href value exactly as shown here.
+
+// The Angular Router is an optional service that presents a particular component vew for a given URL. it is not part of angular core. it is in its own library package, 
+
+// A routed Angular application has one singleton instance of Router service. When the browser's URL changes, that router looks for a corresponding Route from which it can determine the component to display.
+
+// A router has no routes until you configure it . the following wxample creates four route difinitions,
+
+
 ```
 > app-routing.module.ts向外暴露一个appRoutingModule模块，而这个模块会在app.module.ts中由imports 导入；然后我们的app应用 现在就知道，应该使用什么样的路由配置，来路由了；这就是app模块与app-routing模块之间的关系；
 
