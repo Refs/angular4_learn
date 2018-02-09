@@ -265,4 +265,61 @@ ng g service shared/anotherProduct
 
 ```
 
+```ts
+// 在another-product.service.ts中
+import { Injectable } from '@angular/core';
+import { ProductService, Product } from './product.service';
+
+@Injectable()
+// 首先AnotherProductService要实现ProductService,这就意味着前者拥有与后者相同的方法，
+export class AnotherProductService implements ProductService {
+
+  getProduct(): Product {
+    return new Product(2, 'iphone8', 8777, '17年最新款，最NB的手机' );
+  }
+
+  constructor() { }
+
+}
+```
+
+```ts
+// product2.component.ts中
+@Component({
+  selector: 'app-product2',
+  templateUrl: './product2.component.html',
+  styleUrls: ['./product2.component.css'],
+  providers: [{
+      provide: ProductService, useClass: AnotherProductService
+  }]
+})
+//  而这个组件与product1.component.唯一的不同就是，其在组件的级别也声明了一个providers，在这个providers里面声明了一个与模块providers里面相同的token,但是其使用另外一个类
+export class Product2Component implements OnInit {
+  public product: Product;
+  constructor(private productService: ProductService) { }
+
+  ngOnInit() {
+    this.product = this.productService.getProduct();
+  }
+
+}
+
+```
+```html
+<!-- product1.component.html中 -->
+<div>
+  <h3>商品名称：{{product.title}}</h3>
+  <h3>商品价格：{{product.price}}</h3>
+  <h3>商品描述：{{product.desc}}</h3>
+</div>
+
+```
+
+```html
+<!-- app.component.html中 -->
+<app-product1></app-product1>
+<app-product2></app-product2>
+```
+
+
 ## 注入器的层级关系
