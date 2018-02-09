@@ -160,5 +160,42 @@ providers:[{provide:ProductService, useFactory:()=>{...}}]
 // 最后我们还可以利用最后一种方式，即不是通过useClass直接new一个类出来，而是通过一个工厂方法返回一个实例；其会将工厂方法useFactory()返回的实例注入到构造函数的productService属性中 在工厂函数中我们可以写一些代码，来对我们想要创建的ProductService的实例做一些初始化的工作
 ```
 
+### 依赖注入的例子
+
+```bash
+ng new injection 
+ng g component product1
+# 因为我们的服务会在多个组件之间共享，所以我们将其生成到一个shared的文件夹中，
+ng g service shared/product 
+```
+
+```ts
+// product.service.ts中
+import { Injectable } from '@angular/core';
+
+@Injectable()
+export class ProductService {
+
+  constructor() { }
+    //1.3 声明一个getProduct()方法，返回一个Product类型的实例
+    getProduct() : Product {
+        return new Product(0,'iphone7',5899,'最新款iphone7手机')
+    }
+
+}
+
+//1.1 因为我们通过此服务要获取到的是商品信息，所以我们先来定义一个用来封装商品信息的Product类
+
+export class Product {
+    //1.2 利用构造函数来定义里面的字段，
+    constructor(
+        public id:number,
+        public title:string,
+        public price:number,
+        public desc:string
+    ){}
+}
+
+```
 
 ## 注入器的层级关系
