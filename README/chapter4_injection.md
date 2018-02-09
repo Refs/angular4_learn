@@ -198,4 +198,61 @@ export class Product {
 
 ```
 
+```ts
+// app.module.ts中
+@NgModule({
+    declarations: [
+        AppComponent,
+    Product1Component
+  ],
+  imports: [
+      BrowserModule
+  ],
+//2.1 修改模块的声明，将其声明到模块的providers数组里面，
+  providers: [ProductService],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+```
+
+```ts
+// product1.component.ts中
+
+@Component({
+  selector: 'app-product1',
+  templateUrl: './product1.component.html',
+  styleUrls: ['./product1.component.css']
+})
+export class Product1Component implements OnInit {
+  public product: Product;
+  //构造函数声明依赖；
+  constructor(private productService: ProductService) { }
+
+  ngOnInit() {
+    //   使用注入对象上面的方法getProduct()来获取产品的信息；
+    this.product = this.productService.getProduct();
+  }
+
+}
+
+```
+
+```html
+<!-- product1.component.html中 -->
+<div>
+  <h3>商品名称：{{product.title}}</h3>
+  <h3>商品价格：{{product.price}}</h3>
+  <h3>商品描述：{{product.desc}}</h3>
+</div>
+
+```
+
+```html
+
+<!-- app.component.html中 -->
+<app-product1></app-product1>
+
+```
+
 ## 注入器的层级关系

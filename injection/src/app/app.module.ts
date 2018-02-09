@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { Product1Component } from './product1/product1.component';
-import {ProductService} from './shared/product.service';
+import { ProductService } from './shared/product.service';
 
 @NgModule({
   declarations: [
