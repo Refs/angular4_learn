@@ -132,9 +132,33 @@ export class ProductComponent {
 
 ```ts
 constructor(private productService: ProductService){..}
+// 在构造函数上面我们声明了一个productService属性 在属性上我们指明其类型是ProductService; angular的注入器看到这样一个构造函数声明的时候，其就会在整个angular应用中去寻找ProductService的实例，若其能找到这样一个实例，其就会将实例注入到productService这样一个对象里面，然后我们直接使用就可以了；
 
 ```
 
+### 提供器
+
+> 为了让注入器知道需要被注入的对象如何实例化，我们需要指定提供器
+
+```ts
+
+providers:[ProductService];
+providers:[{provide:ProductService, useClass:ProductService}];
+
+//1.1 一般情况下我们会通过组件或者模块的providers属性来声明provide,上面代码就声明了一个名为ProductService的provide; 
+//1.2 上面两行代码的写法是等同的；即当provide属性与useClass一致时，可省略为第一行代码的写法；
+//1.3 provide指定了提供器的token,若指定useClass说明我们的实例化方式是new; 也就是new一个ProductService;; token就是我们在构造函数中声明的属性的类型，当我们在构造函数中声明，我们需要一个ProductService这样一个类型的对象的时候，它会去找token是ProductService类型的provider的声明，当其看到声明的属性写的是useClass:ProductService 其就会去new ProductService()
+
+providers:[{provide:ProductService, useClass:AnotherProductService}]
+//2.1 而当我们的provider的属性是如上的方式声明的，即provide的类型是ProductService token是ProviderService ； 而useClass写的是AnotherProductService; 
+
+constructor(private productService: ProductService){..}
+// 2.2 那么当我在构造函数中去声明需要ProductService这样一个token的时候，我们实例化的就是AnotherProductService;;
+// 2.3 即构造函数中属性声明的类型，与提供器provider的provide声明的token是一致的；即根据构造声明的属性类型与token的类型，来匹配使用某一个provider，而后会根据provider的useClass属性 来指定实例化某一个具体的类；useClass指定的是哪一个类，实例化的对象就是哪一个类；
+
+providers:[{provide:ProductService, useFactory:()=>{...}}]
+// 最后我们还可以利用最后一种方式，即不是通过useClass直接new一个类出来，而是通过一个工厂方法返回一个实例；其会将工厂方法useFactory()返回的实例注入到构造函数的productService属性中 在工厂函数中我们可以写一些代码，来对我们想要创建的ProductService的实例做一些初始化的工作
+```
 
 
 ## 注入器的层级关系
