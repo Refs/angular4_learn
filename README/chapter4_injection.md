@@ -255,4 +255,14 @@ export class Product1Component implements OnInit {
 
 ```
 
+### 提供器的作用域
+上面的例子中我们将提供器providers 声明在app.module.ts中，除了声明在模块之中 我们页可以将提供器providers设置在组件之中，而此处我们再生成一个组件product2, 与一个服务AnotherProductService 来演示这一个特性；
+
+```bash
+ng g component product2
+
+ng g service shared/anotherProduct
+
+```
+
 ## 注入器的层级关系
