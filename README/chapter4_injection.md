@@ -386,8 +386,8 @@ export class LoggerService {
 
 @Injectable()
 export class ProductService {
-// 注入。。。
-  constructor(private logger: LoggerService) { }
+// 注入。。。 注入的修饰符要用public进行修饰，要不然AnotherProductService没办法去实现ProductService
+  constructor(public logger: LoggerService) { }
   getProduct(): Product {
     //   调用注入对象上面的方法
       this.logger.log('getProduct方法被调用');
@@ -448,5 +448,67 @@ export class ProductService {
 
 > 这个工厂函数会根据一个随机数来决定,是实例化ProductService还是AnotherProductService
 
+* 首先我们去掉product2Component中的providers声明，至此poruct1Component 与product2Component公用appModule上的providers提供器； 即两者公用同一个账户来获取商品信息；下面我们去修改appModule中的提供其声明；
+
+```ts
+// 在app.module.ts中使用工厂函数作为提供器
+@NgModule({
+  declarations: [
+    AppComponent,
+    Product1Component, 
+    Product2Component
+  ],
+  imports: [
+    BrowserModule
+  ],
+  providers: [{
+      provide: ProductService,
+      useFactory: () => {
+          let logger = new LoggerService();
+        //   dev 指的是是否是开发环境，我们利用一个随机数对其进行赋值；根据随机数的不同我们每次使用的服务可能是不一样的；
+          let dev = Math.random() > 0.5;
+          if(dev){
+              return new ProductService(logger);
+          }else{
+              return new AnotherProductService(logger);
+          }
+      }
+  }, LoggerService],
+  bootstrap: [AppComponent]
+})
+```
+> 此处有一点需要注意，若有多个组件如product1Component与product2Component同时使用一个服务；若服务的provider指定的是使用工厂方法创建实例，则工厂方法创建的对象是一个单例对象； 工厂方法只会在需要创建第一个需要被注入的对象时被调用一次，然后在整个应用中所有需要被注入工厂方法匹配的token 的实例，都是同一个对象；
+
+> 上述的方式存在两个问题：
+* 我们在工厂方法的内部通过new 操作符 实例化一个logger，这就意味着我们的工厂方法与LoggerService这个类是紧密的耦合在一起的；而实际上我们是有声明LoggerService的提供器的，那么如何在ProductService的工厂方法里面去使用LoggerService的提供器喃？我们需要声明provider的第三个参数deps;
+
+```ts
+// 在app.module.ts中
+@NgModule({
+  declarations: [
+    AppComponent,
+    Product1Component, 
+    Product2Component
+  ],
+  imports: [
+    BrowserModule
+  ],
+  providers: [{
+      provide: ProductService,
+      useFactory: () => {
+          let logger = new LoggerService();
+          let dev = Math.random() > 0.5;
+          if(dev){
+              return new ProductService(logger);
+          }else{
+              return new AnotherProductService(logger);
+          }
+      }
+  }, LoggerService],
+  bootstrap: [AppComponent]
+})
+```
+
+<!-- 好好努力，终将成为自己想成为的那个人 -->
 
 ## 注入器的层级关系
