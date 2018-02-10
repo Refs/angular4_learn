@@ -599,3 +599,28 @@ export class Product1Component implements OnInit {
 
 ### 手工使用angular的注入器
 
+```ts
+
+@Component({
+  selector: 'app-product1',
+  templateUrl: './product1.component.html',
+  styleUrls: ['./product1.component.css']
+})
+export class Product1Component implements OnInit {
+  public product: Product;
+
+  private productService: ProductService;
+  // angular将组件Product1Component本身的注入器，注入到了组件的构造函数当中，
+  constructor(private injector: Injector) {
+    
+    this.productService = Injector.get(ProductService);
+   }
+
+  ngOnInit() {
+    this.product = this.productService.getProduct();
+  }
+
+}
+
+```
+
