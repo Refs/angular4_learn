@@ -321,5 +321,41 @@ export class Product2Component implements OnInit {
 <app-product2></app-product2>
 ```
 
+> 提供器的作用域规则总结：
+
+1. 当一个提供器声明在模块中的时候，其是对所有的组件可见的（所有的组件都可以去注入）；
+2. 当一个提供器声明在组件中的时候，其仅对声明其的组件即子组件可见，其它组件不可以注入；
+3. 当声明在模块中的提供器与声明在组件中的提供器具有相同的token的时候，声明在组件中的提供器会覆盖声明在模块中的提供器；
+4. 一般情况下我们应该优先将服务提供器声明在模块中，只有服务应对声明组件之外的组件不可见的时候，才应该声明在组件之中，而这种情况是非常的罕见的；、
+
+### 服务类的代码分析
+
+```ts
+import { Injectable } from '@angular/core';
+// 装饰器@Injectable()指明 ProductService服务也可以通过构造函数去注入其它的服务；
+// 注意其意思是：”该服务可以将其它的服务注入到该服务中来，并不是说这个服务可以注入到其它的地方; 而该服务能否注入到其它地方，是由其是否在模块中或其它组件中的providers中声明来决定的“
+
+// @Injectable()仅指明其所修饰的类的构造函数中能否注入其它服务，只有被@injectable()修饰我们才可以将别的服务注入到该服务的构造函数中来。
+
+@Injectable()
+export class ProductService {
+
+  constructor() { }
+  getProduct(): Product {
+      return new Product(0, 'iphone7', 5899, '最新款iphone7手机');
+  }
+
+}
+export class Product {
+  constructor(
+      public id: number,
+      public title: string,
+      public price: number,
+      public desc: string
+  ) { }
+}
+
+```
+
 
 ## 注入器的层级关系
