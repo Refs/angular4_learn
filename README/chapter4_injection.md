@@ -563,3 +563,39 @@ export class ProductService {
  *  在主组件的模板中(app.component.html)会引入其子组件 `<app-product1></app-product1>` 这种引用可以使用选择器来引用，也可以按路由来引用，不管使用哪一种方式来引入的组件，都是当前AppComponent的子组件；
  *  当子组件被创建时，其父组件的注入器会为当前的子组件也创建一个注入器，然后将子组件声明的提供器注册上去
  *  以此类推，最后应用中 会形成一组注入器，这些注入器 会形成与组件上下级关系一样的层级关系，
+
+### 注入器的行为分析
+
+* 当angular发现Product1Component 声明了自己需要一个ProductService这样的依赖时，Product1Component这个组件的注入器首先会检查自身是否注册了token类型为ProductService的提供器，如果没有找到，则会去查找器父组件；
+* 其父组件就是AppComponent，AppComponent注入器上面是否有合适的提供器，如果仍然没找到就继续向上面找，一致找到应用级的注入器AppModule
+*  这是angular发现在应用级的注入器上面，发现了一个符合条件的提供器（也就是token类型为ProductService的provider），其会根据提供器的配置来实例化一个ProductService的实例，并且将其注入到product1Component的构造函数中
+* 如果一直到应用级的注入器，都没有发现符合条件的提供器，则抛出异常
+* 这就是angular依赖注入的整个工作方式
+
+```ts
+// 在product1Component中
+import { Component, OnInit } from '@angular/core';
+import { Product, ProductService } from '../shared/product.service';
+
+@Component({
+  selector: 'app-product1',
+  templateUrl: './product1.component.html',
+  styleUrls: ['./product1.component.css']
+})
+export class Product1Component implements OnInit {
+  public product: Product;
+  constructor(private productService: ProductService) { }
+
+  ngOnInit() {
+    this.product = this.productService.getProduct();
+  }
+
+}
+
+```
+
+> 一般情况下我们不需要编码来调用注入器的方法，angular可以通过构造函数的参数，自动注入所需要的依赖；这里需要注意的一点是： angular的依赖注入只有一个注入点，就是其构造函数，如果你看到一个组件声明了一个没有任何参数的构造函数，那么就可以断定这个组件没有被注入任何的东西；
+> 之所以要强调这一点，是因为其它的IOC容器 (控制反转容器)提供多种的注入方式，在angular里面只有一种注入，就是构造函数注入，为了帮助大家理解，我们有一段手工使用注入器的代码；
+
+### 手工使用angular的注入器
+
