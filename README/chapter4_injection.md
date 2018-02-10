@@ -422,6 +422,31 @@ export class ProductService {
 1. 只有声明@injectable()的服务才可以去注入其它的服务，所以建议对每一个服务类都添加@injectable()这个装饰器，包括严格来说并不需要注入其它服务的服务类;因为若以后我们想修改该服务添加依赖的时候，不要想着要添加@injectable()这样一个装饰器；另外一个好处就是一致性，所有的服务都遵循相同的规则，不需要考虑为什么有的服务类有装饰器，而另外一些服务类上面没有装饰器，实际上angular的命令行工具已经帮我们这样做了；
 2. 组件没有@injectable()装饰器也能被注入服务，这是因为组件有一个@component()装饰器，而该装饰器包括后面我们要学到的管道装饰器，都是@injectable()装饰器的子类；所以当我们声明@component()装饰器的时候，实际上即已经声明了@injectable()装饰器了；所以能够在构造函数中去注入其需要的服务；
  
+### 使用工厂方法与值声明来定义提供器
+
+>  在前面我门使用如下的方法来定义一个提供器
+
+```ts
+// 在app.module.ts中
+@NgModule({
+  declarations: [
+    AppComponent,
+    Product1Component,
+    Product2Component
+  ],
+  imports: [
+    BrowserModule
+  ],
+  providers: [ProductService, LoggerService],
+  //其意思是当有组件或者指令声明自己需要一个ProductService类型的token时，实例化一个ProductService的实例，在这里是指利用new操作符 new出来以恶搞ProductService的实例出来，在很多的时候我们的服务对象，并非简单的new一下就可以满足我们的需求的；如 有时我们可能要依据某些条件判别具体要实例化那个对象，也有可能在实例化对象时（调用构造函数时）需要去传递某些参数, 这时就需要去使用工厂提供器；
+  bootstrap: [AppComponent]
+})
+
+```
+
+#### 例子：如何指定一个工厂函数作为提供器
+
+> 这个工厂函数会根据一个随机数来决定,是实例化ProductService还是AnotherProductService
 
 
 ## 注入器的层级关系
