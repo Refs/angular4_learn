@@ -477,10 +477,11 @@ export class ProductService {
   bootstrap: [AppComponent]
 })
 ```
-> 此处有一点需要注意，若有多个组件如product1Component与product2Component同时使用一个服务；若服务的provider指定的是使用工厂方法创建实例，则工厂方法创建的对象是一个单例对象； 工厂方法只会在需要创建第一个需要被注入的对象时被调用一次，然后在整个应用中所有需要被注入工厂方法匹配的token 的实例，都是同一个对象；
+> 此处有一点需要注意，若有多个组件如product1Component与product2Component同时使用一个服务；若服务的provider指定的是使用工厂方法创建实例，则工厂方法创建的对象是一个单例对象； 工厂方法只会在需要创建第一个需要被注入的对象时被调用一次，然后在整个应用中所有需要被注 入工厂方法匹配的token 的实例，都是同一个对象；
 
 > 上述的方式存在两个问题：
-* 我们在工厂方法的内部通过new 操作符 实例化一个logger，这就意味着我们的工厂方法与LoggerService这个类是紧密的耦合在一起的；而实际上我们是有声明LoggerService的提供器的，那么如何在ProductService的工厂方法里面去使用LoggerService的提供器喃？我们需要声明provider的第三个参数deps;
+
+* 我们在工厂方法的内部通过new 操作符 实例化一个logger，这就意味着我们的工厂方法与LoggerService这个类是紧密的耦合在一起的；而实际上我们是有声明LoggerService的提供器的，那么如何在ProductService的工厂方法里面去使用LoggerService的提供器喃？我们需要声明provider的第三个参数deps;deps是一个数组，用来声明我们的工厂方法所需要依赖的参数，
 
 ```ts
 // 在app.module.ts中
@@ -492,23 +493,63 @@ export class ProductService {
   ],
   imports: [
     BrowserModule
-  ],
+  ], 
   providers: [{
       provide: ProductService,
-      useFactory: () => {
-          let logger = new LoggerService();
+      useFactory: (logger: LoggerService) => {
+        //   此时angualr将会使用LoggerService的提供器来实例化一个LoggerService的实例，并将其注入到提供器工厂方法的参数中去，
           let dev = Math.random() > 0.5;
           if(dev){
               return new ProductService(logger);
           }else{
               return new AnotherProductService(logger);
           }
-      }
+      },
+      deps:[LoggerService]
   }, LoggerService],
+//   
   bootstrap: [AppComponent]
 })
 ```
 
 <!-- 好好努力，终将成为自己想成为的那个人 -->
+
+* 问题二： 我们实例化哪一个对象，是由一个随机数来决定的，在真实的世界中我们是不能这样做的，我们可能回去依赖一个变量，来决定实现某一个实现类； 变量可能在不同的环境或则和项目中是不一样的，那么变量是否能像服务一样被依赖注入喃？答案是肯定的；
+
+```ts
+// 在app.module.ts中
+@NgModule({
+  declarations: [
+    AppComponent,
+    Product1Component, 
+    Product2Component
+  ],
+  imports: [
+    BrowserModule
+  ], 
+  providers: [{
+      provide: ProductService,
+      useFactory: (logger: LoggerService, isDev) => {
+          let dev = Math.random() > 0.5;
+          if(APP_CONFIG.isDev){
+              return new ProductService(logger);
+          }else{
+              return new AnotherProductService(logger);
+          }
+      },
+      deps:[LoggerService,'APP_CONFIG']
+  }, LoggerService,{
+    //  变量也需要先注入到提供器之中，且这个提供器的token不再是一个类型，而是一个字符串，提供器的第二个参数既不是useClass也不是uesFactory而是useValue; 即其要注入的就是一个明确的值而不是一个对象实例；
+    // 若想注入到工厂函数中 需要在提供器中的第三个参数deps中声明；deps实际上就是提供器的声明所依赖的token
+    // 不仅可以注入一个具体的值，也可以注入一个值对象；
+    provide: 'APP_CONFIG',
+    // useValue: false
+    useValue: {isDev: false}
+  }],
+//   
+  bootstrap: [AppComponent]
+})
+```
+
 
 ## 注入器的层级关系
