@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
+import { LoggerService } from './logger.service';
 
 @Injectable()
 export class ProductService {
 
-  constructor() { }
-  // 1.3声明一个getProduct()方法，返回一个Product类型的实例
+  constructor(private logger: LoggerService) { }
   getProduct(): Product {
+      this.logger.log('getProduct方法被调用');
       return new Product(0, 'iphone7', 5899, '最新款iphone7手机');
   }
 
 }
 export class Product {
-  // 1.2利用构造函数来定义里面的字段，
   constructor(
       public id: number,
       public title: string,

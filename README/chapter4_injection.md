@@ -328,7 +328,7 @@ export class Product2Component implements OnInit {
 3. 当声明在模块中的提供器与声明在组件中的提供器具有相同的token的时候，声明在组件中的提供器会覆盖声明在模块中的提供器；
 4. 一般情况下我们应该优先将服务提供器声明在模块中，只有服务应对声明组件之外的组件不可见的时候，才应该声明在组件之中，而这种情况是非常的罕见的；、
 
-### 服务类的代码分析
+### 服务类的代码分析以及服务之间的相互注入；
 
 ```ts
 import { Injectable } from '@angular/core';
@@ -354,6 +354,67 @@ export class Product {
       public desc: string
   ) { }
 }
+
+```
+
+> 服务之间的相互注入
+
+```bash
+
+ng g service shared/logger
+
+```
+
+```ts
+// 在logger.service.ts中
+import { Injectable } from '@angular/core';
+
+@Injectable()
+export class LoggerService {
+
+  constructor() { }
+  log(message: string) {
+    console.log(message);
+  }
+}
+
+```
+
+```ts
+// 在product.service.ts中
+// 将logger.service.ts注入到product.service中
+
+@Injectable()
+export class ProductService {
+// 注入。。。
+  constructor(private logger: LoggerService) { }
+  getProduct(): Product {
+    //   调用注入对象上面的方法
+      this.logger.log('getProduct方法被调用');
+      return new Product(0, 'iphone7', 5899, '最新款iphone7手机');
+  }
+
+}
+
+```
+
+> 但此时如果我们去运行，是打印不出来 `getProduct方法被调用`的，因为loggerService也是一种service, 如果想将其注入到其它的模块、组件、服务中，其也需要在提供器providers中去声明
+
+```ts
+// app.module.ts中
+// 在angular中如果我们想要去注入一个服务的时候，首先我们要将其在providers里面去声明；
+0@NgModule({
+  declarations: [
+    AppComponent,
+    Product1Component,
+    Product2Component
+  ],
+  imports: [
+    BrowserModule
+  ],
+  providers: [ProductService, LoggerService],
+  bootstrap: [AppComponent]
+})
 
 ```
 
