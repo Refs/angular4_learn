@@ -19,16 +19,20 @@ import { AnotherProductService } from './shared/another-product.service';
   ],
   providers: [{
     provide: ProductService,
-    useFactory: () => {
-      const logger = new LoggerService();
-      let dev: boolean = Math.random() > 0.5;
-      if (dev) {
+    useFactory: (logger: LoggerService, APP_CONFIG) => {
+      // const logger = new LoggerService();
+      // let dev: boolean = Math.random() > 0.5;
+      if (APP_CONFIG.isDev) {
         return new ProductService(logger);
       } else {
         return new AnotherProductService(logger);
       }
-    }
-  }, LoggerService],
+    },
+    deps: [LoggerService, 'APP_CONFIG']
+  }, LoggerService, {
+    provide: 'APP_CONFIG',
+    useValue: {isDev: true}
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
