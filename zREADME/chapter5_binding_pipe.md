@@ -47,6 +47,7 @@ href 与 onclick 的区别是一个是普通属性，一个是事件属性； an
 
 <app-hero-detail (deleteRequest)="deleteHero($event)"></app-hero-detail>
 
+> 理解事件绑定是从template到component的绑定，因为handler 是定义在component中的， 处理函数的运行肯定是后台组件中运行（这一点很好理解，想象一下自己进行断点调试，事件触发时肯定时蹦到component中的handler函数体中去了），而运行中所需要的参数是从前传到后的；`关键点在于理解handler 是在后台调用执行的`
 
 ## 响应式编程
 
