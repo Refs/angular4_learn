@@ -42,6 +42,11 @@
 
 4. 我们要从这个纬度，去理解angular, 如现在我们去理解自定义事件；
 
+<a href="http://" target="_blank" onclick="do()">
+href 与 onclick 的区别是一个是普通属性，一个是事件属性； angular 要模仿的就是事件属性，要能做到三点： 本质上是属性，可被监听，可触发事件；
+
+<app-hero-detail (deleteRequest)="deleteHero($event)"></app-hero-detail>
+
 
 ## 响应式编程
 
