@@ -170,7 +170,7 @@ TimeOut(200).then((value)=>{
 
 ### Dom属性绑定
 
-差值表达式与属性绑定其实是一个东西；在多数情况插值表达式更方便； 实际上在渲染页面之前，angular会将所有的差值表达式，翻译成相应的属性绑定，从技术上的角度来说没有哪一种形式比哪一种形式好，我们只需要按自己的喜好去选择一种风格，并尽量在代码中使用一种风格编写代码就可以了；
+> 差值表达式与属性绑定其实是一个东西；在多数情况插值表达式更方便； 实际上在渲染页面之前，angular会将所有的差值表达式，翻译成相应的属性绑定，从技术上的角度来说没有哪一种形式比哪一种形式好，我们只需要按自己的喜好去选择一种风格，并尽量在代码中使用一种风格编写代码就可以了；插值表达式是dom属性绑定而不是html属性绑定；
 
 ```html
 <img [src]="imgUrl"></br>
@@ -178,7 +178,19 @@ TimeOut(200).then((value)=>{
 <!-- 两者等同 -->
 ```
 
-#### 对DOM property 与 html attribute的理解
+> dom绑定的语法
+
+![property_binding](../images/property_binding.png)
+
+* 第一步 当控制器的greeting属性发生变化的时候，其将触发angular的dom属性绑定机制，会采用单向绑定来修改input的dom属性，这个“单向”指的是从控制器的greeting属性，到dom的value属性，将dom 属性value的值 更改为组件 greeting属性的值；
+* angular的dom属性绑定，不会更新html 元素的attribute, html属性里面value的值 会一直时空的
+* 因为浏览器会保持UI与DOM的改变同步（浏览器引擎在本质上，仅仅负责在DOM树更新时承担重新渲染）； 所以 angular 在更新完DOM的value属性之后，新的value的值会被渲染到页面上
+* dom value属性的改变不会更新与其相关的<input>标签的html属性
+* 当用户在<input>标签中输东西的时候，浏览器也不会同步UI与html属性，用户看到的属性来自dom 而不是来自于html标签；
+>  整个上面的过程就是angular的dom属性绑定，如果可能的话我们应该优先去使用该风格的属性绑定
+> 需要注意的是： 如果我们忘记在 html模板上 忘记用[]将value括起来（value="greeting"）,angular不会将等号右侧的字符串 当成一个表达式来处理，并执行绑定，其只会将其当成一个字符串赋值给左侧的属性；---- 不要忘了[]!
+
+#### 补充知识---对DOM property 与 html attribute的理解
 
 ##### https://stackoverflow.com/questions/6003819/what-is-the-difference-between-properties-and-attributes-in-html
 
@@ -208,7 +220,7 @@ HTML仅仅是文档树和节点对象的一种描述方法。
 * 用其他的方法，也可以描述DOM对象，例如JSX。（当然用其他方法描述DOM对象的时候，生成DOM文档树的过程，肯定会发生相应的修改）
 
 
-> JavaScript中的DOM对象，仅仅是一种操作浏览器引擎中DOM对象的接口。
+> `JavaScript中的DOM对象，仅仅是一种操作浏览器引擎中DOM对象的接口`。
 
 * JavaScript中的DOM对象，和浏览器引擎中存储的DOM节点，本质上不是一个东西。
 
@@ -218,7 +230,7 @@ HTML仅仅是文档树和节点对象的一种描述方法。
 
 * 这样用户就能通过操作JavaScript的DOM对象，透明的修改引擎中存储的DOM节点。
 
-* 而浏览器引擎在本质上，仅仅负责在DOM树更新时承担重新渲染，实际上并不关心JS的存在。
+* 而`浏览器引擎在本质上，仅仅负责在DOM树更新时承担重新渲染`，实际上并不关心JS的存在。
 
 * 你如果用其他办法修改了引擎使用的DOM树，也能更新文档结构。（当然这种办法基本上不存在…）
 
