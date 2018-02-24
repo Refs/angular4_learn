@@ -28,9 +28,17 @@
 <!-- 在angular中默认的数据绑定方式是单向绑定，虽然默认情况下其不使用双向的绑定 ，但我们依然可以使用明确指定的方式，来使用数据绑定，也就是双向绑定现在变成一个可选项，而不是框架的默认的行为 -->
 ```
 
-### angular中的事件绑定
+#### angular中的事件绑定
 
-#### 课程所讲知识点
+![事件绑定](../images/event_binding.png)
+
+```html
+<input (input)="onInputEvent($event)" >
+<!-- 上面是一段标准的事件绑定语法，为了给一个事件指定一个处理方法，我们需要在组件的模板中将事件的名字用()括起来，小括号表示此时一个angular事件绑定语法，小括号中的内容时事件的名称，当小括号中指定的事件被触发时，等号右侧 双引号中间的表达式会被执行，在上述的代码中这个表达式是组件控制器的一个方法，所以每次这个事件被触发时，onInputEvent方法就会被调用；如果事件的处理方法需要了解事件的属性，我们可以给事件处理方法添加一个$event参数，而这个参数时一个标准的浏览器事件对象，target属性指向事件产生的dom节点 -->
+
+```
+
+> 这里有两个需要注意：等号右边的表达式表达式可以不是一个函数调用，也可以是一个属性赋值 `<button (click)="saved=true">`这表示当按钮被点击时，组件控制器的saved的属性会被设置为true; 第二点需要注意的是 被绑定的事件既可以是标准的dom事件，也可以是任意的自定义事件，会在组件间通讯 演示自定义事件；
 
 
 #### 对angular中的component以及directive的理解
@@ -79,7 +87,7 @@ angular 将上面所述的特性逐一拆解，并通过多个维度 逐一实�
 
 
 
-### 对组件事件绑定的理解 实际上模仿的就是html标签的事件属性
+#### 对组件事件绑定的理解 实际上模仿的就是html标签的事件属性
 
 > 组件的自定义事件在angular的生态中是必须要存在的东西，因为组件实际上是对html标签的扩充，我们可以将一些dom事件属性onclick、onfucus、onmouseover等加到html标签上，但我们不能将这个dom属性加到我们diy的组件上面去：`<app-hero-detail onclick = dosometing() ></app-hero-detail>` , 而若门想实现这一点 就需要用到custom event了；实际上也是父子组件之间的一种交互通道； 以这个逻辑去理解；
 
@@ -141,17 +149,17 @@ delete() {
 > 上面例子是官方文档的例子，整个流程类似于事件的“冒泡”， 将事件逐级向上提，直到有人能够处理；
 
 
-### promise逻辑的理解
+#### promise逻辑的理解
 
 > 一般异步的逻辑是“这个事我现在没法干，得先让‘小李干‘，等他干完了有结果了，我才能做。如果结果为a, 我就这样这样干；如果结果为b 我就那样那样干”- 对现在干不了的事情给领导说个计划，给个承诺；---- 都是满满的套路；而promise的出现就是对付这种套路（其无需等待）， 虽然现在具体结果还没有出来，但结果大概张什么样的自己肯定事心知肚明，就类似于我现在与后台配合做页面，伪说法是 后台需要等前台的页面做完其才能开始做，但现实是虽然页面还没有出来，但页面上将来要部署那些功能，需要那些接口，需不需要分页，都是明的，后台不需要等我页面完全出来，就可以去做这些工作了-------“上级：我知道这个事情现在你没法做，需要先等到小李做完，但你可以先将能做的都做了，并不一定非得等他将结果做出来，`可以将未知结果设置成为一个变量，利用这个变量 你该写你的逻辑写你的逻辑`, `等真实的结果出之后，直接将其传到逻辑中的变量中运行一遍事情就做完了`”  --- 假设未来，先做事，提升效率的逻辑；
 
-```js
+```js         
 function TimeOut (ms){
    return new Promise((resolve,reject)=>{
     //我： “首先这个事 立刻让 小李去做” Promise 构造函数的函数参数中的逻辑 就是小李做事的逻辑
        setTimeout(resolve,ms,'done');
    })
-}
+} 
 // 我：“并不一定要等到他，将这个事情做完，我可以将未知的结果设置成为一个变量，然后该写我的逻辑，写我的逻辑”
 TimeOut(200).then((value)=>{
     // 我： “等小李真的将事情做完了，他可以通过调用resole(data)方法的方式通知我，并将真实的结果传给我； 等到脚本所有的同步代码都运行完毕后（then中的函数必须等所有同步脚本，运行完毕后执行），我在运行一遍我的逻辑，事情就有结果了 ” then 方法函数参数中的逻辑事我的逻辑。
@@ -160,7 +168,74 @@ TimeOut(200).then((value)=>{
 
 ```
 
-### 理解工厂函数的固定写法
+### Dom属性绑定
+
+差值表达式与属性绑定其实是一个东西；在多数情况插值表达式更方便； 实际上在渲染页面之前，angular会将所有的差值表达式，翻译成相应的属性绑定，从技术上的角度来说没有哪一种形式比哪一种形式好，我们只需要按自己的喜好去选择一种风格，并尽量在代码中使用一种风格编写代码就可以了；
+
+```html
+<img [src]="imgUrl"></br>
+<img src="{{imgUrl}}">
+<!-- 两者等同 -->
+```
+
+#### 对DOM property 与 html attribute的理解
+
+##### https://stackoverflow.com/questions/6003819/what-is-the-difference-between-properties-and-attributes-in-html
+
+When writing HTML source code, you can define attributes on your HTML elements. Then, once the browser parses your code, a corresponding DOM node will be created. This node is an object, and therefore it has properties.
+.... 还有很多，建议看一下
+
+##### http://blog.csdn.net/bonjean/article/details/52741333 讲的很透
+
+> 对于浏览器引擎而言，并不存在“HTML标签”这回事。其本质是DOM节点对象。也并不存在“HTML文档”这回事，其本质是DOM节点对象组成的文档树。浏览器引擎才是实际存储和渲染DOM节点对象的“大爷”。只是我们无法直接操作浏览器引擎，所以对这个本质并不熟悉（其实也不需要很熟悉，但是得知道）
+
+> DOM节点对象是唯一的，但操作DOM节点对象的数据，却不止有一种方法。例如对于一个图像的宽度：
+
+* HTML可以通过<img>的width属性去定义；
+
+* JavaScript可以通过element.width去读取和修改；
+
+* 别忘了CSS，CSS也可以通过width属性去修改。
+
+> HTML属性和JavaScript的DOM对象的属性，本质上都只是影响DOM节点对象数据的众多理由之一。
+
+多个原因影响同一个DOM节点的实质数据（多对一），请务必记住这个本质理由。
+
+HTML仅仅是文档树和节点对象的一种描述方法。
+
+* 浏览器的解析器部分，根据HTML直接把DOM文档树，交给浏览器引擎。
+
+* 用其他的方法，也可以描述DOM对象，例如JSX。（当然用其他方法描述DOM对象的时候，生成DOM文档树的过程，肯定会发生相应的修改）
+
+
+> JavaScript中的DOM对象，仅仅是一种操作浏览器引擎中DOM对象的接口。
+
+* JavaScript中的DOM对象，和浏览器引擎中存储的DOM节点，本质上不是一个东西。
+
+* 用户实际上仅仅有权操作JavaScript中提供的DOM对象。
+
+* JS引擎和浏览器引擎协作，确保了JavaScript的DOM对象，是引擎中DOM节点的一个原样映射。
+
+* 这样用户就能通过操作JavaScript的DOM对象，透明的修改引擎中存储的DOM节点。
+
+* 而浏览器引擎在本质上，仅仅负责在DOM树更新时承担重新渲染，实际上并不关心JS的存在。
+
+* 你如果用其他办法修改了引擎使用的DOM树，也能更新文档结构。（当然这种办法基本上不存在…）
+
+> 至于HTML属性名和JavaScript DOM对象的属性名大多相似或等同，这仅仅是人为的方便。JavaScript DOM对象属性名和HTML属性名的近似，是JavaScript给Web开发者的恩惠。
+
+> 第二个要澄清的是 html属性与dom属性的区别：different between HTML attribute and DOM property.
+
+```html 
+<input value="Tom" (input)="doOnInput($event)">
+
+``` 
+当浏览器渲染`<input value="Tom" (input)="doOnInput($event)">`一个字符串的时候，岂会创建一个相应的dom节点，dom是一个类型为html input element类型的对象,每个dom都会有自己的属性与方法，以上面的代码为里dom对象的value属性会被初始化为"Tom"; 另外一个属性是html属性，html属性是不变的，即当input标签初始化的时候其值是什么，这个值就一直是什么， html属性指定了初始的值，dom的属性表明当前的值； html属性初始完dom属性，则他的使命就完成了； dom属性的值可以改变，而html属性的值是不可以改变，这就是两者的区别，这一点我们要明确的记在脑子里；
+
+HTML属性的值指定了初始值；DOM属性的值表示当前的值。DOM属性的值可以改变；HTML属性的值不可以改变；
+
+模板绑定是通过DOM属性和事件来工作的，而不是HTML属性；
+
 
 
 ## 响应式编程
