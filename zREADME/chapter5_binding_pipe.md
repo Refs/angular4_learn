@@ -81,7 +81,7 @@ angular 将上面所述的特性逐一拆解，并通过多个维度 逐一实�
 
 ### 对组件事件绑定的理解 实际上模仿的就是html标签的事件属性
 
-> 组件的自定义事件在angular的生态中是必须要存在的东西，因为组件实际上是对html标签的扩充，我们可以将一些dom事件属性onclick、onfucus、onmouseover等加到html标签上，但我们不能将这个dom属性加到我们diy的组件上面去：`<app-hero-detail onclick = dosometing() ></app-hero-detail>` , 而若门想实现这一点 就需要用到custom event了；实际上也是父子组件之间的一种交互通道；
+> 组件的自定义事件在angular的生态中是必须要存在的东西，因为组件实际上是对html标签的扩充，我们可以将一些dom事件属性onclick、onfucus、onmouseover等加到html标签上，但我们不能将这个dom属性加到我们diy的组件上面去：`<app-hero-detail onclick = dosometing() ></app-hero-detail>` , 而若门想实现这一点 就需要用到custom event了；实际上也是父子组件之间的一种交互通道； 以这个逻辑去理解；
 
 ```ts
 // html: <button onclick="do()"> onclick是button的事件属性，
