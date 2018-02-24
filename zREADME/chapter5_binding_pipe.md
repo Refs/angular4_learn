@@ -30,7 +30,7 @@
 
 ### angular中的事件绑定
 
-### 对angular中的component以及directive的理解
+#### 对angular中的component以及directive的理解
 
 1. 最简单的页面就是纯用html  写的页面；但html作为一个历史产物，使用其有限的标签，所能达到表现能力是有限的； 而angular给了我们一套构建标签的方法，通过这些方法，我们去diy一些标签，通过最原始的html书写方式，去完成我们的页面；
 
@@ -40,36 +40,101 @@
 
 4. 我们要从这个纬度，去理解angular, 如现在我们去理解自定义事件；
 
+#### 对html标签的理解
+```css
+html 就是语义层，但其并非事单纯的语义标注，其还带有一定的样式；
+<p> 与 <h1> 用于标注不同的语义段落，而在浏览器中渲染出的样式是不一样的，其内在是包含不同的样式的；
+
+/* user agent stylesheet  */
+h1 {
+    display: block;
+    font-size: 2em;
+    -webkit-margin-before: 0.67em;
+    -webkit-margin-after: 0.67em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    font-weight: bold;
+}
+p {
+    display: block;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+}
+```
+
+html标签有一定的行为： 如点击a标签其会跳转，点击button其会发送请求；
+
+html 标签有属性，通过设置其属性，可以改变其状态；
+
+html 标签有事件属性， 通过出发标签上的事件属性，可以去执行绑定的js脚本；
+
+angular 将上面所述的特性逐一拆解，并通过多个维度 逐一实现；
+
+#### directive实际模仿的也是html标签
 
 
-### 对事件绑定的理解
+
+### 对事件绑定的理解 实际上模仿的就是html标签的事件属性
 
 ```ts
-// <!-- The directive creates an EventEmmiter and expose i as a property. The directive calls EventEmmiter.emit(payload) to fire event, passing in a message payload -->
-// <!-- Parent directives listen for the event by binding to this property and accessing the payload thougn $event object -->
+// html: <button onclick="do()"> onclick是button的事件属性，
 
-// 监听事件/触发事件/获取事件信息
-// 事件触发后，执行处理函数，函数执行所需要的实参/事件对象，从前传到后； 即 后台“什么时候执行handler 以及 执行handler所需要的实参，均是从前面获取得到” 上述两点就是单向传输的内容；
- 
-// 触发：通过EventEmmiter.emit() 方法触发；payload
-// 监听：通过绑定充当property的EventEmitter;
-// 获取 the binding conveys information---payload 通过$event;
+// 而 angular实现这个事件属性： creates an EventEmmiter and expose i as a property（事件属性）
+deleteRequest = new EventEmitter<Hero>();
 
-// Consider a HeroDetailComponent that presents hero information and response to user actions. Although the HeroDetailComponent has a delete button it doesn't know how to delete the hero itself. The best it can do is raise an event reporting the user's delete request.
- 
+delete() {
+    // html中事件属性可以被监听（绑定handler进行监听）与触发（通过user的action）
 
-// 理解事件绑定
-<a onclick = do()>敢点我试试</a>
+    // angular实现了自定义事件的触发，通过实例化的事件属性的方法；
+  this.deleteRequest.emit(this.hero);
+}
+
+// Directives typically raise custom events with an Angular EventEmitter. The directive creates an EventEmitter and exposes it as a property. The directive calls EventEmitter.emit(payload) to fire an event, passing in a message payload, which can be anything. Parent directives listen for the event by binding to this property and accessing the payload through the $event object.
 
 ```
-<a href="http://" target="_blank" onclick="do()">
+
+`<a href="http://" target="_blank" onclick="do()">`
 href 与 onclick 的区别是一个是普通属性，一个是事件属性； angular 要模仿的就是事件属性，要能做到三点： 本质上是属性，可被监听，可触发事件；
 
-<app-hero-detail (deleteRequest)="deleteHero($event)"></app-hero-detail>
+`<app-hero-detail (deleteRequest)="deleteHero($event)"></app-hero-detail>`
 
 > 理解事件绑定是从template到component的绑定，因为handler 是定义在component中的， 处理函数的运行肯定是后台组件中运行（这一点很好理解，想象一下自己进行断点调试，事件触发时肯定时蹦到component中的handler函数体中去了），而运行中所需要的参数是从前传到后的；`关键点在于理解handler 是在后台调用执行的`
 
-> 依赖注入的逻辑是遇到事情就去安排个人去处理---是从上至下的(requireJS)，而事件绑定的逻辑是遇到事自己处理不了，将事情反馈给上级 让自己的上级去处理。
+> 依赖注入的逻辑是遇到事情就去安排个人去处理---是从上至下的(requireJS)，而事件绑定的逻辑是遇到事自己处理不了，将事情反馈给上级 让自己的上级去处理。---都是推诿
+
+```html
+<!-- src/app/hero-detail.component.ts (template) -->
+<div>
+  <img src="{{heroImageUrl}}">
+  <span [style.text-decoration]="lineThrough">
+    {{prefix}} {{hero?.name}}
+  </span>
+  <button (click)="delete()">Delete</button>
+</div>`
+```
+
+```ts
+// src/app/hero-detail.component.ts (deleteRequest)
+// This component makes a request but it can't actually delete a hero.
+deleteRequest = new EventEmitter<Hero>();
+
+delete() {
+  this.deleteRequest.emit(this.hero);
+}
+
+//  Although the HeroDetailComponent has a delete button it doesn't know how to delete the hero itself. The best it can do is raise an event reporting the user's delete request.
+
+```
+
+```ts
+// src/app/app.component.html (event-binding-to-component)
+<app-hero-detail (deleteRequest)="deleteHero($event)" [hero]="currentHero"></app-hero-detail>
+```
+
+> 上面例子是官方文档的例子，整个流程类似于事件的“冒泡”， 将事件逐级向上提，直到有人能够处理；
+
 
 ### promise逻辑的理解
 
