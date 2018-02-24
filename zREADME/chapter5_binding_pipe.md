@@ -30,6 +30,20 @@
 
 ### angular中的事件绑定
 
+### 对angular中的component以及directive的理解
+
+1. 最简单的页面就是纯用html  写的页面；但html作为一个历史产物，使用其有限的标签，所能达到表现能力是有限的； 而angular给了我们一套构建标签的方法，通过这些方法，我们去diy一些标签，通过最原始的html书写方式，去完成我们的页面；
+
+2. 如果requireJS 让自己学会，自己想做什么千万不要自己去做，而是自己去捏个会做这件事的人（define）,并将它叫到自己面前（injection）, 并把事情甩给他（call method）的逻辑； 则angular 则让自己学会 自己使用最简单的html标签去写页面（前端最开始就是这么办的），自己想要一个什么标签，就去自己diy一个标签，并将这个标签简单的排在自己的html文件中就行了；
+
+3. 而angular给我们提供了两种diy标签的方式，一种是component 的方式 即按照html 标签的本质逻辑 去重构一个新的标签； 一种是directive 的方式 即顺着标签的逻辑 去人为的增设一些东西，其实就是一个新的标签，有别于原始的标签；
+
+4. 我们要从这个纬度，去理解angular, 如现在我们去理解自定义事件；
+
+
+
+### 对事件绑定的理解
+
 ```ts
 // <!-- The directive creates an EventEmmiter and expose i as a property. The directive calls EventEmmiter.emit(payload) to fire event, passing in a message payload -->
 // <!-- Parent directives listen for the event by binding to this property and accessing the payload thougn $event object -->
@@ -48,14 +62,6 @@
 <a onclick = do()>敢点我试试</a>
 
 ```
-1. 最简单的页面就是纯用html  写的页面；但html作为一个历史产物，使用其有限的标签，所能达到表现能力是有限的； 而angular给了我们一套构建标签的方法，通过这些方法，我们去diy一些标签，通过最原始的html书写方式，去完成我们的页面；
-
-2. 如果requireJS 让自己学会，自己想做什么千万不要自己去做，而是自己去捏个会做这件事的人（define）,并将它叫到自己面前（injection）, 并把事情甩给他（call method）的逻辑； 则angular 则让自己学会 自己使用最简单的html标签去写页面（前端最开始就是这么办的），自己想要一个什么标签，就去自己diy一个标签，并将这个标签简单的排在自己的html文件中就行了；
-
-3. 而angular给我们提供了两种diy标签的方式，一种是component 的方式 即按照html 标签的本质逻辑 去重构一个新的标签； 一种是directive 的方式 即顺着标签的逻辑 去人为的增设一些东西，其实就是一个新的标签，有别于原始的标签；
-
-4. 我们要从这个纬度，去理解angular, 如现在我们去理解自定义事件；
-
 <a href="http://" target="_blank" onclick="do()">
 href 与 onclick 的区别是一个是普通属性，一个是事件属性； angular 要模仿的就是事件属性，要能做到三点： 本质上是属性，可被监听，可触发事件；
 
@@ -78,7 +84,7 @@ function TimeOut (ms){
 }
 // 我：“并不一定要等到他，将这个事情做完，我可以将未知的结果设置成为一个变量，然后该写我的逻辑，写我的逻辑”
 TimeOut(200).then((value)=>{
-    // 我： “等小李真的将事情做完了，他可以通过调用resole(data)方法的方式通知我，并将真实的结果传给我； 等到脚本所有的同步代码都运行完毕后（then中的函数必须等所有同步脚本，运行完毕后执行），我在运行一遍我的逻辑，事情就有结果了 ” then 方法函数参数中的逻辑事我的逻辑
+    // 我： “等小李真的将事情做完了，他可以通过调用resole(data)方法的方式通知我，并将真实的结果传给我； 等到脚本所有的同步代码都运行完毕后（then中的函数必须等所有同步脚本，运行完毕后执行），我在运行一遍我的逻辑，事情就有结果了 ” then 方法函数参数中的逻辑事我的逻辑。
     console.log(value);
 })
 
