@@ -192,6 +192,52 @@ TimeOut(200).then((value)=>{
 
 #### 补充知识---对DOM property 与 html attribute的理解
 
+#### 文档： https://javascript.info/dom-attributes-and-properties 关于attribute与　property同步更新的问题
+
+When a standard attribute changes, the corresponding property is auto-updated, and (with some exceptions) vice versa.
+In the example below id is modified as an attribute, and we can see the property changed too. And then the same backwards:
+
+```html
+<input>
+
+<script>
+  let input = document.querySelector('input');
+
+  // attribute => property
+  input.setAttribute('value', 'text');
+  alert(input.value); // text
+
+  // NOT property => attribute
+  input.value = 'newValue';
+  alert(input.getAttribute('value')); // text (not updated!)
+</script>
+
+```
+
+But there are exclusions, for instance input.value synchronizes only from attribute → to property, but not back:
+
+```html
+
+<input>
+
+<script>
+  let input = document.querySelector('input');
+
+  // attribute => property
+  input.setAttribute('id', 'id');
+  alert(input.id); // id (updated)
+
+  // property => attribute
+  input.id = 'newId';
+  alert(input.getAttribute('id')); // newId (updated)
+</script>
+```
+In the example above:
+Changing the attribute value updates the property.
+But the property change does not affect the attribute.
+
+> 总结一下 就是对于某些属性，浏览器会同步attribute 与 property;;其实我们也可以理解为两者事绑定的，切通常是attribute-->的绑定；342
+
 ##### https://stackoverflow.com/questions/6003819/what-is-the-difference-between-properties-and-attributes-in-html
 
 When writing HTML source code, you can define attributes on your HTML elements. Then, once the browser parses your code, a corresponding DOM node will be created. This node is an object, and therefore it has properties.
@@ -251,9 +297,35 @@ HTML属性的值指定了初始值；DOM属性的值表示当前的值。DOM属�
 
 
 ## 响应式编程
+> 来自同学笔记中的内容，后期资料自己慢慢补！
 
-这个和angular关系不大，其使由rsgx框架来实现的，集成了gxgs并将一些相应式的特性建立在gxgs的基础上
+响应式编程 其实就是异步数据流编程观察者模式与Rxjs
+可观察对象Observable(stream,数据生产者,可观察对象,被观察者):表示一组值或者事件的集合.
+在可观察对象发射数据(流)并经过操作符操作后,接着就可以通过订阅(subscribe)这个数据(流)然后激活之前注册的Observable(观察者,一组回调的集合)的回调函数拿到最终结果(完成观察者对可观察对象的订阅)
+订阅Subscription:表示一个可观察对象,主要用于取消订阅
+
+具体实例实现：
+
+```ts
+constructor(){
+    Observable.from([1,2,3,4])
+        .filter( e => e%2 == 0)
+        .map( e => e*e )
+        .subscribe(
+            e => console.log(e)
+        )
+}
+
+// debounce是空闲时间的间隔控制
+
+```
+
+https://www.jianshu.com/p/925adede7c60
 
 ## 管道
 
 用来格式化模版输出的可重用对象
+
+
+
+> 同学的angular笔记： https://segmentfault.com/a/1190000011357579··
