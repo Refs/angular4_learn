@@ -117,7 +117,7 @@ href 与 onclick 的区别是一个是普通属性，一个是事件属性； an
     {{prefix}} {{hero?.name}}
   </span>
   <button (click)="delete()">Delete</button>
-</div>`
+</div>
 ```
 
 ```ts
