@@ -257,3 +257,40 @@ HTML属性的值指定了初始值；DOM属性的值表示当前的值。DOM属�
 ## 管道
 
 用来格式化模版输出的可重用对象
+
+```ts
+// a way to write display-value transformations that you can declear in your HTML
+
+
+// inside the interpolation expression, you flow the component's birthday value through the pipe operator to the Data pipe function on the right . 
+
+// modify the birthday template to give the date pipe a format parameter. 
+
+// in other words, you can control the format through a binding the same way you control the birthdayva lue through a binding . 
+
+// we check to make sure the user a secret passcode available before we allow them to modify the employee. we do this by relacing the direct access to fullname with a set that check the passcode. we add a corresponding get to allow the 
+
+// this gives you a way of having finer-grained control over how a member is accessed on each object.
+
+
+```
+
+```ts
+let passcode = "secret passcode";
+
+class Employee {
+  private _fullName:string;
+  get fullName():string {
+    return this._fullName;
+  }
+  set fullName(newName: string){
+    if (passcode && passcode == "secret passcode"){
+      this._fullName = newName;
+    }else {
+      console.log()
+    }
+  }
+
+}
+
+```
