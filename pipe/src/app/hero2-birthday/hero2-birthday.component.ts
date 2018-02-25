@@ -14,7 +14,7 @@ export class Hero2BirthdayComponent implements OnInit {
     return this.toggle ? 'mediumDate' : 'short';
   }
 
-  toggleFormate(){
+  toggleFormate() {
     this.toggle = !this.toggle;
   }
 
