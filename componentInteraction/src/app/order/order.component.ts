@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-order',
@@ -13,7 +14,7 @@ export class OrderComponent implements OnInit {
   @Input()
   amonut: number;
 
-  constructor() { }
+  constructor(routeInfo: ActivatedRoute) { }
 
   ngOnInit() {
   }
