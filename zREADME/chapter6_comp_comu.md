@@ -63,7 +63,7 @@ export class OrderComponent implements OnInit {
 
 ### 组件的输出属性
 
-angular组件可以使用EventEmit对象来发射自定义的事件，这些事件可以被其它组件处理，EventEmit是Rxjs库中Submit类的一个子类，在响应式编程中其即可以作为观察者也可以作为被观察者，换句话说EventEmit对象既可以通过emit()方法来发射自定义事件，也可以通过其subscripe方法来订阅EventEmit对象所发射的事件流，我们主要集中在如何使用EventEmit来向外发送事件。
+angular组件可以使用EventEmit对象来发射自定义的事件，这些事件可以被其它组件处理，EventEmit是Rxjs库中Submit类的一个子类，在响应式编程中其即可以作为观察者也可以作为被观察者，换句话说EventEmitter对象既可以通过emit()方法来发射自定义事件，也可以通过其subscripe方法来订阅EventEmit对象所发射的事件流，我们主要集中在如何使用EventEmit来向外发送事件。
 
 使用场景：假设我们要写一个组件，这个组件可以链接到股票交易所，并且实时显示变动的股票价格，为了让这个组件可以在不同金融类的项目中重用，除了显示股票价格之外，组件还应将最新的股票价格发送至组件之外，这样其它的组件就可以根据变动的股票价格来执行相应的业务逻辑
 
@@ -83,16 +83,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./price-quote.component.css']
 })
 export class PriceQuoteComponent implements OnInit {
-  //其次：声明两个属性，用来做绑定到模板中
+  //2.1其次：声明两个属性，用来做绑定到模板中
   stockCode: string = 'IBM';
   price: number;
 
+  // 3.1 现在要做的就是将信息输到外面去，告诉此组件外部：“谁感兴趣谁就可以来订阅” 此时就要使用EventEmitter对象
+  // 3.2 利用EventEmitter将信息发送出去(前面已经介绍过EventEmitter即可以发射事件又可以去订阅事件)；现在我们要用其来发射事件； 若我们想用其来发射事件 有一点需要注意：需要将EventEmitter实例化的属性用@Output()修饰符注解一下；类似输入属性需要用@Input()来注解，输出属性需要用@Output来注解；
+  //3.3 使用@Output()修饰符注解为输出属性之后，我们就可以调用输出属性的.emit(value)方法来发射一个值出去；
+  //3.4 泛型<PriceQuote>指明向外界所发送的对象的具体类型，当我们使用输出属性的emit()方法向外界发射事件的时候，我们发射的就是该泛型所指定的类型数据；
+  lastPrice: EventEmitter<PriceQuote> = new EventEmitter();
+
   constructor() {
-    // 利用一个定时器来模拟股票的价格不停的变化
-    // 因为匿名函数每隔一秒钟会被调用一次，所以对象会每隔一秒钟重新生成一次；
+    // 2.2组件实例化的时候，调用一个定时器，
+    // 2.3利用一个定时器来模拟股票的价格不停的变化
+    // 2.4因为匿名函数每隔一秒钟会被调用一次，所以对象会每隔一秒钟重新生成一次；
     setInterval(()=>{
       let priceQuote: PriceQuote = new PriceQuote(this.stockCode, 100*Math.random());
       this.price = priceQuote.lastPrice;
+      //3.5 输出属性lastPrice想外界传递的值就是当前的priceQuote股票报价；
+      this.lastPrice.emit(priceQuote); 
+      //3.6 现在我们已经将组件中的报价信息priceQuote发送到了组件外面，现在我们就要去在父组件中尝试去接受这个报价的信息；然后将其显示出来；--->在父组件app.component中实现 4.1
     },1000)
    }
 
@@ -102,8 +112,8 @@ export class PriceQuoteComponent implements OnInit {
 }
 
 
-// 首先：我们定义一个报价对象来封装报价信息，将特定的数据结构使用类或接口来明确的定义是一个良好的习惯，因为我们在使用ts在编程，所以声明类或接口可以让ide 帮我们做类型检查和语法提示* 
-// 现在我们有了一个对象来封装我们的报价信息
+// 1.1首先：我们定义一个报价对象来封装报价信息，将特定的数据结构使用类或接口来明确的定义是一个良好的习惯，因为我们在使用ts在编程，所以声明类或接口可以让ide 帮我们做类型检查和语法提示* 
+//1.2 现在我们有了一个对象来封装我们的报价信息
 export class PriceQuote{
     constructor(
         // 股票代码
@@ -122,7 +132,7 @@ export class PriceQuote{
 
 > 上述注释中，包含对类的本意理解： 类就是类型，是用来描述一个对象的类型，而对于其所涵盖的对象，有些属性是一致的如人的本质属性都是‘人’，我们可以直接将其具体为一个值； 而对于某些属性人与人之间是不一样的，如性别 如年龄 如工作，我们描述人这个类型的时候，无法将其具体，只能说将其设置为一个变量： 将其放到构造函数的参数接口中，传入具体的实参，从而实例化一个具体的对象； 就是这样一个逻辑； 这也是构造函数参数存在的意义；
 
-```js
+```js 
 class human {
   catgory: string =  'animal';
   public work: string;
@@ -132,28 +142,67 @@ class human {
   } 
 }
 ```
-
-
 ```html
 <!-- price-quote.component.html -->
 <div>这里是报价组件</div>
 <div>
-  股票的代码是{{stockCode}},股票价格是{{price}}
+  股票的代码是{{stockCode}},股票价格是{{price | number:'2,2-2'}}
 </div>
 
 ```
 
 ```html
 <!-- app.component.html -->
-
-<app-price-quote>
+<!-- 4.2 内部子组件的信息现在并没有传到父组件上面，  现在我们要捕捉子组件所发射的事件，然后来处理； 捕捉用EventEmitter发射出来的事件与捕捉原生的DOM事件是一摸一样的， 绑定节点的事件属性即可; 事件的产生机制与什么时候会到来与父组件没有关系，父组件只需要利用一个事件处理函数去监听一下就可以了 ==>4.3 app.component.ts  -->
+<app-price-quote (lastPrice)="priceQuoteHandler($event)">
 </app-price-quote>
+<div>
+  这里是报价组件的外部，
+  这里是股票的名称{{priceQuote.stackCode}},
+  这里是股票的最新价格{{priceQuote.lastPrice}},
+</div>
+
 
 ```
+
+```ts
+// app.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+ stock = '';
+
+//  4.1 在父组件中我们首先也熬声明一个PriceQuote类型的变量，因为我们发射出来的事件是这个类型的，所以我们在父组件里面要声明这样类型的一个属性来接受我们在子组件中所发射的对象；---> app.compoennt.html
+  priceQuote: PriceQuote = new PriceQuote("",0);//给其一个默认值
+
+  // 4.3 将我们捕获到的对象 赋值给本地的对象;
+  //在默认情况下，自定义事件的名字与子组件的输出属性的名字是一样的，如果我们想使用另外一个名字只需要修改其装饰器@Output中的元数据的name属性值就可以了 
+  priceQuoteHandler(event: PriceQuote){
+    this.priceQuote = event;
+  }
+  
+}
+
+```
+
  
 ## 使用中间人模式传递数据
 
-介绍中间人模式以及实现中间人模式，以便在没有父子关系的组件之间传递数据
+> 我们已经学习了输出属性来向组件外面发射事件，并通过事件携带数据，但是现在这个事件只能由他的父组件的模板通过事件绑定的方式来捕获并处理，如果两个组件之间不存在类似的父子关系，那么我如何以松耦合的方式来传递数据？---->中间人模式；
+
+> 我们在创建一个组件的时候，组件不应该去依赖外部已经存在的组件，要实现这样松耦合的组件需要使用“中间人模式” 如下图所示；
+
+![组件间通讯](../images/component_communication.png)
+
+* 除了组件1之外每一个组件都有一个父组件，可以扮演中间人的角色，顶级的中间人就是组件1（app.component）它可以使组件2、3、6之间互相通讯，一次类推组件2是组件4\5的中间人，可以使组件4 组件5之间互相通讯；
+* 中间人负责从一个组件中去接受数据，并将其传递给另外一个组件；
+* 以我们之前的股票价格为例，假设有一个交易员在监视着报价组件的价格，当股票的的价格达到一定的值的时候，交易员会点一个购买按钮来购买股票；在报价组件上添加一个购买按钮很容易，但报价组件并不知道如何下单来买股票，其只是用来监控股票价格的；所以报价组件这个时候应该去通知下中间人（报价组件与交易组件的父组件），告诉它交易员要在某一个价位买了某一个股票；中间人应该知道那个组件可以买股下单，并将股票代码和当前的价格传给该组件
+* 我们在上一节的代码中继续完成中间人模式的代码；
 
 ## 组件生命周期以及angular的变化发现机制
 
