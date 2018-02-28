@@ -88,7 +88,7 @@ export class orderComponent implements OnInit {
   ngOnInit() {
   }
 
-}
+} 
 
 ```
 
@@ -234,8 +234,31 @@ export class PriceQuoteComponent implements OnInit {
 
 <!-- 父组件作为一个中间人，其要做的不是将报价组件所传递的信息，显示出来给我们看，而是要将这信息 传递给下单组件 ,告诉它 “使用此价格来买东西”-->
 
-<app-order>
+<!-- 通过属性绑定，将报价组件所传递过来的报价信息，传递给order组件 这就是中间人需要做的事情 -->
+<app-order [priceQuote]="priceQuote">
 </app-order>
+```
+
+```ts
+// app.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+ stock = '';
+
+  priceQuote: PriceQuote = new PriceQuote("",0);//给其一个默认值
+
+  buyHandler(event: PriceQuote){
+    this.priceQuote = event;
+  }
+  
+}
+
 ```
 
 
@@ -249,36 +272,37 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.css']
 })
-export class PriceQuoteComponent implements OnInit {
-  stockCode: string = 'IBM';
-  price: number;
+export class OrderComponent implements OnInit {
 
-  @Output()
-  lastPrice: EventEmitter<PriceQuote> = new EventEmitter();
-
-  // 2.2 实例化一个EventEmitter对象---输出属性buy
-  @Output()
-  buy: EventEmitter<PriceQuote> = new EventEmitter();
+  // 使用一个输入属性，用来接受 从中间人传递过来的下单信息；
+  @Input()
+  priceQuote : PriceQuote
 
   constructor() {
-    setInterval(()=>{
-      let priceQuote: PriceQuote = new PriceQuote(this.stockCode, 100*Math.random());
-      this.price = priceQuote.lastPrice;
-      this.lastPrice.emit(priceQuote); 
-    },1000)
    }
   ngOnInit() {
   }
-  //2.1 在组件的控制器上 写buyStock() 当我们点击“立即购买”按钮的时候，我们应该是向外发送一个事件，告诉外部 说有人点击了该按钮了；并说明当按钮被点击的时候 股票的价格是多少钱，将这个事件给发射出去； 所以我们需要一个EventEmitter对象
   
-  // 注意自定义的事件函数一般要写在，构造函数与生命周期的函数下面
-  buyStock(event:any) {
-    // 当按钮被点击之后，我们就应该将交易请求以及当前的股票价格给发送出去
-    // **这就是报价组件应该做的事情，其只要将这个价格发送出去就可以了，而不用去关心到底是谁去接收**
-    this.buy.emit(new PriceQuote(this.stockCode,this.price));   
-  }
 }
 ```
+
+```html
+<!-- order.component.html -->
+<!-- 当我们接收到中间人传递过来的PriceQuote之后将其显示到页面中 -->
+
+<div>
+买100手{{priceQuote.stockCode}}股票,买入的价格是{{priceQuote.lastPrice | number: '2.2-2'}}
+</div>
+
+```
+
+> 这就是中间人模式了：在我们报价组件里面 我们没有与下单组件相关的任何一点代码，我们没有调下单里面的任何东西，我们甚至不知道有下单组件这面一个东西存在，我们只是将股票价格与股票代码发送出去； 我们下单组件里面 也没有任何与报价组件相关的代码，也就是说报价组件与订单组件，在彼此不知道对方存在的情况下，共同完成了一个股票下单的功能； 就向最开始图描述的东西一样 组件4根本不知道组件5的存在情况下，点4里面的按钮来触发5里面的一些功能，这就是中间人模式； 这样报价组件与下单组件就会有很高的重用性，我们在编写报价组件的时候，根本就不用考虑一会有个下单组件 要挂上；
+
+### 非兄弟组件之间信息的传递
+
+> 在上面的例子中我们使用了一个父组件appComponent来作为两个兄弟组件orderComponent、priceQuoteComponent的中间人,那么两个组件如果没有共同的父组件甚至不在同一时刻显示怎么办？ ----> 此时我们应该使用一个可注入的服务作为中间人，无论何时当组件被创建，这个中间人服务会被注入进来，然后组件可以订阅该服务发射的事件，在我们后面服务器通讯 我们会演示如何利用一个服务作为中间人
+
+> 在我们使用angular开发一个应用前，我们应该首先设计好需要编写那些可以重用的组件，那些组件或服务用来做那些组件的中间人，组件的输入与输出，组件之间如何去通讯，将这些都考虑好之后，我们再去开始编写代码；angular在开始之前必须要去深入的思考如何设计的问题；
 
 ## 组件生命周期以及angular的变化发现机制
 
