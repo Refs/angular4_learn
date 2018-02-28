@@ -72,61 +72,23 @@ angular组件可以使用EventEmit对象来发射自定义的事件，这些事�
 ng g component priceQuote
 ```
 ```ts
-// price-quote.component.ts
-// 为了代码简单我们不会去链接任何真实的股票服务，而是使用一个随机数生成器，来模拟股票价格的变化，并将股票的代码和最新的价格显示出来
-
+// order.component.ts
 import { Component, OnInit } from '@angular/core';
-
 @Component({
-  selector: 'app-price-quote',
-  templateUrl: './price-quote.component.html',
-  styleUrls: ['./price-quote.component.css']
+  selector: 'app-order',
+  templateUrl: './order.component.html',
+  styleUrls: ['./order.component.css']
 })
-export class PriceQuoteComponent implements OnInit {
-  //2.1其次：声明两个属性，用来做绑定到模板中
-  stockCode: string = 'IBM';
-  price: number;
-
-  // 3.1 现在要做的就是将信息输到外面去，告诉此组件外部：“谁感兴趣谁就可以来订阅” 此时就要使用EventEmitter对象
-  // 3.2 利用EventEmitter将信息发送出去(前面已经介绍过EventEmitter即可以发射事件又可以去订阅事件)；现在我们要用其来发射事件； 若我们想用其来发射事件 有一点需要注意：需要将EventEmitter实例化的属性用@Output()修饰符注解一下；类似输入属性需要用@Input()来注解，输出属性需要用@Output来注解；
-  //3.3 使用@Output()修饰符注解为输出属性之后，我们就可以调用输出属性的.emit(value)方法来发射一个值出去；
-  //3.4 泛型<PriceQuote>指明向外界所发送的对象的具体类型，当我们使用输出属性的emit()方法向外界发射事件的时候，我们发射的就是该泛型所指定的类型数据；
-  lastPrice: EventEmitter<PriceQuote> = new EventEmitter();
+export class orderComponent implements OnInit {
+  
 
   constructor() {
-    // 2.2组件实例化的时候，调用一个定时器，
-    // 2.3利用一个定时器来模拟股票的价格不停的变化
-    // 2.4因为匿名函数每隔一秒钟会被调用一次，所以对象会每隔一秒钟重新生成一次；
-    setInterval(()=>{
-      let priceQuote: PriceQuote = new PriceQuote(this.stockCode, 100*Math.random());
-      this.price = priceQuote.lastPrice;
-      //3.5 输出属性lastPrice想外界传递的值就是当前的priceQuote股票报价；
-      this.lastPrice.emit(priceQuote); 
-      //3.6 现在我们已经将组件中的报价信息priceQuote发送到了组件外面，现在我们就要去在父组件中尝试去接受这个报价的信息；然后将其显示出来；--->在父组件app.component中实现 4.1
-    },1000)
    }
 
   ngOnInit() {
   }
 
 }
-
-
-// 1.1首先：我们定义一个报价对象来封装报价信息，将特定的数据结构使用类或接口来明确的定义是一个良好的习惯，因为我们在使用ts在编程，所以声明类或接口可以让ide 帮我们做类型检查和语法提示* 
-//1.2 现在我们有了一个对象来封装我们的报价信息
-export class PriceQuote{
-    constructor(
-        // 股票代码
-        public stockCode: string,
-        // 最新的股票价格
-        public lastPrice: number
-    ){}
-}
-
-// 我们要将股票的信息，封装进一个对象，在需要的时候将这个对象注入进来用就可以了，
-// 而具体这个对象是什么形式的，我们用一个类型，将这个对象的方方面面描述出来，就是一个类；
-// 我们将对象中某个不确定的属性，抽象成一个变量（如对象是一个人，我们要去描述一个人，则对于人的工作类型属性，人与人之间是不一样的，我们只能将其抽象成为一个变量，然后实例化这个人的时候，将具体的值传进去，从而实例化一个具体的人，这个抽象的操作就是类存在的意义了），放到构造函数参数中去，然后用new操作符实例化的时候，传入一个具体的值；
-// 构造函数就是实例化对象时 运行的函数，构造函数参数就是你若想将一个对象实例化出来，需指明的一些东西； 定义构造函数的时候 我们就需要去指明 那些值是实例化所需要的，用上面的“变量抽象化思想去理解”
 
 ```
 
@@ -203,6 +165,120 @@ export class AppComponent {
 * 中间人负责从一个组件中去接受数据，并将其传递给另外一个组件；
 * 以我们之前的股票价格为例，假设有一个交易员在监视着报价组件的价格，当股票的的价格达到一定的值的时候，交易员会点一个购买按钮来购买股票；在报价组件上添加一个购买按钮很容易，但报价组件并不知道如何下单来买股票，其只是用来监控股票价格的；所以报价组件这个时候应该去通知下中间人（报价组件与交易组件的父组件），告诉它交易员要在某一个价位买了某一个股票；中间人应该知道那个组件可以买股下单，并将股票代码和当前的价格传给该组件
 * 我们在上一节的代码中继续完成中间人模式的代码；
+
+```html
+<!-- price-quote.component.html -->
+<div>这里是报价组件</div>
+<div>
+  股票的代码是{{stockCode}},股票价格是{{price | number:'2,2-2'}}
+</div>
+
+<!--1. 我们在报价组件上添加一个按钮，让其在某一个价格的时候，交易员可以去科技这个按钮去买股票 -->
+<div>
+  <input type="button" value="立即购买" (cclick)="buyStock($event)" >
+</div>
+
+```
+
+```ts
+// price-quote.component.ts
+
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-price-quote',
+  templateUrl: './price-quote.component.html',
+  styleUrls: ['./price-quote.component.css']
+})
+export class PriceQuoteComponent implements OnInit {
+  stockCode: string = 'IBM';
+  price: number;
+
+  @Output()
+  lastPrice: EventEmitter<PriceQuote> = new EventEmitter();
+
+  // 2.2 实例化一个EventEmitter对象---输出属性buy
+  @Output()
+  buy: EventEmitter<PriceQuote> = new EventEmitter();
+
+  constructor() {
+    setInterval(()=>{
+      let priceQuote: PriceQuote = new PriceQuote(this.stockCode, 100*Math.random());
+      this.price = priceQuote.lastPrice;
+      this.lastPrice.emit(priceQuote); 
+    },1000)
+   }
+  ngOnInit() {
+  }
+  //2.1 在组件的控制器上 写buyStock() 当我们点击“立即购买”按钮的时候，我们应该是向外发送一个事件，告诉外部 说有人点击了该按钮了；并说明当按钮被点击的时候 股票的价格是多少钱，将这个事件给发射出去； 所以我们需要一个EventEmitter对象
+  
+  // 注意自定义的事件函数一般要写在，构造函数与生命周期的函数下面
+  buyStock(event:any) {
+    // 当按钮被点击之后，我们就应该将交易请求以及当前的股票价格给发送出去
+    // **这就是报价组件应该做的事情，其只要将这个价格发送出去就可以了，而不用去关心到底是谁去接收**
+    this.buy.emit(new PriceQuote(this.stockCode,this.price));   
+  }
+}
+```
+
+> **这就是报价组件应该做的事情，其只要将这个价格发送出去就可以了，而不用去关心到底是谁去接收** --- 思考一下我们的黑盒子模型； 
+
+> 对于不属于自己业务范围内的事情，自己只负责传递消息（事件），不负责去执行，这个一个很重要的管理手段；一个人都做完了。就不是松耦合-可重用了； 至于发送的事件最终被谁所接收 以及最终被谁执行 自己根本不用去关心；做到这一步就够了， 做人也要这样，明白自己该做什么，不该做什么，做到哪一步就可以了；
+
+```html
+<!-- app.component.html -->
+
+<!-- 在PriceQuote组件的父组件上 监听PriceQuote组件传递的信息（发送的事件）buy -->
+<app-price-quote (buy)="buyHandler($event)">
+</app-price-quote>
+
+<!-- 父组件作为一个中间人，其要做的不是将报价组件所传递的信息，显示出来给我们看，而是要将这信息 传递给下单组件 ,告诉它 “使用此价格来买东西”-->
+
+<app-order>
+</app-order>
+```
+
+
+```ts
+// order.component.ts
+
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-order',
+  templateUrl: './order.component.html',
+  styleUrls: ['./order.component.css']
+})
+export class PriceQuoteComponent implements OnInit {
+  stockCode: string = 'IBM';
+  price: number;
+
+  @Output()
+  lastPrice: EventEmitter<PriceQuote> = new EventEmitter();
+
+  // 2.2 实例化一个EventEmitter对象---输出属性buy
+  @Output()
+  buy: EventEmitter<PriceQuote> = new EventEmitter();
+
+  constructor() {
+    setInterval(()=>{
+      let priceQuote: PriceQuote = new PriceQuote(this.stockCode, 100*Math.random());
+      this.price = priceQuote.lastPrice;
+      this.lastPrice.emit(priceQuote); 
+    },1000)
+   }
+  ngOnInit() {
+  }
+  //2.1 在组件的控制器上 写buyStock() 当我们点击“立即购买”按钮的时候，我们应该是向外发送一个事件，告诉外部 说有人点击了该按钮了；并说明当按钮被点击的时候 股票的价格是多少钱，将这个事件给发射出去； 所以我们需要一个EventEmitter对象
+  
+  // 注意自定义的事件函数一般要写在，构造函数与生命周期的函数下面
+  buyStock(event:any) {
+    // 当按钮被点击之后，我们就应该将交易请求以及当前的股票价格给发送出去
+    // **这就是报价组件应该做的事情，其只要将这个价格发送出去就可以了，而不用去关心到底是谁去接收**
+    this.buy.emit(new PriceQuote(this.stockCode,this.price));   
+  }
+}
+```
 
 ## 组件生命周期以及angular的变化发现机制
 
