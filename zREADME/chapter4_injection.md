@@ -9,7 +9,7 @@
 ### 依赖注入: Dependency injection 简称DJ
 
 ```ts
-//1.1假设我们写一个方法，方法的参数是一个对象，当我们调用该方法时，我们需要将该对象实例化，并将其传递给方法，假设我们的在线竞拍程序，发货中心，负责将我们买的的商品发给我们，那么在程序中我们可能去编写以下的代码；
+//1.1 假设我们写一个方法，方法的参数是一个对象，当我们调用该方法时，我们需要将该对象实例化，并将其传递给方法，假设我们的在线竞拍程序，发货中心，负责将我们买的的商品发给我们，那么在程序中我们可能去编写以下的代码；
 
 //1.2 new一个商品，商品的信息在Product构造函数的参数里面
 var product = new Product();
@@ -21,7 +21,7 @@ createShipment(product);
 ```
 
 ```ts
-// 2.1 加入我们现在需要将Product类，换成Product的一个子类MockProduct 在我们的例子中，你只需要改一行代码：
+// 2.1 假如我们现在需要将Product类，换成Product的一个子类MockProduct 在我们的例子中，你只需要改一行代码：
 var product = new MockProduct();
 createShipment(product);
 
@@ -55,6 +55,8 @@ createShipment(product);
 
 ```
 > 控制反转与依赖注入是一体两变，表达的是一个思想 控制反转侧重于描述目的，即目的是将依赖的控制权从代码的内部转移到代码的外部，而依赖注入则侧重于描述手段即如何去实现控制反转，使用的手段就是依赖注入；实现了控制反转模式的框架成为IOC(inversion of control)容器；而angular 框架就是一个IOC容器，angular实现控制反转的手段就是依赖注入
+
+http://blog.csdn.net/bestone0213/article/details/47424255 写的很好，有时间去看一下；
 
 ### 使用依赖注入的好处
 
