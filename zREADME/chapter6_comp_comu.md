@@ -350,17 +350,73 @@ export class LifeComponent implements OnInit {
 
 ![生命周期钩子的执行顺序](../images/hooksOrder.png)
 
-> 当一个组件被创建的时候，其构造函数首先会被调用，在构造函数的代码执行完毕后,angular会以此调用上述的；构造函数存在的，所以一定会被调用；我们在程序开发中，根据我们的实际需要去实现相应的钩子接口，若上述图中的钩子方法没有定义，angular执行时会自动跳过； 若我们定义了相应的钩子方法，angular在周期事件发生时，会去调用组件内部定义的钩子方法;
+* 当一个组件被创建的时候，其构造函数首先会被调用，在构造函数的代码执行完毕后,angular会以此调用上述的；构造函数存在的，所以一定会被调用；我们在程序开发中，根据我们的实际需要去实现相应的钩子接口，若上述图中的钩子方法没有定义，angular执行时会自动跳过； 若我们定义了相应的钩子方法，angular在周期事件发生时，会去调用组件内部定义的钩子方法;
 
-> 首先是调用构造方法，然后是ngOnchanges; ngOnchanges是当一个父组件修改或初始化一个子组件的输入属性被调用的，如果一个组件没有输入属性，则ngOnChanges这个方法永远不会被调用，而它的首次调用肯定是发生在ngOnInit方法之前； 而且ngOnChanges方法肯定是会被多次调用的，每次输入属性发生变化的时候，都会被执行；
-> 再后面是ngOnInit(),若组件存在输入属性 则在ngOnChanges方法首次调用后被调用，用来初始化组件或者指令；`ngOnInit是在初始化时候用的`，之所以不在构造函数中初始化，是因为`组件的输入属性`在构造函数执行时是没有值的（其依赖于父组件的传值），输入属性是在首次调用ngOnChanges方法是被初始化了的，所以`当我们的组件的初始化逻辑，需要依赖输入属性的值，则这些初始化逻辑一定要写在ngOnInit()里面`而不要写在构造函数里面；
+* 首先是调用构造方法，然后是ngOnchanges; ngOnchanges是当一个父组件修改或初始化一个子组件的输入属性被调用的，如果一个组件没有输入属性，则ngOnChanges这个方法永远不会被调用，而它的首次调用肯定是发生在ngOnInit方法之前； 而且ngOnChanges方法肯定是会被多次调用的，每次输入属性发生变化的时候，都会被执行；
+* 再后面是ngOnInit(),若组件存在输入属性 则在ngOnChanges方法首次调用后被调用，用来初始化组件或者指令；`ngOnInit是在初始化时候用的`，之所以不在构造函数中初始化，是因为`组件的输入属性`在构造函数执行时是没有值的（其依赖于父组件的传值），输入属性是在首次调用ngOnChanges方法是被初始化了的，所以`当我们的组件的初始化逻辑，需要依赖输入属性的值，则这些初始化逻辑一定要写在ngOnInit()里面`而不要写在构造函数里面；
+
+* ngOnCheck 是用来检测的是在angular的每次的变更检测周期中被调用的
 
 ### onChanges钩子
 
-> 是在父组件修改或者初始化子组件的输入参数时被调用
+> 是在父组件修改或者初始化子组件的输入参数时被调用，为了理解ngOnChanges为什么被调用，或者为什么不会被调用，我们需要可变对象与不可变对象
 
+```ts
+export class AppComponent {
+  title ="tom";
+  constructor(){
+    //1.1 在js中 字符串是一个不可变对象，这就意味着当一个字符串在内存中被创建出来以后，其值永远不会发生改变
+    //1.2第一行代码 在内存中创建一个值为'Hello'的字符串
+    var greeting = "Hello";
+    //1.3 第二行代码 并不改变第一行内存中的值，而是在内存中重新创建一个值为"Hello World"的字符串，现在在内存中存在两个字符串，而且每个字符串都是不可变的，
+    //1.4 而对于greeting这个变量来说其值是改变的，因为其只想的内存中的地址，从第一个字符串的地址，改为第二个字符串的地址
+    greeting = "Hello World"
 
+    // 2.1 在js中对象是可以发生变化的，这就一位这当一个对象的实例在内存中被创建以后，即使其属性变化了，其也会一致保存在固定的内存地址l；
 
+    var user = {name: 'Tom'};
+    user.name = 'Jerry';
+    // 对象的name属性指向内存中值为Tom的字符串，地执行第二行代码时另一个值为‘Jerry’的字符串，在另外一个内存地址中被创建，并且user.name指向这个新的地址；当user变量本身依然指向对象刚开始创建时的内存地址，换句话说我们修改的时user变量指向的内存地址的对象的内容，而地址并没有发生改变
+  }
+}
+
+```
+
+```bash
+# ng g component child
+
+```
+
+```ts
+// child.component.ts中
+export class ChildComponent implements OnInit {
+  @Input()
+  greeting: string;
+
+  @Input()
+  user: {name: string};
+
+  message = '初始化消息';
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+}
+
+```
+```html
+<!-- child.component.html -->
+
+<div>
+  <h2>我是子组件</h2>
+  <div>问候语：{{greeting}}</div>
+  <div>姓名：{{user.name}}</div>
+  <div>消息:<input type="text" [(ngModel)]="message"></div>
+</div>
+
+```
 
 
 世界三大MOOC网站： Coursera、Udacity、edX 去找你需要的课程吧，小伙子
