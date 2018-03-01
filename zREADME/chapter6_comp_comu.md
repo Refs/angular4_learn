@@ -306,4 +306,61 @@ export class OrderComponent implements OnInit {
 
 ## 组件生命周期以及angular的变化发现机制
 
+在一个组件声明周期中会发生各种事件，从组件被创建开始 angular的变更检测机制就会开始去监控组件，组件被创建之后会被添加到dom树里面，并且使浏览器渲染出来 使用户去看到，在这之后组件的属性可能会发生变化，这回导致组件被重新渲染，最后组件会被销毁
+
+![组件生命周期钩子图](../images/lifeCycleHooks.png)
+
+* 上图展示了所有的组件生命周期钩子，使用这些钩子，我们可以在特定的组件生命周期事件发生时执行我们需要的业务逻辑，图中“红色”的方法只会被调用一次，而绿色的方法则会被多次去调用；
+* 这些钩子被分布在生命周期的三个阶段： 初始化阶段---> 变更检测阶段--->销毁阶段； 用户会在初始化完成阶段看到组件； 变化检测机制会保证组件的属性会与页面保持同步； 如果由于路由等操作 组件被从dom树上移除，则angular回去执行组件的销毁阶段；
+* 应该注意的地方是：变更检测里面执行的绿色的方法，与初始化的时候执行的绿色的方法是一个方法，并不是两个方法；
+
+### 使用实例描述所有钩子的调用机制与常见的场景
+
+```bash
+# 生成life组件 演示生命周期钩子
+ng g component life
+```
+
+```ts
+// life.component.ts
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-life',
+  templateUrl: './life.component.html',
+  styleUrls: ['./life.component.css']
+})
+// tslint:disable-next-line:max-line-length
+// 刚生成的lifeComponent上面已经实现了一个OnInit接口，每一个钩子都是@angualr/core 库里面定义的接口，每一个都有一个唯一的钩子方法，他们的名字是由接口的名字加上ng前缀构成的； 从技术角度上来说“接口”对javascript与typescript的开发者都是可选的；
+// javascript语言本身并没有接口，angular的运行时看不到typescript接口，因为接口在被编译成javascript的时候已经消失了
+// tslint:disable-next-line:max-line-length
+// 幸运的是他们也不是必须的，我们不需要在组件或者指令上添加生命周期钩子接口，就能获取钩子带来的好处；angular回去检查我们组件的类 一旦发现钩子方法被定义了就会去调用它； angular会找到并调用像ngOnInit()这样的钩子方法，有没有这个接口无所谓`implements OnInit`
+// 但我们建议在typescript的类定义中去添加接口
+export class LifeComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+}
+
+```
+
+
+![生命周期钩子的执行顺序](../images/hooksOrder.png)
+
+> 当一个组件被创建的时候，其构造函数首先会被调用，在构造函数的代码执行完毕后,angular会以此调用上述的；构造函数存在的，所以一定会被调用；我们在程序开发中，根据我们的实际需要去实现相应的钩子接口，若上述图中的钩子方法没有定义，angular执行时会自动跳过； 若我们定义了相应的钩子方法，angular在周期事件发生时，会去调用组件内部定义的钩子方法;
+
+> 首先是调用构造方法，然后是ngOnchanges; ngOnchanges是当一个父组件修改或初始化一个子组件的输入属性被调用的，如果一个组件没有输入属性，则ngOnChanges这个方法永远不会被调用，而它的首次调用肯定是发生在ngOnInit方法之前； 而且ngOnChanges方法肯定是会被多次调用的，每次输入属性发生变化的时候，都会被执行；
+> 再后面是ngOnInit(),若组件存在输入属性 则在ngOnChanges方法首次调用后被调用，用来初始化组件或者指令；`ngOnInit是在初始化时候用的`，之所以不在构造函数中初始化，是因为`组件的输入属性`在构造函数执行时是没有值的（其依赖于父组件的传值），输入属性是在首次调用ngOnChanges方法是被初始化了的，所以`当我们的组件的初始化逻辑，需要依赖输入属性的值，则这些初始化逻辑一定要写在ngOnInit()里面`而不要写在构造函数里面；
+
+### onChanges钩子
+
+> 是在父组件修改或者初始化子组件的输入参数时被调用
+
+
+
+
+
 世界三大MOOC网站： Coursera、Udacity、edX 去找你需要的课程吧，小伙子
