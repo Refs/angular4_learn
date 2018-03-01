@@ -324,9 +324,8 @@ https://www.jianshu.com/p/925adede7c60
 
 ## 管道
 
-用来格式化模版输出的可重用对象
+用来格式化模版输出的可重用对象`
 
-<<<<<<< HEAD
 ```ts
 // a way to write display-value transformations that you can declear in your HTML
 
@@ -363,8 +362,6 @@ class Employee {
 }
 
 ```
-=======
 
 
 > 同学的angular笔记： https://segmentfault.com/a/1190000011357579··
->>>>>>> 29ee38486e7e164fcdcf2720fdd36495e2f43bc1
