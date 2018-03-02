@@ -570,6 +570,117 @@ export class AppCoponent implements OnInit, AfterViewInit, AfterVIewChecked {
 ```
 
 
+### content钩子
+
+在介绍content钩子之前我们要介绍angular的一个新的概念：投影
+
+在某些情况下 我们会希望组件在运行时 动态的改变模版的内容；
+
+```html
+
+<!-- 我们这里有两个div 我们可能会希望第一个div会根据运行时的参数，有时候是一个图片二另外一些时候是一个表格 -->
+<!-- 一般的做法时利用路由，生成两个组件，配一个路由来显示不同的内容，因为路由时一个相对来说麻烦的东西；我们要做的其实没那么复杂 -->
+<!-- 这里就要用到angular提供的新的特性===投影，在angular里面我们可以适用ngContent指令将父组件，模版中的任意片段投影到子组件上面 -->
+<!-- 整个过程很简单，只需要两步： -->
+<div> </div>
+<div> </div>
+```
+
+实例：投影的运用
+
+1. 在子组件中标记投影点
+
+```html
+<!-- child.component.html -->
+
+<!-- 在子组件的模版中，我们使用ngContent指令用来标记一个投影点， -->
+<div class="wrapper">
+<h2>我是子组件</h2>
+<div>这个div定义在子组件中</div>
+<ng-content></ng-content>
+</div>
+
+```
+
+2. 在父组件中，将要投影到子组件的投影点的html片段写到子组件<app-child>的标签中
+
+```html
+<!-- app.component.html  -->
+
+<div class="wrapper">
+  <h2>我是父组件</h2>
+  <div>这个div是定义在父组件中</div>
+
+  <app-child>
+    <!-- 在程序运行的时候下面的div就会被投影到,子组件中<ng-content标签指定的投影点上面> -->
+    <div>这个div是父组件投影到子组件的 </div>
+  </app-child>
+</div>
+
+```
+3. 一个组件可以在其模版上面声明多个 <ng-content>标签
+
+```html
+<!-- child.component.html -->
+
+<div class="wrapper">
+<h2>我是子组件</h2>
+<ng-content select=".first"></ng-content>
+<div>这个div定义在子组件中</div>
+<ng-content select=".second"></ng-content>
+</div>
+
+```
+
+```html
+<!-- app.component.html  -->
+
+<div class="wrapper">
+  <h2>我是父组件</h2>
+  <div>这个div是定义在父组件中</div>
+
+  <app-child>
+  <!--  分别指定两个类名，以便ng-content标签选择器使用；即用来指定哪一个div投影到哪一个ng-content上面的 -->
+  <!-- 同时利用插值表达式 将父组件的属性绑定到要投影到子组件的html片段上面 -->
+    <div class="first">这个div是父组件投影到第一个ng-content的{{title}} </div>
+    <div class="second">这个div是父组件投影到第二个ng-content的 </div>
+  </app-child>
+</div>
+
+```
+4. 结果就是两个div会被分别投影到正确的位置上面，而且 父组件的title属性也被传递到了子组件当中，我们需要注意的是在父组件的模版中，我们编写的投影内容所使用的插值表达式，只能绑定父组件中的属性，虽然内容会被投影到子组件中，
+
+5. 除了上述使用angular还可以利用属性绑定的方式，很方便的插入一段html
+
+```html
+<!-- app.component.html  -->
+
+<div class="wrapper">
+  <h2>我是父组件</h2>
+  <div>这个div是定义在父组件中</div>
+  <app-child>
+    <div class="first">这个div是父组件投影到第一个ng-content的{{title}} </div>
+    <div class="second">这个div是父组件投影到第二个ng-content的 </div>
+  </app-child>
+</div>
+
+<!-- 父组件中： -->
+<!-- divContent="<div>我是传入的html</div>" -->
+<div [innerHTML]="divContent"></div>
+
+```
+
+6. 上述两种方式： 利用ng-content来投影和利用innerHTML做属性绑定各有利弊； innerHTML是一个浏览器特定的api, 也就是说绑定innerHTML属性的方式只能在浏览器里面使用，而<ng-content>方式时与平台无关的，所以开发app是只能使用<ng-content>的方式；
+
+7. 优先使用<ng-content>动态生成html
+
+
+
+
+
+
+
+
 
 
 世界三大MOOC网站： Coursera、Udacity、edX 去找你需要的课程吧，小伙子
