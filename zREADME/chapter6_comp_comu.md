@@ -419,4 +419,159 @@ export class ChildComponent implements OnInit {
 ```
 
 
+### view钩子
+
+#### @ViewChild()装饰器
+
+一个angular应用实际上就是一个组件树，在组件树上面 父组件可以去绑定子组件的输入属性来向子组件传递数据，但在某些情况下，父组件需要去调用子组件的方法；--》如何在父组件的模版与控制器里面去调用子组件的api
+
+```ts
+// child.component.ts
+
+export class ChildComponent implements OnInit(){
+  constructor() {}
+
+  ngOnInit() {
+  }
+  //子组件的一个方法，一会我们会使用父组件来去调用该方法
+  greeting(name: string){
+    console.log('hello' + name)
+  }
+}
+
+```
+
+```html
+<!-- app.compoment.html -->
+
+<!-- 因为等下要利用两种方式来演示调用子组件 api的方式 所以此处写两个childComponent -->
+<app-child #child1> </app-child>
+
+<!-- 在父组件的模版中去调用子组件的方法 -->
+<app-child #child2> </app-child>
+<button (click)="child2.greeting('jerry')">调用child2的greeting方法</button>
+
+```
+
+```ts
+// app.component.ts
+// 在父组件的控制器里面 由@ViewChild()装饰器装饰的变量
+// 使用该装饰器我们可以在父组件上面 获取一个子组件的引用，获取子组件引用之后我们就可以在父组件的任一方法里，调用被引用子组件的方法；
+
+export class AppCoponent implements ngOnInit {
+  @ViewChild('child1')
+  child1: ChildComponent;
+
+  constructor() {}
+  ngOnInit():void {
+    this.child1.greeting('Tom')
+  }
+// 上面的代码中 angular通过模版变量#child1 找到相应的子组件，并将其赋值给child1变量，
+}
+
+```
+
+> 上面我们已经了解了，如何在一个父组件上面去调用一个子组件的方法，在这个基础之上我们来看一下两个view钩子
+
+```ts
+// app.component.ts中
+export class AppCoponent implements OnInit, AfterViewInit, AfterVIewChecked {
+  // 两个view钩子，是在组件的模版所有的内容都被组装完成之后，组件的模版已经呈现给用户的动作完成之后，两个方法才会被调用
+
+  ngAfterViewInit(): void {
+    console.log('父组件的视图初始化完毕')；
+  }
+  ngAfterViewCHecked(): void {
+    console.log('父组件的视图变更检测完毕')
+  }
+
+  @ViewChild('child1')
+  child1: ChildComponent;
+
+  constructor() {}
+  ngOnInit():void {
+    // 不直接去调用而是通过一个定时器去调用
+    setIniterval(()=>{
+    this.child1.greeting('Tom')
+    },5000)
+  }
+}
+
+```
+
+```ts
+// child.component.ts 同样去实现两个view钩子
+
+export class ChildComponent implements OnInit, AfterViewInit, AfterViewChecked{
+
+   ngAfterViewInit(): void {
+    console.log('子组件的视图初始化完毕')；
+  }
+  ngAfterViewCHecked(): void {
+    console.log('子组件的视图变更检测完毕')
+  }
+
+  constructor() {}
+
+  ngOnInit() {
+  }
+  greeting(name: string){
+    console.log('hello' + name)
+  }
+}
+
+```
+
+![viewHook的调用](../images/viewHooks.png)
+
+* 首先子组件的视图初始化完毕，子组件的视图变更检测完毕，着说明init方法是先于checked方法调用的
+* 因为我们在父组件的模版上面声明了两个子组件，我们可以在输出日志里面看到两个子组件的初始化动作，
+* 当两个子组件都初始化并且做变更检测完毕之后，父组件的初始化方法与变更检测方法才会被去调用，这说明父组件的视图想要被完全组装好，那么首先所有子组件的视图需事先先被组装好
+* 另外 在视图初始化完毕之后，ngAfterView()方法只会在组件视图初始化的时候被调用一次；然后就再也不会被调用了
+* 而当父组件每隔5秒中去调用子组件的其中一个方法（greeting）的时候，可能会触发我们整个视图的变更，因为angualr没办法判断我们调子组件的方法，是否会造成视图的改变，但是我们调用方法的动作就会触发angular的变更检测机制，然后其就会将所有组件上面实现了ngAfterViewChecked()的方法都会调用一遍；
+* 每次触发变更检测之后，两个子组件以及父组件的ngAfterViewChecked()方法都会被调用，这种事情发生在即是我们的视图没有发生一点变化，也会被调用
+* 结论就是若我们想实现变更检测的钩子，实现一定要尽可能的精简；
+
+
+```ts
+export class AppCoponent implements OnInit, AfterViewInit, AfterVIewChecked {
+
+  // 在父组件上声明一个普通变量message 并将其绑定到模版中
+  message: string;
+
+  ngAfterViewInit(): void {
+    console.log('父组件的视图初始化完毕')；
+
+    // 在viewInit()钩子方法里面去改变已经绑定给视图的message属性的值
+    this.message = "hanmeimei";
+
+    // angular会抛出一个异常，这是因为在变更检测周期中，angular是禁止在一个视图在已经被组装好之后，再去更新此视图，这是angular自身的规定
+    // 而ngAterViewInit()钩子 正好是在组件的视图刚被组装好之后触发的，同样ngAfterView()也是在视图被组装好之后运行的；所以我们在这两个钩子中去更新模版中被绑定的属性，去触发组件视图的变化，angular就会去抛出异常；；
+    // 解决这个异常也很简单就是将其放到另一个js运行周期去运行就行了：即将更改属性的代码放到一个setTimeout()方法中；
+    setTimeout(()=>{
+      this.message = "Hello";
+    },0)
+  }
+  ngAfterViewCHecked(): void {
+    console.log('父组件的视图变更检测完毕')
+  }
+
+  @ViewChild('child1')
+  child1: ChildComponent;
+
+  constructor() {}
+  ngOnInit():void {
+    setIniterval(()=>{
+    this.child1.greeting('Tom')
+    },5000)
+  }
+}
+
+```
+
+
+
+
 世界三大MOOC网站： Coursera、Udacity、edX 去找你需要的课程吧，小伙子
+
+angular是一个框架，我们应该去两个 体系内的各部分 在体系中的位置，发挥的作用，这就是入门需要思考的问题； 类似于以前学习微积分 ，极限 函数 导数是同一个微积分体系的三个重要的组成部分，了解这三部分各自的位置 与发挥的作用 至关重要；  这也是最顶层的最大的东西；
