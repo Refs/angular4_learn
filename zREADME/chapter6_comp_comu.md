@@ -572,6 +572,8 @@ export class AppCoponent implements OnInit, AfterViewInit, AfterVIewChecked {
 
 ### content钩子
 
+#### 投影的概念
+
 在介绍content钩子之前我们要介绍angular的一个新的概念：投影
 
 在某些情况下 我们会希望组件在运行时 动态的改变模版的内容；
@@ -675,12 +677,82 @@ export class AppCoponent implements OnInit, AfterViewInit, AfterVIewChecked {
 7. 优先使用<ng-content>动态生成html
 
 
+#### ngAfterContentInit与ngAfterContentChecked钩子
+
+> 与ngAfterViewInit与ngAfterViewChecked类似，只不过view钩子是在组件的全部视图都组装完毕之后调用的，而两个Conten钩子是在被投影进来的内容被组装完成之后被调用的，
+
+```ts
+// 父组件app.component.ts中
+
+export class AppComponent implements AfterContentInit,AfterContentChecked, AfterVIewInit{
+  ngAfterContentInit():void {
+    console.log('父组件投影内容初始化完毕')
+  }
+  ngAfterContentChecked():void {
+    console.log('父组件投影内容变更检测完毕')
+
+  }
+  ngAfterViewInit():void {
+    console.log('父组件视图初始化完毕')
+
+  }
+  title = "app works";
+} 
+
+```
+
+```ts
+// 子组件child.component.ts中
+
+export class ChildComponent implements OnInit, AfterContentInit, AfterContentChecked {
+   ngAfterContentInit():void {
+    console.log('子组件投影内容初始化完毕')
+  }
+  ngAfterContentChecked():void {
+    console.log('子组件投影内容变更检测完毕')
+
+  }
+}
+
+```
+
+![content方法的调用顺序](../images/content_hooks.png)
+
+这说明 在组装整个视图的时候，首先组装的是投影进来的内容，然后组装组装子组件视图的内容；
+
+> AfterContentInit与AfterVIewInit两者需要注意的地方
+* AfterVIewInit：在组件的模板整个被组装完成之后,是不能再去更改模板里的内容去再去引起模板内容的变化的； 这点事angular规定的 就是模板组装完毕后，在同一个组件周期内是不能改变模板里面的内容；
+* 而在AfterContentInit中是可以该改变，因为钩子方法被调用的时候整个视图还没有组合完毕，只是投影进来的内容被组装完毕了，所以钩子方法中是可以改变其内容的；
 
 
 
 
 
 
+## 总结
+
+### 属性初始化阶段
+
+![](../images/property_init.png)
+
+* constructor 构造函数用来初始化对象, ngOnChanges初始化输入属性，ngOnInit是用来初始化除了输入属性之外的其它属性，ngDoCheck做第一次变更检查
+* 属性初始化阶段完成之后，组件的所有属性，都应该被赋予需要被赋予的值
+
+### 组件视图渲染阶段
+
+![](../images/content_init.png)
+
+* 属性初始化完毕之后，开始渲染组件的视图，首先渲染投影进来的内容; 投影进来的内容渲染完毕之后 会调用ngAfterContentInit()方法与ngAfterContentChecked()方法；
+![](../images/child_init.png)
+* 上面两个方法执行过之后，若有子组件会去执行子组件一整套逻辑（即组件初始化的8条项目）；
+* 子组件的那一整套执行完毕之后，或者其没有子组件，即整个组件的视图都组装完毕之后，就会去调用组件ngAfterViewInit()方法与ngAfterViewChecked()； 上面的两个方法执行完毕之后，整个组件初始化过程都执行完毕了；这是组件就会整个呈现给用户，用户就可以进行一些交互；
+
+
+
+
+
+
+ 
 
 
 世界三大MOOC网站： Coursera、Udacity、edX 去找你需要的课程吧，小伙子
