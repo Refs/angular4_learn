@@ -726,7 +726,7 @@ export class ChildComponent implements OnInit, AfterContentInit, AfterContentChe
 
 
 
-
+### OnDestrory钩子
 
 
 ## 总结
@@ -746,6 +746,17 @@ export class ChildComponent implements OnInit, AfterContentInit, AfterContentChe
 ![](../images/child_init.png)
 * 上面两个方法执行过之后，若有子组件会去执行子组件一整套逻辑（即组件初始化的8条项目）；
 * 子组件的那一整套执行完毕之后，或者其没有子组件，即整个组件的视图都组装完毕之后，就会去调用组件ngAfterViewInit()方法与ngAfterViewChecked()； 上面的两个方法执行完毕之后，整个组件初始化过程都执行完毕了；这是组件就会整个呈现给用户，用户就可以进行一些交互；
+
+* 而用户做的交互，如鼠标点击、键盘输入 任何一件事，都可以去触发angular的变更检测机制
+* 一旦检测到变更发生，在当前组件树上，所有的活动组件上被实现的、带有check关键字的方法 都会被调用 用来检查当前组件的一些变化
+* 如果某一个变化 导致了当前某一个组件的输入属性发生变化，则相应组件上面定义的ngOnChanges方法也会被调用
+
+* 最终当组件被销毁的时候，会调用ngOnDestrory
+
+### 组件什么时候会被销毁
+
+> 在路由的时候，当从一个路由地址跳往另外一个路由地址的时候，前一个路由地址对应的组件会被销毁，然后后一个路由地址对应的组件 会被创建
+
 
 
 
