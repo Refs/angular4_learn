@@ -62,6 +62,7 @@ NgForm指令：其隐式的创建了一个FormGroup类的实例，FormGroup类�
 
 ```html
 
+<!-- 我们可以利用事件绑定语法来绑定angular提供的onSubmit事件，将器绑定到组件的自定义方法上来处理，并且使用模版变量#myForm.value属性将表单的值传输给方法 -->
 <form #myForm="ngForm" (ngSubmit)="onSubmit(myForm.value)">
     <div>用户名：<input type="text"> </div>
     <div>手机号：<input type="text"> </div>
@@ -75,11 +76,119 @@ NgForm指令：其隐式的创建了一个FormGroup类的实例，FormGroup类�
     <!-- 此时在渲染出来的浏览器页面上，无论我们在上面输入框中怎么输，下面对象输出的json里面都不会发生变化，也就是我们输入的值并没有反应到对象上面，这是因为我们的input标签上都没有标注ngModel指令，而FormGroup类的实例会自动发现标有ngModel -->
 </div>
 
+```   
+
+
+### NgModel 除了数据的双向绑定，还用来标注一个html元素，应该成为表单数据模型的一部分；
+
+在angular的表单api中，ngModule指令代表表单中的一个字段，该指令会为其附着的input隐式的创建FormControl对象的实例 代表字段的数据模型，并利用FormControl这个模型 来存储字段的值；
+
+需要注意的是， 在标有ngForm指令的html元素内（form表单的子元素上），使用ngModel指令的时候是不需要使用方括号或这小括号将其括起来的，也不用去指定将ngModel绑定到组件的某一个属性上 直接写一个ngModule就可以了； 但是我们需要为指定了ngModule指令的元素去指定一个'name'属性； name属性的值会成为ngForm.value对象上面的一个属性；
+
+与ngForm指令类似，ngModule指令创建的对象也可以通过一个模版变量来引用， 并通过模版变量的value属性来访问字段的值，
+
+```html
+<form #myForm="ngForm" (ngSubmit)="onSubmit(myForm.value)">
+    <div>用户名：<input #username="ngModule" ngModule name="username" type="text"> </div>
+    <div>手机号：<input type="text"> </div>
+    <div>密码：<input type="password"> </div>
+    <div>确认密码：<input type="password"> </div>
+    <div><button type="submit">注册</button></div>
+</form>
+
+<div>{{username.value}}</div>
+
 ```
 
-* NgModel 除了数据的双向绑定，还用来标注一个html元素，应该成为表单数据模型的一部分；
-* NgModelGroup
+### NgModelGroup
 
+NgModuleGroup代表的是表单中的一部分， 器允许我们将一些表单的字段组织在一起形成更清晰的层次关系，与NgForm指令类似NgModuleGroup指令 也会创建一个FormGroup类的实例，这个对象会在NgForm.value的对象中表现成为一个嵌套的对象即 NgModuleGroup的子属性，都会变成嵌套对象的子属性
+
+```html
+<form #myForm="ngForm" (ngSubmit)="onSubmit(myForm.value)">
+  <div NgModuleGroup="userInfo">
+    <div>用户名：<input #username="ngModule" ngModule name="username" type="text"> </div>
+    <div>手机号：<input type="text"> </div>
+  </div>
+    <div>密码：<input type="password"> </div>
+    <div>确认密码：<input type="password"> </div>
+    <div><button type="submit">注册</button></div>
+</form>
+
+<div>{{username.value}}</div>
+
+<!-- 
+    {"userInfo":{
+        "username": ""
+    }} 即形成了一个嵌套的关系
+ -->
+
+```
+### 实例
+
+```html
+<form #myForm="ngForm" (ngSubmit)="onSubmit(myForm.value)">
+    <div>用户名：<input ngModule name="username" type="text"> </div>
+    <div>手机号：<input ngModule name="mobile" type="number"> </div>
+
+    <!-- 由于两个密码字段是联动的，最终我们提交的时候也只会提交其中一个字段， 所以很自然的我们应该将他们放到一个group中去 -->
+    <!-- 这样当我们在做校验的时候，我们可以利用一个叫 passwordsGroup的对象，来方便的处理所有密码相关的字段 -->
+  <div ngModelGroup="passwordsGroup">
+    <div>密码：<input ngModel name="password" type="password"> </div>
+    <div>确认密码：<input ngModel name="pconfirm" type="password"> </div>
+  </div>
+
+    <div><button type="submit">注册</button></div>
+</form>
+
+
+```
+
+### 模版式表单的总结
+
+在上面的例子中，我们模版表单的数据模型是由模版中的指令来控制的，angular给<form>标签自动的添加了一个NgForm 指令，创建了一个FormGroup对象
 
 
 ## 响应式表单
+
+与模版式表单不同，创建一个响应式表单需要两步： 首先我们需要编码来创建一个数据模型，然后我们需要使用指令 将模版中的html元素连接到数据模型上面
+
+### 创建一个数据模型
+
+数据模型指的是用来存储表单数据的数据结构，简称模型；它由angular定义在forms中的三个类组成： Formcontrol FormGroup FormArray
+
+1. FormControl:  构成表单的基本单位，通常情况下代表一个input元素，但是其也可以代指一个更复杂的Ui组件，如 日历  下拉选择框， FormControl保存着与其关联的html元素当前的值以及元素的校验状态、元素是否被修改过等信息，
+
+```bash
+ng g component reactiveForm
+```
+
+```ts
+// reactive-form.component.ts中
+export class ReactiveFormComponent implements OnInit{
+    // FormControl的构造函数会接收一个参数，这个参数是用来指定FormControl的初始值； 如下面传参'aaa’ 若我们将实例化过的username与页面上的<input>连接之后，则<input>的初始值就是'aaa'
+    // 模版式表单中的ngModel指令实际上就是为其附着的<input>创建一个FormControl的实例
+    username: FormControl = new FormControl('aaa');
+}
+
+```
+
+2. FormGroup
+
+FormGroup即可以代表表单中的一部分，也可以用来代表整个表单，其是多个FormControl的集合，器将多个FormControl的值与状态聚合在一起；
+
+在表单校验中，如果FormGroup中的其中一个FormControl是无效的，则整个FormGroup就是无效的，在管理表单多个相关联的字段的时候，FormGroup是很方便的，如：一个日期范围在表单中一般会表现为两个input字段，一个起始日期与一个截止日期，则这两个input就可以被放到同一个 FormGroup里面，这样当两个日期字段中的任何一个值无效的时候都会显示一个错误的信息；
+
+```ts
+// reactive-form.component.ts中
+export class ReactiveFormComponent implements OnInit{
+    username: FormControl = new FormControl('aaa');
+
+    formMdel: FormGroup = new FormGroup({
+        // 起始日期与结束日期
+        from: new FormControl(),
+        to: new FormControl()
+    })
+}
+
+```
