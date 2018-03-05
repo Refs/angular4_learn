@@ -192,3 +192,7 @@ export class ReactiveFormComponent implements OnInit{
 }
 
 ```
+
+3. FormArray
+
+FormArray与FormGroup  类似，但是其有一个额外的长度属性， 一般来说FormGroup用来代表整个表单
