@@ -239,7 +239,29 @@ export class ReactiveFormComponent implements OnInit{
 2. 与模版式表单不同 响应式表单中的这些form开头的指令是不可以引用的，也就是不能使用`<form #myForm="ngForm">`的方式通过自定义模版本地变量来引用指令的实例，在angular中 其是故意这么做的，目的是明确的区分这两种表单的处理方式： 
     + 前面说的模版式表单中，我们是不能访问数据模型相关的类的，在组件的事件处理方法中不能拿到FormControl、FormGroup 、FormArray的引用，我们只能拿到表单最终的一个数据（由模版通过事件参数传递）； 但是我们可以在模版中 通过模版的本地变量来操作 数据模型的实例
     + 在响应式表单中，我们可以去直接去访问数据模型的相关的类，但是由于它们是不可以被本地变量所引用的，我们是不可以在模版中去操作数据模型的，只能在代码中去操作，所以这两者是完全相反的： 一个是只能在模版中操作，一个是只能在代码中去操作；
-3. 的发生地
+
+
+```html
+<form>
+    <div>
+        起始日期：<input type="date"></input>
+        截止日期：<input type="date"></input>
+    </div>
+    <div>
+        <ul>
+            <li>
+                <input type="text">
+            </li>
+        </ul>
+        <button type="button">增加email<button>
+    </div>
+    <div>
+        <button type="submit">保存</button>
+    </div>
+
+</form>
+
+```
 
 
 
