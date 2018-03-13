@@ -155,9 +155,11 @@ NgModuleGroup代表的是表单中的一部分， 器允许我们将一些表单
 
 ### 创建一个数据模型
 
-数据模型指的是用来存储表单数据的数据结构，简称模型；它由angular定义在forms中的三个类组成： Formcontrol FormGroup FormArray
+数据模型指的是用来存储表单数据的数据结构，简称模型；它由angular定义在forms模块中的三个类组成： Formcontrol FormGroup FormArray
 
 1. FormControl:  构成表单的基本单位，通常情况下代表一个input元素，但是其也可以代指一个更复杂的Ui组件，如 日历  下拉选择框， FormControl保存着与其关联的html元素当前的值以及元素的校验状态、元素是否被修改过等信息，
+
+> 创建一个formcontrol的实例
 
 ```bash
 ng g component reactiveForm
@@ -175,7 +177,7 @@ export class ReactiveFormComponent implements OnInit{
 
 2. FormGroup
 
-FormGroup即可以代表表单中的一部分，也可以用来代表整个表单，其是多个FormControl的集合，器将多个FormControl的值与状态聚合在一起；
+FormGroup即可以代表表单中的一部分，也可以用来代表整个表单，其是多个FormControl的集合，其将多个FormControl的值与状态聚合在一起；
 
 在表单校验中，如果FormGroup中的其中一个FormControl是无效的，则整个FormGroup就是无效的，在管理表单多个相关联的字段的时候，FormGroup是很方便的，如：一个日期范围在表单中一般会表现为两个input字段，一个起始日期与一个截止日期，则这两个input就可以被放到同一个 FormGroup里面，这样当两个日期字段中的任何一个值无效的时候都会显示一个错误的信息；
 
@@ -184,8 +186,9 @@ FormGroup即可以代表表单中的一部分，也可以用来代表整个表�
 export class ReactiveFormComponent implements OnInit{
     username: FormControl = new FormControl('aaa');
 
+    // FormGroup的构造函数 接收一个对象，
     formMdel: FormGroup = new FormGroup({
-        // 起始日期与结束日期
+        // 在这个FormGroup的实例中 存有两个字段(FormControl的实例)，一个是from一个是to；
         from: new FormControl(),
         to: new FormControl()
     })
@@ -195,4 +198,52 @@ export class ReactiveFormComponent implements OnInit{
 
 3. FormArray
 
-FormArray与FormGroup  类似，但是其有一个额外的长度属性， 一般来说FormGroup用来代表整个表单
+FormArray与FormGroup  类似，但是其有一个额外的长度属性， 一般来说FormGroup用来代表整个表单，或者表单字段的一个固定的子集，而FormArray通常是代表一个可以增长的字段的集合； 举例说： 表单中我们可能会有email的一块区域，一个用户可能会有多个email,这个时候我们就可以使用FormArray来让用户去输入，任意数量的email的地址
+
+```ts
+// reactive-form.component.ts中
+export class ReactiveFormComponent implements OnInit{
+    username: FormControl = new FormControl('aaa');
+
+    formMdel: FormGroup = new FormGroup({
+        from: new FormControl(),
+        to: new FormControl()
+    })；
+
+    // FormArray的构造函数接收一个数组，数组中的每一个元素都是一个字段， 
+    emails:FormArray = new FormArray([
+        // 字段的构造函数中接受的参数就是字段的初始值；
+        new FormControl('a@a.com')，
+        new FormControl('b@b.com')
+    ])
+    // 值得一提的是FormArray与FormGroup不一样的地方在于，前者的字段FormControl是没有一个相关的key的，我们只能通过序号来访问FormArray中的元素；
+}
+
+```
+
+### 响应式表单指令
+
+响应式表单使用了一组与模版式表单完全不同的一套指令，这些指令都来源于ReactiveFormsModule 模块
+
+在下面的表单中第二列是使用`属性绑定`中使用的指令，指令的名称与类名相同，首字母小写，需要注意FormArray是不能使用属性绑定指令来绑定； 第三列是可以属性名字来连接数据模型与dom元素的
+
+|    类名     |    指令1    |      指令2      |
+|:-----------:|:-----------:|:---------------:|
+|  FormGroup  |  formGroup  |  formGroupName  |
+| FormControl | formControl | formControlName |
+|  FormArray  |             |  formArrayName  |
+
+> 需要注意的点：
+
+1. 响应式表单所有的指令都是以form开头的，所以我们可以很容易通过查看组件的模版，来区分表单的处理方式 是模版式表单还是响应式表单；
+2. 与模版式表单不同 响应式表单中的这些form开头的指令是不可以引用的，也就是不能使用`<form #myForm="ngForm">`的方式通过自定义模版本地变量来引用指令的实例，在angular中 其是故意这么做的，目的是明确的区分这两种表单的处理方式： 
+    + 前面说的模版式表单中，我们是不能访问数据模型相关的类的，在组件的事件处理方法中不能拿到FormControl、FormGroup 、FormArray的引用，我们只能拿到表单最终的一个数据（由模版通过事件参数传递）； 但是我们可以在模版中 通过模版的本地变量来操作 数据模型的实例
+    + 在响应式表单中，我们可以去直接去访问数据模型的相关的类，但是由于它们是不可以被本地变量所引用的，我们是不可以在模版中去操作数据模型的，只能在代码中去操作，所以这两者是完全相反的： 一个是只能在模版中操作，一个是只能在代码中去操作；
+3. 的发生地
+
+
+
+
+
+
+
