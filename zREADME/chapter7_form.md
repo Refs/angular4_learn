@@ -381,14 +381,57 @@ export class ReactiveFormComponent implements OnInit{
 
     ngOnInit() {}
 
-
-
-
-
+    onSubmit() {
+       console.log(this.forModel.value)
+    }
     
 } 
 
+``` 
+
+```html
+<!-- reactive-form-component.html中   -->
+
+<form [formGroup]="formModel" (submit)="onSubmit()" >
+    <div>用户名：<input type="text" formControlName="username"> </div>
+    <div>手机号：<input type="text" formControlName="mobile"> </div>
+    <div formGroupName="passWordsGroup" >
+        <div>密码：<input type="password" formControlName="password"> </div>
+        <div>确认密码：<input type="password" formControlName="pconfirm" > </div>
+    </div>
+    <div><button type="submit">注册</button></div>
+</form>
+
 ```
+
+>  模板式表单与响应式表单的行为是完全一致的，但是内部的实现是不同的，现在的问题是响应式表单比模板式表单的代码量要多不少，因为其需要通过编码来构建表单的数据模型----angualr 提供FormBuild类来简化表单模型的构建过程；
+
+> FormBuild是angular提供的一个工具，其本身并没有提供任何新的功能，但是其简化了 定义表单数据结构的语法，相对于直接使用FormControl、FormGroup等类，使用FormBuild可以使我们使用少量的代码来构建同样的数据结构：
+
+```ts
+
+// reactive-form-component.ts中 构建表单的数据模型；
+
+export class ReactiveFormComponent implements OnInit{
+
+    formModel: FormGroup;
+    // 注入FormBuild类
+    constructor(fb:FormBUilder){
+        this.formModel = fb.froup({
+            username:[''],
+            mobile:[''],
+            passwordsGroup: fb.group({
+                password:[''],
+                pconfirm:['']
+            })
+        })
+    }
+
+} 
+
+```
+
+> 使用FormBuild来配置表单的数据模型 比直接使用new操作符 来实例化表单模型相关的类，代码量要少了很多，此外FormBuild还可以提供一些额外的配置，如group() 方法，可以接收一个额外的参数，在参数中可以去校验FormGroup的实例；此外FormBuild可允许直接利用数组来实例化一个FormControl的实例，数组的第一个元素是字段的初始值，第二个元素是一个校验方法，第三个元素是一个异步的校验方法； 
 
 
 
