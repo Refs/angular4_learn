@@ -233,13 +233,15 @@ export class ReactiveFormComponent implements OnInit{
 | FormControl | formControl | formControlName |
 |  FormArray  |             |  formArrayName  |
 
-> 表格中的第二列一般情况下，都需要使用属性绑定语法，第三列的不需要；
+
 > formControlName必须声明在一个FormGroup之内，来链接FormGroup中的FromControl和页面上的Dom元素；
 > formArrayName与FormControlName一样 必须用在 formGroup这样一个指令范围之内；
 > formControl 在响应式表单中 `不能用在`FormFroup的里面，而只能使用在FormGroup外面而单独的和一个input字段 绑定在一块
 
+
+
 ```html
-<input [formControl]="username" >
+<input [formCont rol]="username" >
 <!-- 但是在后台中username属性 并不在表单的数据模型里面； -->
 <!-- 而若想将username放到 表单的数据模型里面去，那么绑定的时候，我们要将其放到模板的 FormGroup里面去 -->
 <form [formGroup]="formModel" (submit)="onSubmit">
@@ -339,6 +341,8 @@ export class ReactiveFormComponent implements OnInit{
 }
 
 ```
+
+> `总结：` 所有的指令都是以form开头的，如果指令以Name结尾， 则不需要使用属性绑定语法的方括号，只需要指定属性绑定的名字； 反之则需要使用属性绑定的语法，绑定到一个属性上；  以Name为结尾的属性,只能使用在FormGroup覆盖的范围之内， 反之第二列不能用在内部；
 
 
 
