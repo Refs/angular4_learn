@@ -434,6 +434,100 @@ export class ReactiveFormComponent implements OnInit{
 > 使用FormBuild来配置表单的数据模型 比直接使用new操作符 来实例化表单模型相关的类，代码量要少了很多，此外FormBuild还可以提供一些额外的配置，如group() 方法，可以接收一个额外的参数，在参数中可以去校验FormGroup的实例；此外FormBuild可允许直接利用数组来实例化一个FormControl的实例，数组的第一个元素是字段的初始值，第二个元素是一个校验方法，第三个元素是一个异步的校验方法； 
 
 
+## 表单校验
+
+表单API的优势就是 其具有校验的能力，这种校验能力在两种表单处理上面都是可以使用的
+
+### Angular的校验器
+
+其实就是一个普通的方法，方法接收一个参数，参数的类型必须是AbstractControl,必须要有一个返回值，返回值可以是一个任意结构的一个对象， 对这个对象只有一个要求，就是其key 必须是string类型的，值可以是任意的类型的`xxx(control: AbstractControl): {[key: string]: any}{return null}`
+
+#### angular提供的一组预定义的校验器；
+预定义的校验器 都是定义在angular Forms模块中的Validators的类里面的；一旦我们拥有一个已经预定好的校验器 我们就可以去通过配置表单模型来使用；
+
+```ts
+
+// 在响应式表单模型里面；
+
+export class ReactiveFormComponent implements OnInit{
+
+    formModel: FormGroup;
+    //  在响应式表单中我们可以将校验器作为模型类的构造函数的参数传入到模型类中，
+    constructor(fb:FormBUilder){
+        this.formModel = fb.froup({
+            // username所属的模型类是FormControl, 在其构造函数中 第一个是其默认值，第二个就是我们的校验器；
+            // 我们加上Validitor.required校验器，则username这个字段现在就是必填的项了；且我们可以同时提供一组校验器，来同时校验一个字段；
+            // 为某一个字段定义好校验器之后，我们就可以通过字段的valid属性，来判断字段当前的值是否合法；this.formModel.get('username').valid:boolean
+            username:['',[Validators.required, Validators.minLength(6)]],
+            mobile:[''],
+            passwordsGroup: fb.group({
+                password:[''],
+                pconfirm:['']
+            })
+        })
+    }
+
+    onSubmit(){
+        // 通过字段的额valid属性，获取字段信息的校验结果；
+        // 同时可以通过errors属性，获取导致校验没通过的具体的错误信息；通过这些错误信息，我们可以了解详细的错误原因，也可以显示一个“用户良好的”错误提示；
+        
+        let isValid:boolean = this.formModel.get("username").valid;
+        let errors:any = this.formModel.grt("username").errors;
+        console.log( JSON.stringify(errors));
+        console.log(this.formModel.value);
+        
+    }
+
+} 
+
+``` 
+
+> angular提供的标准的校验器，器在校验一些基本的类型的时候是比较方便的，如字符串或数字； 如果我们要去校验的是一个更为复杂的数据类型， 我们可能需要去创建一个自己的校验器；
+
+> 校验器其实就是一个符合特定签名的方法，方法接收一个参数，参数的类型必须是AbstractControl（可以是FormControl FormGroup FormArray类型中的任意一种）,必须要有一个返回值，返回值可以是一个任意结构的一个对象， 对这个对象只有一个要求，就是其key 必须是string类型的，值可以是任意的类型的`xxx(control: AbstractControl): {[key: string]: any}{return null}`， 返回的对象 是用来描述 错误信息；
+
+任何时候，当一个校验器返回null的时候，说明其校验通过了；
+
+```ts
+
+// ；
+
+export class ReactiveFormComponent implements OnInit{
+
+    formModel: FormGroup;
+    //  在响应式表单中我们可以将校验器作为模型类的构造函数的参数传入到模型类中，
+    constructor(fb:FormBUilder){
+        this.formModel = fb.froup({
+            // username所属的模型类是FormControl, 在其构造函数中 第一个是其默认值，第二个就是我们的校验器；
+            // 我们加上Validitor.required校验器，则username这个字段现在就是必填的项了；且我们可以同时提供一组校验器，来同时校验一个字段；
+            // 为某一个字段定义好校验器之后，我们就可以通过字段的valid属性，来判断字段当前的值是否合法；this.formModel.get('username').valid:boolean
+            username:['',[Validators.required, Validators.minLength(6)]],
+            mobile:[''],
+            passwordsGroup: fb.group({
+                password:[''],
+                pconfirm:['']
+            })
+        })
+    }
+
+    onSubmit(){
+        // 通过字段的额valid属性，获取字段信息的校验结果；
+        // 同时可以通过errors属性，获取导致校验没通过的具体的错误信息；通过这些错误信息，我们可以了解详细的错误原因，也可以显示一个“用户良好的”错误提示；
+        
+        let isValid:boolean = this.formModel.get("username").valid;
+        let errors:any = this.formModel.grt("username").errors;
+        console.log( JSON.stringify(errors));
+        console.log(this.formModel.value);
+        
+    }
+
+} 
+
+``` 
+
+### 校验响应式表单
+
+### 校验模板式表单
 
 
 
