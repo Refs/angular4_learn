@@ -233,6 +233,9 @@ export class ReactiveFormComponent implements OnInit{
 | FormControl | formControl | formControlName |
 |  FormArray  |             |  formArrayName  |
 
+> formControlName必须声明在一个FormGroup之内，来链接FormGroup中的FromControl和页面上的Dom元素；
+> formArrayName与FormControlName一样 必须用在 formGroup这样一个指令范围之内；
+
 > 需要注意的点：
 
 1. 响应式表单所有的指令都是以form开头的，所以我们可以很容易通过查看组件的模版，来区分表单的处理方式 是模版式表单还是响应式表单；
@@ -242,26 +245,86 @@ export class ReactiveFormComponent implements OnInit{
 
 
 ```html
-<form>
-    <div>
-        起始日期：<input type="date"></input>
-        截止日期：<input type="date"></input>
+<!-- reactive-form-html中 -->
+
+<!-- 2. 在模板中使用formGroup指令，绑定后台的FormGroup类对象的实例 ； 绑定后整个表单的处理方式，就变为了一个响应式表单的处理方式 ->3 -->
+<!-- 3. 表单的提交 同样是利用angular提供的submit事件，绑定到后台的handler方法中去处理 ->4 -->
+<form [formGroup]='formModel' (submit)="onSubmit()" > 
+    <!-- 5.1 利用formGroupName指令去链接一个FormGroup -->
+    <!-- 5.3 在模板中使用formGroupName指令去绑定后台自定义的FromGroup的实例dateRange -->
+    <div formGroupName="dateRange">
+        <!-- 6. formControlName必须声明在一个FormGroup之内，来链接FormGroup中的FromControl和页面上的Dom元素 -->
+        <!-- 6.1  formControlName的值依然是一个字符串（属性的名字），所以不要使用属性绑定语法-->
+        起始日期：<input type="date" formControlName="from">
+        截止日期：<input type="date" formControlName"to" >
     </div>
     <div>
-        <ul>
-            <li>
-                <input type="text">
+        <!-- formArrayName与FormControlName一样 必须用在 formGroup这样一个指令范围之内；下面是在最外层的 formGroup指令下面-->
+        <ul formArrayName="emails" >
+        <!-- 前面我们已经说过FormArray中的FromControl没有key，只有顺序号，所以一般情况下 我们会与ngFor指令阿里一起使用forArrayName指令 -->
+            <li *ngFor="let e of this.formModel.get('emails').controls; let i=index;" >
+                <!-- 在 字段中我们使用formControlName 将其与循环下标绑定在一块，注意此处需要使用属性绑定的语法 -->
+                <input type="text" [formControlName]="i">
             </li>
         </ul>
-        <button type="button">增加email<button>
+        <button type="button"  (click)="addEmail()">增加email<button>
     </div>
     <div>
         <button type="submit">保存</button>
-    </div>
+    </div> 
 
 </form>
 
 ```
+
+> `<form [formGroup]='formModel' (submit)="onSubmit()" >  <div formGroupName="dateRange">` 这里需要注意的 formGroup绑定的是后台的一个属性，所以要使用属性绑定的方括号的语法；而formGroupName的值是一个字符串，所以不要使用属性绑定语法，直接使用属性名称的字符串就可以了；
+
+> `<form>`标签默认时被angular模板式表单中中的ngForm指令来接管的，而在reactive 表单中 我们要让FormGroup去接管；通常情况下我们会利用绑定到`<form></form>`标签的FormGroup对象来代表整个表单，
+
+```ts
+// reactive-form-component.ts中
+
+export class ReactiveFormComponent implements OnInit{
+    //1.  创建一个FromGroup类的对象的实例formModel,用以表示整个表单的数据，在页面上使用上表中介绍的formgroup指令 ->2
+    formModel: FormGroup = new FormGroup({
+        //5.2 首先我们要在组件中去声明一个FormGroup
+        dateRange: new FormGroup({
+            from: new FormControl(),
+            to: new FormControl()
+        }),
+
+        emails:  new FormArray([
+            new FormControl('a@a.com')，
+            new FormControl('b@b.com')
+        ])
+    })；
+    
+    username: FormControl = new FormControl('aaa');
+
+
+    constructor(){
+        
+        
+    }
+    
+    ngOnInit (){
+        
+    }
+    
+    onSubmit(){
+        //4.  在handler中 将此时的扁担数据模型 打印出来；
+        console.log(this.formModel.value);
+    }
+
+    addEmail(){
+        let emails = this.formModel.get("emails") as FromArray;
+        emails.push(new FormControl());
+    }
+}
+
+```
+
+
 
 
 
