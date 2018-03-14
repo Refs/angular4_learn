@@ -233,8 +233,24 @@ export class ReactiveFormComponent implements OnInit{
 | FormControl | formControl | formControlName |
 |  FormArray  |             |  formArrayName  |
 
+> 表格中的第二列一般情况下，都需要使用属性绑定语法，第三列的不需要；
 > formControlName必须声明在一个FormGroup之内，来链接FormGroup中的FromControl和页面上的Dom元素；
 > formArrayName与FormControlName一样 必须用在 formGroup这样一个指令范围之内；
+> formControl 在响应式表单中 `不能用在`FormFroup的里面，而只能使用在FormGroup外面而单独的和一个input字段 绑定在一块
+
+```html
+<input [formControl]="username" >
+<!-- 但是在后台中username属性 并不在表单的数据模型里面； -->
+<!-- 而若想将username放到 表单的数据模型里面去，那么绑定的时候，我们要将其放到模板的 FormGroup里面去 -->
+<form [formGroup]="formModel" (submit)="onSubmit">
+    <!-- 但是我们绑定的时候，就不能使用如下的方式去绑定， -->
+    <!-- <input [formControl]="username" >    -->
+    <!-- 在formGroup内部使用formControlName来单独绑定一个字段； -->
+    <input formControlName="username">
+    
+</form>
+
+```
 
 > 需要注意的点：
 
@@ -248,7 +264,7 @@ export class ReactiveFormComponent implements OnInit{
 <!-- reactive-form-html中 -->
 
 <!-- 2. 在模板中使用formGroup指令，绑定后台的FormGroup类对象的实例 ； 绑定后整个表单的处理方式，就变为了一个响应式表单的处理方式 ->3 -->
-<!-- 3. 表单的提交 同样是利用angular提供的submit事件，绑定到后台的handler方法中去处理 ->4 -->
+<!-- 3. 表单的提交 是利用dom元素自带的submit事件属性，绑定到后台的handler方法中去处理 ->4 -->
 <form [formGroup]='formModel' (submit)="onSubmit()" > 
     <!-- 5.1 利用formGroupName指令去链接一个FormGroup -->
     <!-- 5.3 在模板中使用formGroupName指令去绑定后台自定义的FromGroup的实例dateRange -->
