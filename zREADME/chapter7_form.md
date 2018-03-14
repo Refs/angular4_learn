@@ -482,40 +482,63 @@ export class ReactiveFormComponent implements OnInit{
 
 ``` 
 
-> angular提供的标准的校验器，器在校验一些基本的类型的时候是比较方便的，如字符串或数字； 如果我们要去校验的是一个更为复杂的数据类型， 我们可能需要去创建一个自己的校验器；
+#### 自定义angular的校验器
 
-> 校验器其实就是一个符合特定签名的方法，方法接收一个参数，参数的类型必须是AbstractControl（可以是FormControl FormGroup FormArray类型中的任意一种）,必须要有一个返回值，返回值可以是一个任意结构的一个对象， 对这个对象只有一个要求，就是其key 必须是string类型的，值可以是任意的类型的`xxx(control: AbstractControl): {[key: string]: any}{return null}`， 返回的对象 是用来描述 错误信息；
+angular提供的标准的校验器，器在校验一些基本的类型的时候是比较方便的，如字符串或数字； 如果我们要去校验的是一个更为复杂的数据类型， 我们可能需要去创建一个自己的校验器；
+
+校验器其实就是一个符合特定签名的方法，方法接收一个参数，参数的类型必须是AbstractControl（可以是FormControl FormGroup FormArray类型中的任意一种）,必须要有一个返回值，返回值可以是一个任意结构的一个对象， 对这个对象只有一个要求，就是其key 必须是string类型的，值可以是任意的类型的`xxx(control: AbstractControl): {[key: string]: any}{return null}`， 返回的对象 是用来描述 错误信息；
 
 任何时候，当一个校验器返回null的时候，说明其校验通过了；
 
 ```ts
 
-// ；
-
 export class ReactiveFormComponent implements OnInit{
 
     formModel: FormGroup;
-    //  在响应式表单中我们可以将校验器作为模型类的构造函数的参数传入到模型类中，
     constructor(fb:FormBUilder){
+
         this.formModel = fb.froup({
-            // username所属的模型类是FormControl, 在其构造函数中 第一个是其默认值，第二个就是我们的校验器；
-            // 我们加上Validitor.required校验器，则username这个字段现在就是必填的项了；且我们可以同时提供一组校验器，来同时校验一个字段；
-            // 为某一个字段定义好校验器之后，我们就可以通过字段的valid属性，来判断字段当前的值是否合法；this.formModel.get('username').valid:boolean
             username:['',[Validators.required, Validators.minLength(6)]],
-            mobile:[''],
+            //1.6 将我们自定义的校验器放到我们要校验的字段上面去；
+            //1.7 这样每次当我们在字段的input便签上输入时，绑定在上面的校验器都会被执行
+            mobile:['',this.mobileValidator],
+
+            // 将我们自定义的校验FormGroup的校验器equalValidator,绑定到我们想校验的FormGroup上去；与绑定单个FormControl不同（直接写在第二个参数处，多个写在数组中 放到第二个参数位置处）； 校验FormGroup的校验器 需放到一个{}中；{validator: this.equalValidator}
             passwordsGroup: fb.group({
                 password:[''],
                 pconfirm:['']
-            })
+            },{valitator: this.equalValidator})
         })
     }
 
+    //1.0 自定义手机号码 校验器 （校验一个单一的字段）
+    //1.2 前面已经说过自定义的校验器方法接受的参数必须是AbstractControl 类型，即FromControl FormGroup FormArray中的一种； 而又由于我们要校验的字段<input formControlName="mobile" >是FormControl 类型； 所以我们此处校验器的方法接受的参数是FormControl类型；
+    mobileValidator(control: FormControl):any {
+        //1.3 自定义一个正则表达式，用于验证我们的手机号是否正确；
+        var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+        //1.4 control.value引用我们输进去的值；
+        let valid = myreg.test(control.value);
+        console.log('mobile的校验结果是'+valid);
+        //1.5 当我们的校验结果是通过的时候，即valid的值为true的时候 我们应该返回一个null(angular校验通过一般都返回一个null),否则返回一个对象，用来携带错误信息；
+        return valid ? null : {mobile: true};
+
+    }
+
+    // mobileValidator是我们自定义的用来校验单一字段的校验器，但有时候我们需要同时去校验 多个字段，为了满足这个需求 angular允许我们 为我们的FormGroup来定义校验器；
+    // 因为校验的对象是一个FormGroup对象，所以自定义的校验方法接收到的参数是FormGroup类型；
+    equalValidator(group: FormGroup) : any {
+        let password: FormControl = group.get("password") as FormControl;
+        let pconfirm: FormControl = group.get("pconform") as FormControl;
+        let valid:boolean = (password.value === pconfirm.value);
+        console.log("密码校验结果为" + valid);
+        return valid? null : {equal : true};
+    }
+
+
+
     onSubmit(){
-        // 通过字段的额valid属性，获取字段信息的校验结果；
-        // 同时可以通过errors属性，获取导致校验没通过的具体的错误信息；通过这些错误信息，我们可以了解详细的错误原因，也可以显示一个“用户良好的”错误提示；
-        
         let isValid:boolean = this.formModel.get("username").valid;
-        let errors:any = this.formModel.grt("username").errors;
+        let errors:any = this.formModel.get("username").errors;
         console.log( JSON.stringify(errors));
         console.log(this.formModel.value);
         
