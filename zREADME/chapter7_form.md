@@ -338,14 +338,57 @@ export class ReactiveFormComponent implements OnInit{
         let emails = this.formModel.get("emails") as FromArray;
         emails.push(new FormControl());
     }
-}
+} 
 
 ```
 
 > `总结：` 所有的指令都是以form开头的，如果指令以Name结尾， 则不需要使用属性绑定语法的方括号，只需要指定属性绑定的名字； 反之则需要使用属性绑定的语法，绑定到一个属性上；  以Name为结尾的属性,只能使用在FormGroup覆盖的范围之内， 反之第二列不能用在内部；
 
+### 响应式表单的重构
+
+```html
+<!-- 纯html的表单  -->
+
+<form action="/registry" method="post">
+    <div>用户名：<input type="text"> </div>
+    <div>手机号：<input type="text"> </div>
+    <div>密码：<input type="password"> </div>
+    <div>确认密码：<input type="password"> </div>
+    <div><button type="submit">注册</button></div>
+</form>
+
+```
 
 
+```ts
+
+// reactive-form-component.ts中 构建表单的数据模型；
+
+export class ReactiveFormComponent implements OnInit{
+
+    formModel: FormGroup;
+
+    constructor(){
+        this.formModel = new FormGroup({
+            username: new FormControl(),
+            mobile: new FormControl(),
+            passWordsGroup: new FormGroup({
+                password: new FormControl(),
+                pconfirm: new FormControl()
+            })
+        })
+    }
+
+    ngOnInit() {}
+
+
+
+
+
+    
+} 
+
+```
 
 
 
