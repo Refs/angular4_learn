@@ -884,6 +884,29 @@ pending 指的是当一个字段正处于 异步校验的时候，字段的pendi
 
 在响应式表单中，我们的后台会有一个编码的数据模型，只需要将字段的校验方法，挂接到指定的字段上面就可以了；但是在模板式表单中 后台是没有这样一个数据模型的，指令是我们唯一可以使用的东西，所以首先我们需要将我们的校验器方法`包装成一个个指令`然后才能在模板中去使用；
 
+对于angular 预定义的校验器，都已经有对应的指令，我们可以在模板中直接去用就可以了
+
+```html
+<!-- 2. 为了让angular 知道required是一个指令而不是一个html属性， 避免干扰angular的校验  -->
+<!-- 为了避免干扰， 在form标签中使用 novalidate 不要启动浏览器默认的表单校验 -->
+<form #myForm="ngForm" (ngSubmit)="onSubmit(myForm.value)"   novalidate >
+    <!--1. required 并不是html的属性required 而是angular的一个校验器指令 -->
+    <div>用户名：<input ngModule required name="username" type="text"> </div>
+    <div>手机号：<input ngModule name="mobile" type="number"> </div>
+
+  <div ngModelGroup="passwordsGroup">
+    <div>密码：<input ngModel name="password" type="password"> </div>
+    <div>确认密码：<input ngModel name="pconfirm" type="password"> </div>
+  </div>
+
+    <div><button type="submit">注册</button></div>
+</form>
+
+
+```
+
+#### 封装自定义的校验器；
+
 > 将mobilevalidator 校验器方法 封装成一个指令； 
 
 ```bash
@@ -910,13 +933,35 @@ import { Directive } from '@angular/core';
      selector: '[mobile]' // 这样我们就得到了一个名为mobile的属性；
 
     //2.0 我们需要一个providers提供器； 首先我们声明一个provide token  ，而angualr中校验器的包装指令的token 是固定的 就是NG_VALIDATORS, 它是@angular/forms 模块中提供的一个常量
-     providers: [{provide: NG_VALIDATORS, useValue: }]
+    // mobileValidator是我们已经暴漏在全局的一个函数；
+    // 这样 我们就将mobileValidator 包装成为一个mobile指令
+
+    // multi: true 意思就是说同一个 provide token  下面可以挂 多个不同的useValue , 因为前面已经说过，所有的检验器指令都共用同一个token; 所以就会导致同一个NG_VALIDATORS 下面就挂了多个不同的useValue
+     providers: [{provide: NG_VALIDATORS, useValue: mobileValidator, multi: true }]
 })
 export class MobileValidatorDirective {
 
   constructor() { }
 
 }
+
+```
+
+> 为我们的表单 添加各种校验
+
+```html
+<form #myForm="ngForm" (ngSubmit)="onSubmit(myForm.value)"   novalidate >
+    <div>用户名：<input ngModule required minLength="6" name="username" type="text"> </div>
+    <div>手机号：<input ngModule mobile name="mobile" type="number"> </div>
+
+  <div ngModelGroup="passwordsGroup" equal>
+    <div>密码：<input ngModel minLength="6" name="password" type="password"> </div>
+    <div>确认密码：<input ngModel name="pconfirm" type="password"> </div>
+  </div>
+
+    <div><button type="submit">注册</button></div>
+</form>
+
 
 ```
 
