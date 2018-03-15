@@ -548,6 +548,101 @@ export class ReactiveFormComponent implements OnInit{
 
 ``` 
 
+> 我们应该注意上述的我们校验器的方法 是我们写在控制器里面的；事实上 其可以单独提取出来 写在一个单独的js文件里面；并通过`export` 关键字暴露出来, 这样我们就可以将应用中通用的校验器 都写在一个文件里面，然后再不同的组件中去服用 文件中的校验器；
+
+```bash
+# 再src/app目录下面新建 validator/validator.ts
++-- app
+| +-- validator
+| | +-- validator.ts
+
+```
+
+```ts
+// validator.ts中
+
+// 将在上述组件中自定义的两个方法 挪到validator.ts文件里面；但需要注意 一旦从组件里挪出来，其就不再是typecript 类里面的方法了，而是全局的一个typescript函数，我们需要使用function来声明，然后要通过export 关键字来将方法暴露出去；这样我们就声明了两个全局的方法，这样我们就可以在组件中去引用这两个全局的方法；
+ export function mobileValidator(control: FormControl):any {
+    var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+    let valid = myreg.test(control.value);
+    console.log('mobile的校验结果是'+valid);
+    return valid ? null : {mobile: true};
+
+}
+
+export function equalValidator(group: FormGroup) : any {
+    let password: FormControl = group.get("password") as FormControl;
+    let pconfirm: FormControl = group.get("pconform") as FormControl;
+    let valid:boolean = (password.value === pconfirm.value);
+    console.log("密码校验结果为" + valid);
+    return valid? null : {equal : true};
+}
+
+
+```
+
+> 将组件的方法 单独拉出来 放到一个文件中，然后再组件中去引用 这意味着我们所有的组件，都是可以通过这种方式 来共用一些 相同逻辑的校验器，
+
+> 现在我们已经给我们的表单字段 加上了一些校验器，这时候我们就可以通过FormModel的valid属性 来判断整个表单的所有字段的值，是否都是合法的；只有当这个FormModel 里面所有的字段的valid值都是合法的，则Formmodel 的valid属性`this.formModel.valid`才是true;
+> 只有在表单模型中所有的字段，都校验通过，我们才会去执行某些动作，如将数据发送至服务器，或者将表单模型打印出来；
+
+```ts
+// 在组件的表单数据模型中
+export class ReactiveFormComponent implements OnInit{
+
+    formModel: FormGroup;
+    constructor(fb:FormBUilder){
+        this.formModel = fb.froup({
+            username:['',[Validators.required, Validators.minLength(6)]],
+            // 可以去全局引用 这两个自定义的方法；
+            mobile:['',mobileValidator],
+            passwordsGroup: fb.group({
+                password:[''],
+                pconfirm:['']
+            },{valitator: equalValidator})
+        })
+    }
+
+    onSubmit(){
+        // let isValid:boolean = this.formModel.get("username").valid;
+        // let errors:any = this.formModel.get("username").errors;
+        // console.log( JSON.stringify(errors));
+        if(this.formModel.valid) {
+            // 只有在所有的字段 都合法之后 我们才回去执行一些动作；如将表单模型打印出来；
+            console.log(this.formModel.value);
+        }
+        
+    }
+
+} 
+
+``` 
+
+> 在前面的代码中我们可以很清楚的看到，在响应式表单中 控制校验器 我们只需要修改 控制器的代码就可以了，不需要去写 任何的html代码；但是但我们校验失败的时候，我们会希望可以显示错误信息 给用户；而这个时候 我们就必须去更改我们的模板了（因为我们的错误信息是显示在模板上面的）；
+
+
+```html
+<!-- reactive-form-component.html中   -->
+
+<form [formGroup]="formModel" (submit)="onSubmit()" >
+    <div>用户名：<input type="text" formControlName="username"> </div>
+    <!-- 我们在用户名字段下面加上一句话，我们希望当我们的用户 没有填写 ‘用户名’字段的时候，去显示，否则 隐藏； 而显示与不显示 是由div的  [hidden]属性 来控制的, 若hidden属性是true 则div 就隐藏起来不显示，否则就显示 -->
+    <!-- 我们通过将[hidden]属性 去绑定到一个表达式上面去 formModel.hasError() ； 表达式方法 接收两个参数，第一个参数是我们希望校验的错误，如我们现在去校验其是否必填 所以我们传一个`reuqired`, 注意此处的'required' 不是校验器的名字， 而是我们校验器 失败了之后， 返回对象里面的key，而不是校验器方法的名字 ；另外一点 只要 这个返回的对象的对象的key 有值，则angular 就会认为 校验是失败的， 所以我们去传回一个true 与传回来一个对象的效果是一样的； -->
+    <!-- {required : true} 不管对象中require 的key 的值 是不是true , 只要其有值，作用是和true 没有任何区别的： {require: false} 也一样是表达校验没有通过 -->
+    <!-- formModel.hasError('required')  -->
+    <div>用户名是必填项</div>
+    
+    <div>手机号：<input type="text" formControlName="mobile"> </div>
+    <div formGroupName="passWordsGroup" >
+        <div>密码：<input type="password" formControlName="password"> </div>
+        <div>确认密码：<input type="password" formControlName="pconfirm" > </div>
+    </div>
+    <div><button type="submit">注册</button></div>
+</form>
+
+```
+
+
 ### 校验响应式表单
 
 ### 校验模板式表单
