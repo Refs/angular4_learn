@@ -649,6 +649,139 @@ export class ReactiveFormComponent implements OnInit{
 
 ```
 
+> 上面的例子中我们将错误消息，我们是通过`硬编码`写在模板上面的，实际上其也可以是由校验器来提供的：
+
+```ts
+// validator.ts中
+
+export function equalValidator(group: FormGroup) : any {
+    let password: FormControl = group.get("password") as FormControl;
+    let pconfirm: FormControl = group.get("pconform") as FormControl;
+    let valid:boolean = (password.value === pconfirm.value);
+    console.log("密码校验结果为" + valid);
+    // return valid? null : {equal : true};
+    // 我们不去返回true了，而是去返回一个descxx: 注意desc是一个关键字 不能直接拿来用；
+    return valid ? null : {equal: {descxx: "密码和确认密码不匹配"}}
+}
+
+```
+> 在模板中通过formModel.getError()方法 ， 将desc信息 绑定到模板中；这样我们的错误信息，就不是通过硬编码在模板上的，而是直接写在校验器里面的，
+
+```html
+<!-- reactive-form-component.html中   -->
+
+<form [formGroup]="formModel" (submit)="onSubmit()" >
+    <div>用户名：<input type="text" formControlName="username"> </div>
+    <div [hidden]= "!formModel.hasError('required','username')">用户名是必填项</div>
+    <div [hidden]= "!formModel.hasError('minlength','username')">用户名的最小长度是6</div>
+    
+    <div>手机号：<input type="text" formControlName="mobile"> </div>
+      <div [hidden]= "!formModel.hasError('mobile','mobile')">请输入正确的手机号</div>
+    <div formGroupName="passWordsGroup" >
+         <div>密码：<input type="password" formControlName="password"> </div>
+         <div [hidden]= "formModel.hasError('minlength', ['passWordsGroup', 'password'])">密码的最小长度是6</div>
+        
+         <div>确认密码：<input type="password" formControlName="pconfirm" > </div>
+         <div [hidden]= "!formModel.hasError('equal','passWordsGroup')">
+            {{ formModel.getError('equal', 'passwordsGroup')?.desc }}
+         </div>
+    </div>
+    <div><button type="submit">注册</button></div>
+</form>
+
+```
+
+#### 异步校验器
+
+ angular的表单API 还支持一个特殊的校验器，叫做异步校验器，异步校验器 可以`调用远程的服务来检查表单字段的值`；与普通校验器相同 异步校验器 也是一个普通的方法， 唯一不同的是 异步校验器返回的不是一个对象，而是一个`可观测的流`--- 将前面的mobileValidator改成一个异步的校验器：
+ 
+```ts
+// validator.ts中
+
+ export function mobileValidator(control: FormControl):any {
+    var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+    let valid = myreg.test(control.value);
+    console.log('mobile的校验结果是'+valid);
+    return valid ? null : {mobile: true};
+
+}
+
+ export function mobileAsyncValidator(control: FormControl):any {
+    var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+    let valid = myreg.test(control.value);
+    console.log('mobile的校验结果是'+valid);
+    // return valid ? null : {mobile: true};
+    // 逻辑与普通的校验器一样，只不过在最后返回的时候，返回的不是一个对象，而是一个Observable流
+    // delay(5000) 是为了模拟一下服务器，服务器处理5s之后 才返回，这么一个效果；
+    return Observable.of(valid? null : {mobile : true}).delay(5000);
+
+}
+
+```
+
+> 在响应式表单的后台数据模型里面，异步的校验器，可以作为FormControl构造函数的第三个参数，来传到模型里面
+
+```ts
+// 在组件的表单数据模型中
+export class ReactiveFormComponent implements OnInit{
+
+    formModel: FormGroup;
+    constructor(fb:FormBUilder){
+        this.formModel = fb.froup({
+            username:['',[Validators.required, Validators.minLength(6)]],
+            //异步校验器作为第三个参数y
+            mobile:['',mobileValidator,mobileAsyncValidator],
+            passwordsGroup: fb.group({
+                password:[''],
+                pconfirm:['']
+            },{valitator: equalValidator})
+        })
+    }
+
+    onSubmit(){
+        if(this.formModel.valid) {
+            console.log(this.formModel.value);
+        }
+        
+    }
+} 
+
+``` 
+
+```html
+<!-- reactive-form-component.html中   -->
+
+<form [formGroup]="formModel" (submit)="onSubmit()" >
+    <div>用户名：<input type="text" formControlName="username"> </div>
+    <div [hidden]= "!formModel.hasError('required','username')">用户名是必填项</div>
+    <div [hidden]= "!formModel.hasError('minlength','username')">用户名的最小长度是6</div>
+    
+    <div>手机号：<input type="text" formControlName="mobile"> </div>
+      <div [hidden]= "!formModel.hasError('mobile','mobile')">请输入正确的手机号</div>
+    <div formGroupName="passWordsGroup" >
+         <div>密码：<input type="password" formControlName="password"> </div>
+         <div [hidden]= "formModel.hasError('minlength', ['passWordsGroup', 'password'])">密码的最小长度是6</div>
+        
+         <div>确认密码：<input type="password" formControlName="pconfirm" > </div>
+         <div [hidden]= "!formModel.hasError('equal','passWordsGroup')">
+            {{ formModel.getError('equal', 'passwordsGroup')?.desc }}
+         </div>
+    </div>
+    <div><button type="submit">注册</button></div>
+</form>
+
+<!-- 我们写一个div 用来显示表单当前的状态 -->
+
+<div>
+    {{formModel.status}}
+</div>
+```
+
+![](../images/reactive-form1.png)
+
+![](../images/reactive-form2.png)
+
+
 
 ### 校验响应式表单
 
