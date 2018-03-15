@@ -782,10 +782,144 @@ export class ReactiveFormComponent implements OnInit{
 ![](../images/reactive-form2.png)
 
 
+### 状态字段
 
-### 校验响应式表单
+在上述的例子中，我们可以显示一些错误信息，给用户； 但是例子存在一些问题： 如用户名字段，器其是一个非空的字段，而在页面初始化之后，其本身的值，就是空的，所以页面刚初始化，其值就是非法的；但是用户还从来没有访问过这个字段；这个时候也许我们不应该去显示一个错误信息给用户（因为这时候 用户什么都没做，什么错都还没犯 我们不应该去显示一个错误信息 给他）； 为了解决这样一个问题，angular提供了许多的 状态字段：
+
+1. touched 和 untouched
+
+用来判用户是否已经 访问过 某一个字段，也就是这个字段是否曾经 获取过焦点；如果一个字段 曾经获取过焦点 则其touched状态 就是true, untouched就是false 反则 相反；这两个字段一般就是控制错误信息的显示；
+
+2. pristine 和 dirty
+
+如果一个的值 从来没有被改变过，则其pristine的状态就是 true 而 dirty 就是false; 反之若一个字段的值被修改过 则其pristine的值就是 false 
+
+pristine 与 dirty 所关注的是字段的值，有没有发生过变化，touched 与 untouched 关注的是字段有没有获取过焦点，他两个的共同点就是，对于整个表单来说 如果有任何一个字段是touched  则整个的表单formModel就是touched; 只有表单内所有的字段的状态是untouched的时候，整个表单的untouched才是true;  同样 如果有任何一个字段是dirty 则整个表单的状态就是dirty， 只有当表单内的所有的字段的状态都是pristine的时候，整个表单的pristine才是true ;
+
+3. pending  
+
+pending 指的是当一个字段正处于 异步校验的时候，字段的pending属性为true, `这个时候我们 我们可以去显示一段文字 或者一张图片 来让用户知道 我们正在校验；  
+
+```html
+<!-- reactive-form-component.html中   -->
+
+<form [formGroup]="formModel" (submit)="onSubmit()" >
+    <div>用户名：<input type="text" formControlName="username"> </div>
+        <!-- 在用户必填项 与 最小长度的错误信息之外 去套一层div 来整体的控制 错误信息是否显示； -->
+        <!--1. 在username字段 校验通过的情况下 或者 字段曾经没获取过焦点的情况下；将绑定的div隐藏 -->
+    <div [hidden]="formModel.get('username').valid || formModel.get('username').untouched">
+        <div [hidden]= "!formModel.hasError('required','username')">用户名是必填项</div>
+        <div [hidden]= "!formModel.hasError('minlength','username')">用户名的最小长度是6</div>
+    </div>
+    
+    <div>手机号：<input type="text" formControlName="mobile"> </div>
+        <!--2.  只有在字段的值校验不合法，或者 字段的初始值被修改过之后，才会显示错误信息 -->
+        <div [hidden]="formModel.get('mobile').valid || formModel.get('mobile').pristine">
+            <div [hidden]= "!formModel.hasError('mobile','mobile')">请输入正确的手机号</div>
+        </div>
+        <!-- 3. 当字段的pending 为true的时候，说明我们正在通过异步来校验 字段的合法性，此时我们就应该将下面的话显示出来，就hidden 取反  -->
+        <div [hidden]="!formModel.get('mobile').pending">
+            正在校验手机号的合法性
+        </div>
+    <div formGroupName="passWordsGroup" >
+         <div>密码：<input type="password" formControlName="password"> </div>
+         <div [hidden]= "formModel.hasError('minlength', ['passWordsGroup', 'password'])">密码的最小长度是6</div>
+        
+         <div>确认密码：<input type="password" formControlName="pconfirm" > </div>
+         <div [hidden]= "!formModel.hasError('equal','passWordsGroup')">
+            {{ formModel.getError('equal', 'passwordsGroup')?.desc }}
+         </div>
+    </div>
+    <div><button type="submit">注册</button></div>
+</form>
+ 
+```
+
+> 注意 ： 针对所有的字段 angular都会自动根据其状态 为其添加一些样式， 我们可以通过自定义样式 来定制dom元素 在不同状态下的外观     ； 根其会据当前字段的状态 而 不断的去改变 当前字段附加的样式（通过为字段不同的状态添加不同的类的方式）； 我们可以去自定义这些默认类的样式，达到diy样式的目的
+
+![](../images/reactive-form3.png)                           
+
+> 特别的: 我们可以去自己 根据 字段的不同状态，去手动的加上我们自定的类；而不是让angular 自动的去加上一些默认的类；方式如下
+
+```css                                                                                                      .hasError {
+        border: 1px solid red;
+    }                                    
+```                           
+
+```html
+<!-- reactive-form-component.html中   -->
+
+<form [formGroup]="formModel" (submit)="onSubmit()" >
+    <!-- 利用类绑定将.hasError 类绑定到 username字段 -->
+    <!-- 当username字段无效，并且用户名这个字段已经被用户碰过了，这个时候我们就给其一个hasError的样式 -->
+    <div>用户名：<input [class.hasError]="formModel.get('username').invalid && formModel.get('username').touched" type="text" formControlName="username"> </div>
+    <div [hidden]="formModel.get('username').valid || formModel.get('username').untouched">
+        <div [hidden]= "!formModel.hasError('required','username')">用户名是必填项</div>
+        <div [hidden]= "!formModel.hasError('minlength','username')">用户名的最小长度是6</div>
+    </div>
+    
+    <div>手机号：<input type="text" formControlName="mobile"> </div>
+        <div [hidden]="formModel.get('mobile').valid || formModel.get('mobile').pristine">
+            <div [hidden]= "!formModel.hasError('mobile','mobile')">请输入正确的手机号</div>
+        </div>
+        <div [hidden]="!formModel.get('mobile').pending">
+            正在校验手机号的合法性
+        </div>
+    <div formGroupName="passWordsGroup" >
+         <div>密码：<input type="password" formControlName="password"> </div>
+         <div [hidden]= "formModel.hasError('minlength', ['passWordsGroup', 'password'])">密码的最小长度是6</div>
+        
+         <div>确认密码：<input type="password" formControlName="pconfirm" > </div>
+         <div [hidden]= "!formModel.hasError('equal','passWordsGroup')">
+            {{ formModel.getError('equal', 'passwordsGroup')?.desc }}
+         </div>
+    </div>
+    <div><button type="submit">注册</button></div>
+</form>
+ 
+```
+                                                                                                    
 
 ### 校验模板式表单
+
+在响应式表单中，我们的后台会有一个编码的数据模型，只需要将字段的校验方法，挂接到指定的字段上面就可以了；但是在模板式表单中 后台是没有这样一个数据模型的，指令是我们唯一可以使用的东西，所以首先我们需要将我们的校验器方法`包装成一个个指令`然后才能在模板中去使用；
+
+> 将mobilevalidator 校验器方法 封装成一个指令； 
+
+```bash
+# 生成一个空白指令 
+ng g directive directives/mobileValidator
+
++ app/
+| + directives/
+| | + mobile-validator-directive.ts
+
+```
+
+> 指令与组件 其实就是一个东西，它们之间有一个区别 就是指令是没有模板的，所以我们可以简单的将指令理解为一个没有模板的组件；它与组件能做的事情都是一样的；下面我们要将之前在 响应式表单中使用的校验器mobileValidator 封装在一个指令当中：
+
+```ts
+// mobile-validator-directive.ts中
+
+import { Directive } from '@angular/core';
+
+@Directive({
+    //1.0 在组件里面selector是一个字符串，而在指令里面selector 使用[] 括起来的，这就意味着 指令可以作为html的属性来使用的；
+    //1.1 组件是用标签来使用的<app-template-form></app-template-form> 而  指令是被当作标签属性来使用的，
+//   selector: '[appMobileValidator]'
+     selector: '[mobile]' // 这样我们就得到了一个名为mobile的属性；
+
+    //2.0 我们需要一个providers提供器； 首先我们声明一个provide token  ，而angualr中校验器的包装指令的token 是固定的 就是NG_VALIDATORS, 它是@angular/forms 模块中提供的一个常量
+     providers: [{provide: NG_VALIDATORS, useValue: }]
+})
+export class MobileValidatorDirective {
+
+  constructor() { }
+
+}
+
+```
+
 
 
 

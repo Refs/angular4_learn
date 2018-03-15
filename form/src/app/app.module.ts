@@ -3,11 +3,13 @@ import { NgModule } from '@angular/core';
 
 
 import { AppComponent } from './app.component';
+import { MobileValidatorDirective } from './directives/mobile-validator.directive';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MobileValidatorDirective
   ],
   imports: [
     BrowserModule
