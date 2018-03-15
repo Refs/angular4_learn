@@ -629,13 +629,20 @@ export class ReactiveFormComponent implements OnInit{
     <!-- 我们在用户名字段下面加上一句话，我们希望当我们的用户 没有填写 ‘用户名’字段的时候，去显示，否则 隐藏； 而显示与不显示 是由div的  [hidden]属性 来控制的, 若hidden属性是true 则div 就隐藏起来不显示，否则就显示 -->
     <!-- 我们通过将[hidden]属性 去绑定到一个表达式上面去 formModel.hasError() ； 表达式方法 接收两个参数，第一个参数是我们希望校验的错误，如我们现在去校验其是否必填 所以我们传一个`reuqired`, 注意此处的'required' 不是校验器的名字， 而是我们校验器 失败了之后， 返回对象里面的key，而不是校验器方法的名字 ；另外一点 只要 这个返回的对象的对象的key 有值，则angular 就会认为 校验是失败的， 所以我们去传回一个true 与传回来一个对象的效果是一样的； -->
     <!-- {required : true} 不管对象中require 的key 的值 是不是true , 只要其有值，作用是和true 没有任何区别的： {require: false} 也一样是表达校验没有通过 -->
-    <!-- formModel.hasError('required')  -->
-    <div>用户名是必填项</div>
+    <!-- formModel.hasError('required','username') 方法的第二个参数 是我们想检查字段的名字 --> 
+    <div [hidden]= "!formModel.hasError('required','username')">用户名是必填项</div>
+    <div [hidden]= "!formModel.hasError('minlength','username')">用户名的最小长度是6</div>
     
     <div>手机号：<input type="text" formControlName="mobile"> </div>
+      <div [hidden]= "!formModel.hasError('mobile','mobile')">请输入正确的手机号</div>
     <div formGroupName="passWordsGroup" >
         <div>密码：<input type="password" formControlName="password"> </div>
+        <!-- 注意点： 如果我们要检查的字段是嵌套在另外一个FormFroup里面的话，则第二个参数（指定校验字段） 要去传一个数组进去 -->
+        <!-- 如此处我们想要校验的对象是password 其是嵌套在 passWordsGroup里面的， 所以第二个参数 我们就不能直接的去写password , 因为在整个passWordsGroup里面 其不是第一级的属性，而是一个嵌套的属性；所以我们要去写一个数组，这个数组 第一个元素 是我们第一级的属性(相对于formModel来说，因为hasError方法是formModel调用的) passWordsGroup 第二个元素 是我们要校验的字段第二级属性password） -->
+        <div [hidden]= "formModel.hasError('minlength', ['passWordsGroup', 'password'])">密码的最小长度是6</div>
+        
         <div>确认密码：<input type="password" formControlName="pconfirm" > </div>
+         <div [hidden]= "!formModel.hasError('equal','passWordsGroup')">密码与确认密码不匹配</div>
     </div>
     <div><button type="submit">注册</button></div>
 </form>
