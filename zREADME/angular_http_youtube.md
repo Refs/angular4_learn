@@ -86,7 +86,62 @@ this.getUsers()
 
 ## course3 First HTTP Call 
 
+> the angular library follow the fecth standard for API calls and it's a standardized way to pass data around between  different sites > this going to a Response from the fectch standard and response always has a json methos on it to get all of the data out of that call . we don't have to worry about the implementation of the fetch standard . the cool thing about fetch is that it gives us a standardized way to get information about headers and different parts of the server that we're hitting  ;  
+
+```ts
+// app.component.ts中
+
+// load Http OnInit 
+import { Component , OnInit } from '@angular/core';
+import { Http } from '@angular/http';
+import { User } from './shared/models/user.model';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+
+  // custom a users variable which type is Array of User the class we define in ``shared/models/user.model.ts file;
+  users: [User];
+
+  constructor (private http: Http ) {
+
+  }
+
+  ngOnInit () {
+    this.http.get('https://reqres.in/api/users')
+      .subscribe(
+          // since angular fellow fetch standard, the data's type is Response, all of the information is in the body of the Response instance, to utilize the information , we have to resolve the instance. because every Response instance have a json method, so we can call the method to resolve itself; 
+          // 即我们之所以可以去调用json 方法，是因为Reponse 类型上面有这样一个json对象方法； 要明白这个本质，而不是盲从；
+        // data => console.log(data)
+        // data => console.log(data.json())
+        data => this.users = data.json().data
+      );
+  }
+}
 
 
+```
+
+
+```html
+<!-- app.component.html中 -->
+
+<h1>fadfasd</h1>
+
+<div *ngIf= "users">
+  <div *ngFor= "let user of users" >
+    <h2> {{user.first_name}} </h2>
+  </div>
+</div>
+
+
+```
+
+
+
+> we injected private HTTP directly in the component , in the futrue we want to use HTTP and abstract it into a service , where we want to use HTTP ; we don't want to inject straghtly into the component , the component itself should not be concerned with how it gets data ,it just needs to know that it uses a service to get data , and the service is going to be what is reponsible for implementing the data getting and data creation or whatever we need to with our API
 
 
