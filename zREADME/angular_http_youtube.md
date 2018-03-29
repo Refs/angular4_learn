@@ -13,6 +13,18 @@
 ```ts
 // in app.module.ts
 
+import { HttpModule } from '@angular/http';
+import { FormsModule } from '@angular/forms';
+
+@NgModule({
+//   ...
+  imports: [
+    HttpModule,
+    FormsModule
+  ]
+//   ....
+})
+export class AppModule { }
 
 
 ```
@@ -25,11 +37,27 @@
 cd src/app/
 mkdir shared 
 mkdir shared/models
+cd shared/models
+touch user.model.ts
 
 ```
 
 > in the models folder we can create user class ,so we can use that class across whole application . we are going to list users, creating users, updating users. it makes sense to have a user model so that we know what a user object looks like   
-* create user.model.ts
+* code user.model.ts
+
+```ts
+// user.model.ts中
+
+export class User {
+  id: Number;
+  first_name: String;
+  last_name: String;
+  avatar: String;
+}
+
+```
+
+
 
 
 
