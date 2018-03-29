@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
+import { UserService } from './shared/services/user.service.client';
 import { AppComponent } from './app.component';
 
 
@@ -17,7 +18,9 @@ import { AppComponent } from './app.component';
     HttpModule,
     FormsModule
   ],
-  providers: [],
+  providers: [
+    UserService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

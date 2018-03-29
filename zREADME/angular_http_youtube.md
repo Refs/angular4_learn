@@ -222,4 +222,88 @@ export class AppModule { }
 
 ```
 
+## course5 Starting UserService
+
+> let's removing HTTP and stopping from injecting it into a component , create a services folder in shared folder, in the folder we touch a new file user.service.client.ts 
+
+```ts
+// user.service.client.ts 
+
+import { User } from './../models/user.model';
+import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+
+@Injectable()
+export class UserService {
+  // note 1 we won't use hard code url  in the http methods;
+  private usersUrl = 'https://reqres.in/api/users';
+
+  constructor (private http: Http) {
+  }
+
+    // nodte 2 give the method a return type, and document the method. so that in the file that call this method , we can see the document intelinces; 
+  /**
+   * getUser method
+   * @returns {Observable<[User]>}
+   * @memberof UserService
+   */
+  getUsers(): Observable<[User]> {
+     return this.http.get(this.usersUrl)
+      .map(
+        res => res.json().data
+      );
+  }
+
+  // get a single user
+
+  // create a user
+
+  // update a user
+
+  // delete a user
+
+  // tslint:disable-next-line:max-line-length
+  // the service will be incharge of all of those things we just comment, and once we use the service, the component wont't need to deal with HTTP anymore
+
+  // tslint:disable-next-line:max-line-length
+  //  we're only creating the observables in this service. this service is not responsible for subscribing to get any data here . we just create cold observables. the app component will subscribe to it
+
+}
+
+```
+
+> in the component which will use above service
+
+```ts
+// app.component.ts
+
+import { Component , OnInit } from '@angular/core';
+import { User } from './shared/models/user.model';
+import { UserService } from './shared/services/user.service.client';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+  users: [User];
+
+  constructor (private userservice: UserService ) {
+
+  }
+
+  ngOnInit () {
+    this.userservice.getUsers()
+      .subscribe(
+        users => this.users = users
+      );
+  }
+}
+
+```
+
+
+
 
