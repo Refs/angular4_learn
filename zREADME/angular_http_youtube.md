@@ -137,11 +137,89 @@ export class AppComponent implements OnInit {
   </div>
 </div>
 
-
 ```
 
 
 
 > we injected private HTTP directly in the component , in the futrue we want to use HTTP and abstract it into a service , where we want to use HTTP ; we don't want to inject straghtly into the component , the component itself should not be concerned with how it gets data ,it just needs to know that it uses a service to get data , and the service is going to be what is reponsible for implementing the data getting and data creation or whatever we need to with our API
+## course4 RxJS Operator
+
+> mao is going to take hte data that we have and we can manipulate it and pass it back so that our HTTP call is just going to reformat the data 
+
+> map doesn't exist on observable type yet , observable is very modular and we have to bring in the operators that we want to use 
+
+```ts
+// app.component.ts中
+
+import { Component , OnInit } from '@angular/core';
+import { Http } from '@angular/http';
+import { User } from './shared/models/user.model';
+// load map and toPromise operator;
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+
+  users: [User];
+
+  constructor (private http: Http ) {
+
+  }
+
+  ngOnInit () {
+    this.http.get('https://reqres.in/api/users')
+      .map(
+        res => res.json().data
+      )
+      .subscribe(
+        users => this.users = users
+      );
+     this.http.get('https://reqres.in/api/users')
+      .toPromise()
+      .then(
+        data => console.log(data)
+      );
+  }
+}
+
+```
+
+> we're importing these operators inside of app.component.ts , it's okay to let the here since app.component is going to encompass our entire app , so these operator would apply to our entire app , we like to improving this and bring those into app.module.ts this is where we import everything for our entire app 
+
+```ts
+// app.module.ts
+
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
+import { FormsModule } from '@angular/forms';
+
+// 只需要在顶层去引用，组建中的引用，都可以删除了；
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
+
+import { AppComponent } from './app.component';
+
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    HttpModule,
+    FormsModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+```
 
 

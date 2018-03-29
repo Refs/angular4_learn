@@ -1,6 +1,8 @@
 import { Component , OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 import { User } from './shared/models/user.model';
+// import 'rxjs/add/operator/map';
+// import 'rxjs/add/operator/toPromise';
 
 @Component({
   selector: 'app-root',
@@ -17,9 +19,16 @@ export class AppComponent implements OnInit {
 
   ngOnInit () {
     this.http.get('https://reqres.in/api/users')
+      .map(
+        res => res.json().data
+      )
       .subscribe(
-        // data => console.log(data.json())
-        data => this.users = data.json().data
+        users => this.users = users
+      );
+     this.http.get('https://reqres.in/api/users')
+      .toPromise()
+      .then(
+        data => console.log(data)
       );
   }
 }
