@@ -21,11 +21,11 @@ export const routes: Routes  = [
   {
     path: 'users',
     component: UsersComponent,
-    // children: [
-    //   {
-    //     path: '',
-    //     component: UserListComponent
-    //   },
+    children: [
+      {
+        path: '',
+        component: UserListComponent
+      },
     //   {
     //     path: 'create',
     //     component: UserCreateComponent
@@ -38,7 +38,7 @@ export const routes: Routes  = [
     //     path: ':di/edit',
     //     component: UserEditComponent
     //   }
-    // ]
+    ]
   }
 
 ];
