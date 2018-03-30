@@ -349,11 +349,12 @@ npm install bootstrap@3 --save
       // 其中styles与scripts就是用来配置 第三方库的位置，将要引得第三方css与js文件路径，添加到下面两个字段里面，就可以了，
       "styles": [
         "styles.css",
-        "node_modules/bootstrap/dist/css/bootstrap.css"
+        "../node_modules/bootstrap/dist/css/bootstrap.css"
       ],
       "scripts": [
-        "node_modules/jquery/dist/jquery.js",
-        "node_modules/bootstrap/dist/js/bootstrap.js"
+      // 因为这里的base path 是 src, 而 node_modules 是位于 src的同层目录，用 ../相对路径，否则会编译出错；
+        "../node_modules/jquery/dist/jquery.js",
+        "../node_modules/bootstrap/dist/js/bootstrap.js"
       ],
       //加了上面三行之后，bootstrap与jquery就被加到我们的项目里面去了；
       "environmentSource": "environments/environment.ts",
