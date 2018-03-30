@@ -8,11 +8,21 @@ import 'rxjs/add/operator/catch';
 
 import { UserService } from './shared/services/user.service.client';
 import { AppComponent } from './app.component';
+import { UsersComponent } from './users/users.component';
+import { UserCreateComponent } from './users/user-create/user-create.component';
+import { UserEditComponent } from './users/user-edit/user-edit.component';
+import { UserListComponent } from './users/user-list/user-list.component';
+import { UserSingleComponent } from './users/user-single/user-single.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    UsersComponent,
+    UserCreateComponent,
+    UserEditComponent,
+    UserListComponent,
+    UserSingleComponent
   ],
   imports: [
     BrowserModule,
