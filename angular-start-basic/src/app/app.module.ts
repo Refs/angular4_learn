@@ -22,7 +22,7 @@ import { UserSingleComponent } from './users/user-single/user-single.component';
     UserCreateComponent,
     UserEditComponent,
     UserListComponent,
-    UserSingleComponent
+    UserSingleComponent,
   ],
   imports: [
     BrowserModule,

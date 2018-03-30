@@ -452,6 +452,33 @@ private handleError(err) {
 
 ## Course 7 Users Component
 
+> 主要是学习 父组件与子组件，在文档树里面的嵌套结构; 即逻辑上是嵌套关系，在文档的结构上面也是一个嵌套的关系；
+
+```bash
+cd src/app
+ng g component users
+
+# 若想去生成一个组件的子组件，要先进到该组建所在的文件夹里面，然后在正常的使用生成组件的命令就可以了；
+cd users
+ng g component user-create
+ng g component user-edit
+ng g component user-list
+ng g component user-single
+
+# 最后的文档树
+
+|--src/
+|  +--app/
+|     +--users/
+|        +--users.component.ts
+|        +--users.component.html
+|        +--user-create/
+|           +--user-create.component.ts
+|           +--user-create.component.html
+
+
+```
+
 
 
 
