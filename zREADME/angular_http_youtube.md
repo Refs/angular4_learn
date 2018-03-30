@@ -310,6 +310,130 @@ export class AppComponent implements OnInit {
 > handing errors when we talk to any sort of API is really important because even though we know what the format is going be of the content that we get back, but sometime that data might not come back the way we think it will , there might be a server error , there might be an error in the connection , alot of different things could go wrong 
 > the way we handing the errors in working with the HTTP library and Observables is to use `catch`
 
+* 首先要使用到rxjs 的catch 操作符， 在app.module.ts 中将其引入
+
+* 其次在比对错误信息类型的时候，需要引入Response类型， 在 @angular/http将其引入
+
+* fectch standard标准 https://fetch.spec.whatwg.org/#responses  
+
+```ts
+//  在 user.service.client.ts中
+
+import { Injectable } from '@angular/core';
+import { Http , Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import { User } from './../models/user.model';
+
+@Injectable()
+export class UserService {
+
+  private usersUrl = 'https://reqres.in/api/users';
+
+  constructor (private http: Http) {
+  }
+  /**
+   * getUser method
+   * @returns {Observable<[User]>}
+   * @memberof UserService
+   */
+  getUsers(): Observable<[User]> {
+     return this.http.get(this.usersUrl)
+      .map(
+        res => res.json().data
+      )
+
+      // we could create a to handle all sorts of errors no matter wtat kind of call we're making and no matter what kind of server. let's go head further and try to make a more robust error handler
+      .catch(
+        err => {
+          let errMessage: string;
+          // tslint:disable-next-line:max-line-length
+          // the cool thing the HTTP library does is it returns everything using that fecth standard we talking about . fecth standard will return a response , so we can use response to type hint what is coming back from our catch statement;
+          if (err instanceof Response ) {
+            // https://fetch.spec.whatwg.org/#responses  fecth standard
+            // 如果 err  是 Response 实例，A response has an associated body (null or a body). Unless stated otherwise it is null（除非另有说明 否则为空）.
+            // 我们可以使用response.json()去获取response的body, 当然这是body不为空的情况下；
+            // tslint:disable-next-line:prefer-const
+            let body = err.json() || '';
+            // tslint:disable-next-line:prefer-const
+            let error = body.error || JSON.stringify(body);
+            errMessage = `${err.status} - ${err.statusText} || ''} ${error}`;
+
+          } else {
+            // tslint:disable-next-line:max-line-length
+            // if a message comes through from the server , we'll set errMessage equal that message, otherwise we will take whatever coming back from the server and just convert it to string;
+            errMessage = err.message ? err.message : err.toString();
+          }
+
+          return Observable.throw(errMessage);
+        }
+      );
+
+  }
+
+}
+
+
+```
+
+> refactory above code : reuse the error handle process
+
+```ts
+
+//  在 user.service.client.ts中
+
+import { Injectable } from '@angular/core';
+import { Http , Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import { User } from './../models/user.model';
+
+@Injectable()
+export class UserService {
+
+  private usersUrl = 'https://reqres.in/api/users';
+
+  constructor (private http: Http) {
+  }
+  /**
+   * getUser method
+   * @returns {Observable<[User]>}
+   * @memberof UserService
+   */
+  getUsers(): Observable<[User]> {
+     return this.http.get(this.usersUrl)
+      .map(
+        res => res.json().data
+      )
+      .catch( this.handleError );
+  }
+
+  /**
+ *
+ * handle any error from any server
+ * @private
+ * @param {any} err
+ * @returns
+ * @memberof UserService
+ */
+private handleError(err) {
+    let errMessage: string;
+    if (err instanceof Response ) {
+      // tslint:disable-next-line:prefer-const
+      let body = err.json() || '';
+      // tslint:disable-next-line:prefer-const
+      let error = body.error || JSON.stringify(body);
+      errMessage = `${err.status} - ${err.statusText} || ''} ${error}`;
+
+    } else {
+      errMessage = err.message ? err.message : err.toString();
+    }
+
+    return Observable.throw(errMessage);
+  }
+
+}
+
+```
+
 
 
 
