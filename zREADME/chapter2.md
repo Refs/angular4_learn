@@ -323,7 +323,7 @@ export class AppComponent {
 ```
 // 在当前项目auction的根目录 下，利用npm工具进行安装；
 npm install jquery --save
-npm install bootstrap --save
+npm install bootstrap@3 --save
 
 ```
 
