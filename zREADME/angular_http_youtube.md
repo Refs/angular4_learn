@@ -305,5 +305,11 @@ export class AppComponent implements OnInit {
 ```
 
 
+## course 6 Error Handing
+
+> handing errors when we talk to any sort of API is really important because even though we know what the format is going be of the content that we get back, but sometime that data might not come back the way we think it will , there might be a server error , there might be an error in the connection , alot of different things could go wrong 
+> the way we handing the errors in working with the HTTP library and Observables is to use `catch`
+
+
 
 
