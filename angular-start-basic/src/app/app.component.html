@@ -1,10 +1,17 @@
-<h1>fadfasd</h1>
+<div class="container">
 
+  <div class="navbar">
+    <div class="container-fluid">
 
-<div *ngIf= "users">
-  <div *ngFor= "let user of users" >
-    <h2> {{user.first_name}} </h2>
+      <a class="navbar-brand" routerLink="/">Title</a>
+      <ul class="nav navbar-nav">
+        <li class="active">
+          <a  routerLink="/users">Home</a>
+        </li>
+      </ul>
+    </div>
+
   </div>
-</div>
 
-<router-outlet></router-outlet>
+  <router-outlet></router-outlet>
+</div>

@@ -4,8 +4,11 @@
 
 <!-- the reason we use *ngif directive is that , once the component gets activated we don't have users just yet,after the component gets activated , we're goning to grap users , otherwise if we don't use *ngif, this will throw an error if we don't have `users` -->
 <div *ngIf=users class= 'user-list row' >
-  <div class='col-sm-4 user-wrap ' *ngFor = 'let user of users' >
-    <img [src]="user.avatar" class='user-avatar img-rounded' alt="">
-    <h2>{{user.first_name}} {{user.last_name}} </h2>
+  <div class='col-sm-4 ' *ngFor = 'let user of users' >
+    <div class="user-card text-center">
+
+      <img [src]="user.avatar" class='user-avatar img-rounded' alt="">
+      <h2>{{user.first_name}} {{user.last_name}} </h2>
+    </div>
   </div>
 </div>
