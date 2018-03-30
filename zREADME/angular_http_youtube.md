@@ -481,12 +481,102 @@ ng g component user-single
 
 ## Course 8 Routing Our App
 
-> 在app 目录下 新建一个文件 app.routing.ts
+> 学习设计： 首先利用 sketch 或  adobe XD 将应用的原型设计出来，然后将其路由的轮廓设计出来；  I really like building the entire routing file from beging because we know how we our application is going to look , and it kind of gives us an outline of how to move through our application  as we build it
+> 在app 目录下 新建一个文件 app.routing.ts 主要是学习如何将路由的配置 与 app.module.ts分割开来； 用一个单独的文件，去专门负责路由的配置
+
+* 在app.routing.ts中去配置路由，细节就是，引入Routes 与 ModuleWithProviders 的意思在于，能够进行类型提示，这样当我们在配置路由的过程中出错的时候，其会进行相应的提示；
 
 ```ts
 // app.routing.ts中
 
+// import Routes | ModuleWithProviders to give us type hints, when we code ;
+// the type hints is always useful because it call always tell us if we have a route that isn't configured correctly
+
+import { RouterModule , Routes } from '@angular/router';
+import { ModuleWithProviders } from '@angular/core';
+import { UsersComponent } from './users/users.component';
+import { UserListComponent } from './users/user-list/user-list.component';
+import { UserCreateComponent } from './users/user-create/user-create.component';
+import { UserSingleComponent } from './users/user-single/user-single.component';
+import { UserEditComponent } from './users/user-edit/user-edit.component';
+
+export const routes: Routes  = [
+  {
+    path: '',
+    redirectTo: '/users',
+    pathMatch: 'full'
+  },
+  {
+    path: 'users',
+    component: UsersComponent,
+    // children: [
+    //   {
+    //     path: '',
+    //     component: UserListComponent
+    //   },
+    //   {
+    //     path: 'create',
+    //     component: UserCreateComponent
+    //   },
+    //   {
+    //     path: ':id',
+    //     component: UserSingleComponent
+    //   },
+    //   {
+    //     path: ':di/edit',
+    //     component: UserEditComponent
+    //   }
+    // ]
+  }
+
+];
+
+export const routing: ModuleWithProviders = RouterModule.forRoot(routes);
+
+// bring this router module into our app module
+
 ```
+
+* 在 app.module.ts中将 routing 引入
+
+```ts
+
+import { routing } from './app.routing';
+@NgModule({
+  imports: [
+    // routing = RouterModule.forRoot(routes) 按照这个式子，就与官方的文档保持一致了；
+    routing
+  ]
+})
+
+```
+
+* 在index.html 中设置路径的编译的绝对位置
+
+> Most routing applications should add a <base> element to the index.html as the first child in the <head> tag to tell the router how to compose navigation URLs.
+
+```html
+<base href='/' >
+
+```
+
+* 在host 组件中设置插座 outlet 的位置, 路由所匹配的组件 会在outlet 之后的位置显示；
+
+```html
+<router-outlet></router-outlet>
+<!-- Routed views go here -->
+
+```
+
+
+
+
+
+
+
+
+
+
 
 
 

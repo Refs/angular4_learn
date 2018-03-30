@@ -13,6 +13,7 @@ import { UserCreateComponent } from './users/user-create/user-create.component';
 import { UserEditComponent } from './users/user-edit/user-edit.component';
 import { UserListComponent } from './users/user-list/user-list.component';
 import { UserSingleComponent } from './users/user-single/user-single.component';
+import { routing } from './app.routing';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { UserSingleComponent } from './users/user-single/user-single.component';
   imports: [
     BrowserModule,
     HttpModule,
-    FormsModule
+    FormsModule,
+    routing
   ],
   providers: [
     UserService
