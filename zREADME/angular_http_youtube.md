@@ -479,6 +479,15 @@ ng g component user-single
 
 ```
 
+## Course 8 Routing Our App
+
+> 在app 目录下 新建一个文件 app.routing.ts
+
+```ts
+// app.routing.ts中
+
+```
+
 
 
 
