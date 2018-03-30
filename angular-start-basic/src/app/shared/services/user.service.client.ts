@@ -30,7 +30,19 @@ export class UserService {
 
   }
 
-  // get a single user
+  /**
+   * get a single user
+   *
+   * @returns {Observable<User>}
+   * @memberof UserService
+   */
+  getUser(): Observable<User> {
+    return this.http.get('http://example.com/api/')
+      .map(
+        res => res.json().data
+      )
+      .catch(this.handleError);
+  }
 
   // create a user
 

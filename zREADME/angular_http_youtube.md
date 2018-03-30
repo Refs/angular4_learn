@@ -406,6 +406,21 @@ export class UserService {
       .catch( this.handleError );
   }
 
+
+    /**
+   * get a single user
+   *
+   * @returns {Observable<User>}
+   * @memberof UserService
+   */
+  getUser(): Observable<User> {
+    return this.http.get('http://example.com/api/')
+      .map(
+        res => res.json().data
+      )
+      .catch(this.handleError);
+  }
+
   /**
  *
  * handle any error from any server
@@ -433,6 +448,11 @@ private handleError(err) {
 }
 
 ```
+
+
+## Course 7 Users Component
+
+
 
 
 
