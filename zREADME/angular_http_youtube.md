@@ -572,6 +572,19 @@ import { routing } from './app.routing';
 
 *  在项目中引入jquery 与 bootstrap
 
+* 其余的部分看代码吧
+
+
+## Course 10 User Single Component
+
+> we are going to two things. one we need to make suer the user list component when we click on a user , it's going to the user single component and then once we're in the user single component we're going to grab that ID and then make an API call using that ID.  
+
+
+
+> in the user-single.component.ts, we're going to grap the ID from the URL and we going to use the router for that and then two we're 
+
+
+
 
 
 

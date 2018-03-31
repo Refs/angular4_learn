@@ -30,10 +30,10 @@ export const routes: Routes  = [
     //     path: 'create',
     //     component: UserCreateComponent
     //   },
-    //   {
-    //     path: ':id',
-    //     component: UserSingleComponent
-    //   },
+      {
+        path: ':id',
+        component: UserSingleComponent
+      },
     //   {
     //     path: ':di/edit',
     //     component: UserEditComponent
