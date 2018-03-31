@@ -45,7 +45,7 @@
 
 ### NgForm  
 
-> NgForm指令用来代表整个表单，在angular应用中 其会被`自动的`添加到每一个<form>标签上面，即默认的情况下angular会为<form>标签挂一个NgForm指令，然后其就会将整个form的处理给接管了，也就是我们写在form上的`<form action="/registry" method="post">`action与method都没有用了， 即我们若此时再去点击页面上的submit按钮其是什么反应都没有的；
+> NgForm指令用来代表整个表单，在angular应用中 其会被`自动的`添加到每一个`<form>`标签上面，即默认的情况下angular会为`<form>`标签挂一个NgForm指令，然后其就会将整个form的处理给接管了，也就是我们写在form上的`<form action="/registry" method="post">`action与method都没有用了， 即我们若此时再去点击页面上的submit按钮其是什么反应都没有的；
 
 NgForm指令：其隐式的创建了一个FormGroup类的实例，FormGroup类用来代表表单的数据模型，并且存储表单的数据；标有ngForm指令的html标签，`会自动发现其所有标有ngModel指令的子元素，并将他们的值自动添加到表单的数据模型中`；
 
@@ -80,6 +80,8 @@ NgForm指令：其隐式的创建了一个FormGroup类的实例，FormGroup类�
 
 
 ### NgModel 除了数据的双向绑定，还用来标注一个html元素，应该成为表单数据模型的一部分；
+
+> 表单之所谓为表单，它和mongodb中的表单 或 mysql中的表单 或 与excel中的表单之间没有什么本质的区别，其只是外在的表现形式有所不同而已；实质都是一样的，其也有字段，有列； 表单中有的特性它都有； 将这些概念去融合；
 
 在angular的表单api中，ngModule指令代表表单中的一个字段，该指令会为其附着的input隐式的创建FormControl对象的实例 代表字段的数据模型，并利用FormControl这个模型 来存储字段的值；
 
