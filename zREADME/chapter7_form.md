@@ -81,6 +81,8 @@ NgForm指令：其隐式的创建了一个FormGroup类的实例，FormGroup类�
 
 ### NgModel 除了数据的双向绑定，还用来标注一个html元素，应该成为表单数据模型的一部分；
 
+> 表单之所谓为表单，它和mongodb中的表单 或 mysql中的表单 或 与excel中的表单之间没有什么本质的区别，其只是外在的表现形式有所不同而已；实质都是一样的，其也有字段，有列； 表单中有的特性它都有； 将这些概念去融合；
+
 在angular的表单api中，ngModule指令代表表单中的一个字段，该指令会为其附着的input隐式的创建FormControl对象的实例 代表字段的数据模型，并利用FormControl这个模型 来存储字段的值；
 
 需要注意的是， 在标有ngForm指令的html元素内（form表单的子元素上），使用ngModel指令的时候是不需要使用方括号或这小括号将其括起来的，也不用去指定将ngModel绑定到组件的某一个属性上 直接写一个ngModule就可以了； 但是我们需要为指定了ngModule指令的元素去指定一个'name'属性； name属性的值会成为ngForm.value对象上面的一个属性；
