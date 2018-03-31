@@ -746,6 +746,23 @@ private handleError(err) {
 
 ```
 
+## Course 12 Editing a User
+
+
+
+
+## 目前要解决的问题
+
+> 这都是进行下一步要解决的问题；
+
+* angular 的路由守卫
+
+* node.js 的 JWT
+
+* mongoose 的外键 join
+
+
+
 
 
 
