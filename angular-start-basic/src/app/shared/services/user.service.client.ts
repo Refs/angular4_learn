@@ -36,8 +36,8 @@ export class UserService {
    * @returns {Observable<User>}
    * @memberof UserService
    */
-  getUser(): Observable<User> {
-    return this.http.get('http://example.com/api/')
+  getUser( id: number ): Observable<User> {
+    return this.http.get(`${this.usersUrl}/${id}`)
       .map(
         res => res.json().data
       )
