@@ -34,10 +34,10 @@ export const routes: Routes  = [
         path: ':id',
         component: UserSingleComponent
       },
-    //   {
-    //     path: ':di/edit',
-    //     component: UserEditComponent
-    //   }
+      {
+        path: ':id/edit',
+        component: UserEditComponent
+      }
     ]
   }
 
