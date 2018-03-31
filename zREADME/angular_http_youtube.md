@@ -583,8 +583,168 @@ import { routing } from './app.routing';
 
 > in the user-single.component.ts, we're going to grap the ID from the URL and we going to use the router for that and then two we're 
 
+## advanced mapping 
+
+> To get our information from the API to match the information in our application 
+
+> 即当后台所提供的接口，与我们在实际中运用的接口不一致的情况下，将从服务器接收过来的数据转化一下，然后在自己的应用中去使用，这中情况比较适合蹭网的情况；
+
+```js
+// 服务器给我们提供的接口
+export class User {
+  id: Number;
+  first_name: String;
+  last_name: String;
+  avatar: String;
+}
+```
+
+```js
+// 我们在实际的应用中去使用的接口
+
+export class User {
+  id: Number;
+  name: String;
+  username: String;
+  avatar: String;
+}
+
+```
+> 我们就需要将两者进行统一一下， 主要是通过observable的 operator 来进行操作
+
+```js
+// user.service.client.ts中
+
+getUsers(): Observable<[User]> {
+     return this.http.get(this.usersUrl)
+      .map(
+        res => res.json().data
+      )
+      .map(
+        users => {
+          // 因为此处 users是一个数组，此处是利用了数组的map方法 ， Array.prototype.map()
+          return users.map(
+            user => {
+              // tslint:disable-next-line:no-unused-expression
+              return {
+                id: user.name,
+                name: `${user.first_name} ${user.last_name}`,
+                username: user.first_name,
+                avatar: user.avatar
+              };
+            }
+          );
+        }
+      )
+      .catch( this.handleError );
+
+  }
+```
+> This is great because our reformatting and our map on the user service did want we wanted it to 
+
+### 重构上面的代码 将转化的过程封装进一个函数中，以便其它的函数也能够去使用；
 
 
+```js
+// user.service.client.ts中
+
+import { Injectable } from '@angular/core';
+import { Http , Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import { User } from './../models/user.model';
+
+@Injectable()
+export class UserService {
+
+  private usersUrl = 'https://reqres.in/api/users';
+
+  constructor (private http: Http) {
+  }
+
+  /**
+   * getUser method
+   * @returns {Observable<[User]>}
+   * @memberof UserService
+   */
+  getUsers(): Observable<[User]> {
+     return this.http.get(this.usersUrl)
+      .map(
+        res => res.json().data
+      )
+      .map(
+        users => {
+          return users.map(
+            this.toUser
+          );
+        }
+      )
+      .catch( this.handleError );
+
+  }
+
+  /**
+   * get a single user
+   *
+   * @returns {Observable<User>}
+   * @memberof UserService
+   */
+  getUser( id: number ): Observable<User> {
+    return this.http.get(`${this.usersUrl}/${id}`)
+      .map(
+        res => res.json().data
+      )
+      .map(
+        this.toUser
+      )
+      .catch(this.handleError);
+  }
+
+
+/**
+ *
+ * handle any error from any server
+ * @private
+ * @param {any} err
+ * @returns
+ * @memberof UserService
+ */
+private handleError(err) {
+    let errMessage: string;
+    if (err instanceof Response ) {
+      // tslint:disable-next-line:prefer-const
+      let body = err.json() || '';
+      // tslint:disable-next-line:prefer-const
+      let error = body.error || JSON.stringify(body);
+      errMessage = `${err.status} - ${err.statusText} || ''} ${error}`;
+
+    } else {
+      errMessage = err.message ? err.message : err.toString();
+    }
+
+    return Observable.throw(errMessage);
+  }
+
+  /**
+   * Convert user info from hte API to our standard/format
+   *
+   * @private
+   * @param {any} user
+   * @returns {User}
+   * @memberof UserService
+   */
+  private toUser(user): User {
+    return {
+      id: user.id,
+      name: `${user.first_name} ${user.last_name}`,
+      username: user.first_name,
+      avatar: user.avatar
+    };
+  }
+
+}
+
+
+```
 
 
 

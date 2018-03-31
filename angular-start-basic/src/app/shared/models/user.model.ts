@@ -1,6 +1,6 @@
 export class User {
   id: Number;
-  first_name: String;
-  last_name: String;
+  name: String;
+  username: String;
   avatar: String;
 }

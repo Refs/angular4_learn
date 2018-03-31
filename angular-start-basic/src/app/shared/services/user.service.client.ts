@@ -26,6 +26,13 @@ export class UserService {
       .map(
         res => res.json().data
       )
+      .map(
+        users => {
+          return users.map(
+            this.toUser
+          );
+        }
+      )
       .catch( this.handleError );
 
   }
@@ -40,6 +47,9 @@ export class UserService {
     return this.http.get(`${this.usersUrl}/${id}`)
       .map(
         res => res.json().data
+      )
+      .map(
+        this.toUser
       )
       .catch(this.handleError);
   }
@@ -79,6 +89,23 @@ private handleError(err) {
     }
 
     return Observable.throw(errMessage);
+  }
+
+  /**
+   * Convert user info from hte API to our standard/format
+   *
+   * @private
+   * @param {any} user
+   * @returns {User}
+   * @memberof UserService
+   */
+  private toUser(user): User {
+    return {
+      id: user.id,
+      name: `${user.first_name} ${user.last_name}`,
+      username: user.first_name,
+      avatar: user.avatar
+    };
   }
 
 }
