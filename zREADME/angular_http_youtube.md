@@ -760,6 +760,8 @@ private handleError(err) {
 > 我们可以在service文件夹内新建一个文件 user.information.service.ts that willbe solely responsible for sending information, whicjh is just a generic event emitter service where any component can call it and emit events and any other component in our app can listen to that .
 
 ```ts
+// user.service.client.ts
+
 import { Subject } from 'rxjs/Subject';
 
 @Injectable()
@@ -772,6 +774,7 @@ private userDeletedSource = new Subject();
  
 // observable stream
 // the stream is going to be the thing that we subscribe to which is the observable 
+// subject.prototype.asObservable() to convert an subject to an observable, so you could't call userCreate$.next(), because it has already not been a observer;
 userCreate$ = this.userCreateSource.asObservable();
 userDelete$ = this.userDeleteSource.asObservable();
 
