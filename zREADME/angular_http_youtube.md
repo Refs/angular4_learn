@@ -749,6 +749,137 @@ private handleError(err) {
 ## Course 12 Editing a User
 
 
+## Course 13 Success and Error message
+
+## Course 14 Creating a User
+
+## Course 15 Deleting a User
+
+## Course 16 Communicationg Components -- very important section
+
+> 我们可以在service文件夹内新建一个文件 user.information.service.ts that willbe solely responsible for sending information, whicjh is just a generic event emitter service where any component can call it and emit events and any other component in our app can listen to that .
+
+```ts
+import { Subject } from 'rxjs/Subject';
+
+@Injectable()
+export class UserService {
+  
+// observable source
+// the source is going to be the thing that holds the data 
+private userCreatedSource = new Subject<User>();
+private userDeletedSource = new Subject();
+ 
+// observable stream
+// the stream is going to be the thing that we subscribe to which is the observable 
+userCreate$ = this.userCreateSource.asObservable();
+userDelete$ = this.userDeleteSource.asObservable();
+
+// create a user
+// in this function we would go head and grap that source and pass it some information that a user has just been created
+
+createUser(user: User): Observable<User> {
+  return this.http.post(this.usersUrl, user)
+    .map(
+      res => res.json()
+    )
+    // do operator : intercepts each mission on the sourcea and runs a functionm, but return an output which is identical to the source as long sa errors don't occur.
+    // but modified so that the provided Observer is called 
+    .do(this.userCreated(user))
+    .catch(this.handleError);
+}
+
+
+}
+
+/**
+ * Delete a user
+*/
+deleteUser(id: number): Observable<any> {
+  return this.http.delete(`${this.userUrl}/${id}`)
+            .do(
+              res => this.userDeleted()
+            )
+            .catch(this.handleError)
+}
+
+
+/**
+ * The user was created, Add this info to our sstream
+*/
+userCreated(user: User) {
+  this.userCreatedSource.next(user);
+}
+
+/**
+ * the user was deleted, add this info to our sream
+*/
+userDeleted() {
+  // we just say this function was called
+  this.userDeleteSource.next()
+}
+
+
+```
+
+```js
+// users.component.ts
+
+import { Component, OnInit } from '@angular/core';
+import { UserService } from './../shared/services/user.service.client';
+
+
+@Component({
+  selector: 'app-users',
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.css']
+})
+export class UsersComponent implements OnInit {
+  successMessage: string = '';
+  errorMessage: string = '';
+
+  constructor( private userService: UserService ) { }
+
+  ngOnInit() {
+    this.userService.userCreated$.subscribe(
+      user => {
+        this.successMessage = `${user.name} has been created`;
+        this.clearMessages()
+      };
+    )
+    this.service.userDeleted$.subscribe{
+      () => {
+        this.errorMessage = `the user has been deleted!`
+        this.clearMessages()
+      }
+    }
+  }
+
+  /**
+   * clear all messages after 5 seconds
+  */
+  clearMessages () {
+    setTimeOut(
+      () => {
+        this.successMessage = '';
+        this.errorMessage = '';
+      }, 5000
+    )
+  }
+
+}
+
+```
+
+```html
+<div *ngif="successMessage" class='alert alert-success' >{{successMessage}}</div>
+<div *ngif="errorMessage" class='alert alert-danger' >{{errorMessage}}</div>
+
+```
+
+> now we have information getting sent from child component to parent component  
+
+> we learn the way we're going to get data from any component in our application up to parent component , updown to children components or over to sibling component 
 
 
 ## 目前要解决的问题
