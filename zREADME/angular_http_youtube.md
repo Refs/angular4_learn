@@ -884,6 +884,28 @@ export class UsersComponent implements OnInit {
 
 > we learn the way we're going to get data from any component in our application up to parent component , updown to children components or over to sibling component 
 
+## Course 17 Login a User in 
+
+> tu: https://medium.com/@blacksonic86/angular-2-authentication-revisited-611bf7373bf9
+
+### Token Based Auth
+
+> we're going to go ahead and log in to an API.  by logging into an API that API will give us a JSON web TOKEn or a jot . we're going to store that jot in local storage for our browser storage and whenever we want to make a request to that API, we'll pass in that dot \
+
+> we get a jot which is going to be our key to APi and every time we want to make a request to API, we'll pass the key . the API will know we are the person trying to get that information since we have the jot  
+
+* Login to an API
+
+* Get a Json Web Token
+
+* Store JWT in LocalStorage
+
+* Pass in for all API requests
+
+> to use the `angular2-jwt` package
+
+> 
+
 
 ## 目前要解决的问题
 
