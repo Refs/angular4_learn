@@ -207,7 +207,23 @@ input.ng-invalid.ng-touched  {
 }
 
 ```
+ 
 
+> use template driven form in the login page  and use reactive form in the signup page
+
+
+## angular 中为什么有些类我们可以直接去注入：
+
+class ReactiveFormsModule {
+}
+
+@NgModule({
+    declarations: [REACTIVE_DRIVEN_DIRECTIVES],
+    `providers: [FormBuilder, RadioControlRegistry],`
+    exports: [InternalFormsSharedModule, REACTIVE_DRIVEN_DIRECTIVES]
+})
+
+看上面ReactiveFromsModel 的类定义就知道了，我们想在页面中注入的类已经在， module中注册了，所以我们在也main中可以直接去引用； 对于我们自定义的类，则需要我们去手动的去注入；
 
 
  
