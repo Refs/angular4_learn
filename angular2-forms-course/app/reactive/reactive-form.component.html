@@ -1,0 +1,69 @@
+<form (ngSubmit)="processForm()" [formGroup]="form">
+
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" name="name" required
+            formControlName="name">
+
+        <span class="help-block" *ngIf="formErrors.name">
+            {{ formErrors.name }}
+        </span>
+    </div>
+
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" class="form-control" name="username" required
+            formControlName="username">
+
+        <span class="help-block" *ngIf="formErrors.username">
+            {{ formErrors.username }}
+        </span>
+    </div>
+
+    <!-- addresses -->
+    <div class="form-group" formArrayName="addresses">
+        <div *ngFor="let address of form.controls.addresses.controls;let i=index;"> 
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Address #{{ i + 1 }}
+
+                    <span *ngIf="form.controls.addresses.controls.length > 1" (click)="removeAddress(i)">
+                        Remove
+                    </span>
+                </div>
+
+                <div class="panel-body" [formGroupName]="i">
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" class="form-control" formControlName="city" required>
+
+                        <span class="help-block" *ngIf="formErrors.addresses[i].city">
+                            {{ formErrors.addresses[i].city }}
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Country</label>
+                        <input type="text" class="form-control" formControlName="country" required>
+
+                        <span class="help-block" *ngIf="formErrors.addresses[i].country">
+                            {{ formErrors.addresses[i].country }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- add address button -->
+    <div class="text-right">
+        <a (click)="addAddress()" class="btn btn-info">Add Address</a>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-danger">Submit</button>
+    </div>
+
+</form>
