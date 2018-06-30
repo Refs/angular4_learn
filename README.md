@@ -46,3 +46,63 @@ get name() { return this.heroForm.get('name'); }
 
 get power() { return this.heroForm.get('power'); }
 ```
+
+Instead you'll write a canActivate() guard to redirect anonymous users to the login page 
+
+
+In ordre to prevent the route from loading until the data is fetched. The router gaurds require an observable to complete , meaning it has emitted all of its values . 
+
+Import this resolver in the crisis-center-routing.module.ts and add a resolver object to the CrisisDetailComponent route configuration.
+
+remember to add the CrisisDetailResolver service to the CrisisCenterRoutingModule's providers array.
+
+In the route parameters example , you only dealt with paramwters specific to the route, but what if you wanted optional parameters available to all routes? this is where query parameters come into play.
+
+Fragments refer to certain elements on the page identified with an id attribute.
+
+Update the AuthGuard to provide a session_id query that will remain after navigationg to another route. 
+
+Add an anchor element so that you can jump to certain point on the page.
+
+Add the NavigationExtras object to the router.navigate method that navigates you to the /login route.
+
+```ts
+import { Injectable } from '@angular/core';
+import {  CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivateChild, NavigationExtras } from '@angular/router';
+
+import { AuthService } from './auth.service';
+
+@Injectable()
+export class AuthGuard implements CanActivate, CanActivateChild {
+  constructor ( private anthService: AuthService, private router: Router) {}
+
+  canActivate() {
+
+  }
+
+
+  checkLogin(url: string): boolean {
+    if (this.authService.isLoggedIn) { return true};
+
+    this.authService.redirectUrl = url;
+
+    let sessionId = 123456;
+
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        'session_id': sessionId
+      },
+      fragment: 'anchor'
+    }
+
+    this.router.navigate(['/login'], navigationExtras);
+    return false;
+
+  }
+}
+
+
+```
+
+You can also preserve query parameters anf fragmeters across navigations without hhaving to provide them agin when navigating . In the LoginComponent , you'll add an objdect as the second argument in the router.navigate function and provide queryParamsHandling and preserveFragment to pas along the 
+
