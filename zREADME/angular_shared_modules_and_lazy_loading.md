@@ -187,6 +187,6 @@ Dependency injection , however , doesn't always work this simply . There are tim
 
 https://poychang.github.io/use-forroot-to-provide-services-in-angular-shared-module/
 
->  参考文档： Angular: Understanding Modules and Services 用来理解上述的模块 分类 ，非常重要；
+> ****  参考文档： Angular: Understanding Modules and Services 用来理解上述的模块 分类 ，非常重要；
 
 https://medium.com/@michelestieven/organizing-angular-applications-f0510761d65a
