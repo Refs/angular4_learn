@@ -190,3 +190,27 @@ https://poychang.github.io/use-forroot-to-provide-services-in-angular-shared-mod
 > ****  参考文档： Angular: Understanding Modules and Services 用来理解上述的模块 分类 ，非常重要；
 
 https://medium.com/@michelestieven/organizing-angular-applications-f0510761d65a
+
+Where should I put my services ? Am I importing then in the right way? Are my modules well-organized and ready to scale? Is this component in the right place? How do I even name this folder?
+
+I found that most developer struggle with this questions because they don't have a clear version of how angular modules woek and how important they are for the 
+
+
+In this article we try to lay to lay the foundation for all of your next projects , nothing less
+
+caveats
+
+
+It doesn't bootstrap anything 
+
+Lazy loading not only saves vytes and memory , but it also enforces you to think abut modules in the right way; for example , each module should have its own 
+
+
+A shared module is the perfect place to declear components in order to make them reusable ; this way , you won't re-import the same components in every module, you'll just import the shared module 
+
+
+
+Notice the 'exports ' property which makes components , directives, pipes and even other modules available to the importing modules!;
+
+Well , you might think that we already declear our golbal services in CoreMoudle, and it's true , but what if the components decleard in the shared module need some services ? what if the module that imports the shred module needs a service from it 
+
