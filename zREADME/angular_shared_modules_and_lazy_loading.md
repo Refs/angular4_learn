@@ -214,3 +214,68 @@ Notice the 'exports ' property which makes components , directives, pipes and ev
 
 Well , you might think that we already declear our golbal services in CoreMoudle, and it's true , but what if the components decleard in the shared module need some services ? what if the module that imports the shred module needs a service from it 
 
+At some point you will reach a tipping point where the application takes long time to load .
+
+How do you combat this problem ? With asynchronoue routing , which loads feature modules lazily , on request . Lazy loading has multiple benefits . 
+You can load feature areas only when requested by user. 
+
+You can speed up load time for users that only vist xertian areas of the application .
+
+You can continue expanding lazy loaded feature areas without inceasing the size of the initial load bundle.
+
+You're already part of the way there. By ogganizing the application into modules AppModule. HeroMoudule and 
+
+Lazy Loading route configuration 
+
+Change the admin path in the admin-routing.module.ts from admin to an empty string,'' tthe empty path.
+The router supports empty path routes; use them to group routes together without adding any additional path segments to the URL . Users will still vist /admin and the AdminComponent still server as the ROuting component containing child routes .
+
+When the router navigates to this route, it uses the LoadChildren string to dynamically load the AdminModule. Then it adds the AdminModule routes to its current route configuration. Finally , it loads the requested route to 
+
+Finally it loads the requested route to the destination admin component.
+
+Take the fianl step and detach teh admin deature set from the main application . The root AppModule must neither load nor reference the AdminModule 
+
+
+angular 中设计的概念很多， 如何将这些概念，组织起来，就变得 尤为重要了； 自己的 ngrx-app 在被自己利用ngrx改造之前的样子，自己也要熟悉；
+
+
+You're already protecting the AdminModule with a CanActivate guard that prevents unauthorized users from accessing the admin feature area. It redirects to the login page if the user is not authrozed.
+
+But the router is still loading the AdminMoule  even if the user can't vist any of its components ideally. you'd only load the AdminModule if the user is logged in ;
+
+Add CanLoad guard tha only loads the AdminModule once the user is logged in and attempts to access the admin feature area.
+
+```ts
+canLoad(route: Route): boolean {
+    let url = `/${route.path}`;
+    return this.checkLogin(url);
+}
+
+
+{
+    path: 'admin',
+    loadChildren: ''
+    canLoad: [AuthGuard]
+}
+
+
+```
+
+You've learned how to load modules on-demond . You can also load modules asynchronously with preloading.
+
+
+For the smallest initial payload and fastest launch time , you should eagerly load the AppMoudle and the HeroesModule.
+
+You could lazy load the CrisisCenter. But you're almost certain that the user will vist the Crisis Center within minutes of launching the app. Ideally , the app would launch with just the AppModule and teh HeroesModule loaded and then , almost immediately , load the CrisisCenterModule in the background . By the time the user navigates to the Crisis Center, its module will have been loaded and ready to go.
+
+That's preloading.
+
+
+Surprisingly , the AdminModule does not preload. Something is blocking it .
+
+The preloadAllModules strategy does not load feature areas protected by a CanLoad guard . This is by design.
+
+
+
+
