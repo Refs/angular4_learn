@@ -182,6 +182,46 @@ logoutConfirmation$ = this.actions$.ofType('[Auth] confirm Logout')
 ```
 
 
+## Router 
+
+> How the route intergrates with the reactive store in the authenication and we use the router for side effects including redirecting the user when logging in and logging out and intergration with router guards. 
+
+1. Login Success Action 
+
+> So If we look at this  `Login success` action   we can see that once that action comes in we can use the router to perform a side effect and navigate the user to an intended destination as as you can see I'm using a dispatch: false , because we don't want this effect to produce any new actions and only perfor that side effect 
+
+```ts
+@Effect({dispatch: false})
+logginRedirect$ = this.actions$
+    .ofType('[Auth API] Login Success')
+    .pipe(
+        tap(()=>
+            this.router.navigate(['/home'])
+        );
+    )
+
+```
+
+2. Logout Action 
+
+> The same we'll go for a logout action . If a user logs out we prompt them and they accept that prompt then we can redirect the user back to the login page and their user session will be cleared 
+
+```ts 
+@Effect({dispatch: false})
+logoutRedirect$ = this.actions$
+    .ofType('[Auth API] Logout Complete')
+    pipe(
+        tap(()=>
+            this.router.navigate(['./login'])
+        );
+    )
+
+``` 
+
+3. Router guards
+
+> Router guard are a way that you can prevent navigation between pages but we don't want to hit the actual API every time a user navigation between pages and so we can intergrate this with the store . So since we can verify that the authenication state will be valid for a certain amount of time , we can check the store first to see if there the user is logged in and this handles when they navigate between pages and on like page reloads . So 
+
 
 
 
