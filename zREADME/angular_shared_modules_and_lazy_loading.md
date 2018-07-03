@@ -276,6 +276,98 @@ Surprisingly , the AdminModule does not preload. Something is blocking it .
 
 The preloadAllModules strategy does not load feature areas protected by a CanLoad guard . This is by design.
 
+You added a Canload guard to the route in the AdminModule a few steps back to block loading of that module until the user is authorized .  That CanLoad guard take precedence over the preload strategy.
+
+If you want to preload a module and guard against unauthorized accessm drop the canLoad() guard methos and rely on the canActivate() guard alone.
+
+
+
+Preloading every lazy loaded modules works well in many situations , but it isn't always the right choice, especially on mobile devices and over low brandwidth connections. You may choose to preload only certian feature modules, based on user metrics 
+
+You may choose to preload only certain feature modulesm based on user metrics and other business and technical factors.
+
+In this section , you'll add a custom strategy that only preloads routes whose data.preload flag is set to true. Recall that you add anything to the data property of a route
+
+```ts
+{
+    path: 'crisis-center',
+    loadChildren: 'app/crisis-center/crisis-center.module#CrisisCenterModule',
+    data: { preload: true }
+}
+
+```
+
+Add a new file to the project called selective-preloading-strategy.ts and define a SelectivePreloadingStrategy service class as follows:
+
+```ts
+import { Injectable } from '@angular/core';
+import { PreloadingStrategy, Route } from '@angular/router';
+import { Observable, of } from 'rxjs';
+
+@Injectable()
+export class SelectivePreloadingStrategy implements PreloadingStrategy {
+    preloadedModules: string[] = [];
+
+    preload(route: Route, load: () =>Observable<any>): Observable<any> {
+        if ( route.data && route.data['preload'] ) {
+
+            // add the route path to the preloaded module array
+            this.preloadedModules.push(route.path);
+
+            // log the route path to the console
+            console.log('preloaded:' + route.path);
+
+            return load()
+        
+        } else {
+            return of(null)
+        }
+    }
+}
+
+```
+
+SelectivePreloadingStrategy implements ProloadingStrategy which has one method preload . The router calls the preload method wth teo arguments:
+
+The router to consider
+A loader function that can load teh routed module asynchronously.
+
+An implementation of preload must return an Observable. If the route should preload, it return the observable by calling the loader function. If the route should not preload , it returns an Observable of null.
+
+In this sample , the preload method loads the route if the route's data.preload flag  is truthy.
+
+It also has a side-effect. SelectivePreloadingStrategy logs the path of a selected route in its public 
+
+
+It also have a side-effect. SelectivePreloadStrategy lof the path of a selected route in its public preloadedModules array.
+
+Shortly , you'll extend the AdminDashboardComponent to inject this service and display its preloadModules array.
+
+
+## 总结 
+
+> angular 是一个框架，将框架的各个部分 摸清楚，然后在具体的项目中 具体选择使用；
+
+1. 模块的加载方式？
+
+* eager loading 
+* lazy loading 
+* preloading 
+
+2. 模块的分类？
+
+* view module / feature module
+* core module
+* shared module
+
+3. 组件的分类
+
+* suficent-self component && component requiring out data;
+* container component | smart component &&  presentational component | dump component
+
+4. ngrx 相关
+
+> 结论 应用的常规做法是，将应用 划分好 模块 与逻辑， 放到图上，然后一目了然的情况下，一步一步的去实现； 这样自己给领导 汇报也方便，领导跟进也方便； 不过万事开头难，这个图 不是 很好画；  最起码 自己需要先 有一个好的开始；
 
 
 
