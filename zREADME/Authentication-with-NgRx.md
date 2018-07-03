@@ -83,6 +83,105 @@ interface LoginPageState {
 2. Authenication state
 
 ```ts
+// Here is a user model that would contain what would be returned back from the API upon successful authenication 
+interface UserModel {
+    id: string;
+    name: string;
+    email: string;
+}
+
+// The AuthState capture the user who wants to authenication is sucessful and would hold any addtional information about the current user . You notice in the AuthState that there isn't an explicit about being logged in and the we'll talk about that further . So now we have models and authenicaiton information into the store and how do we get that out of the store --- selctors  
+
+interface AuthState {
+    user: UserModel | null;
+}
+
+```
+
+## Selectors
+
+> Selectors fall into teo categories , selectors that get and selectors that derive
+
+1. selctor that get 
+
+> Selectors are pure functions that are used to get simple and complex pieces of state . We use these selectors when we inject store to select to connect state to your components . In order to get the authenicated user with store we use a function that provide that state and we get the user property 
+
+```ts
+const selectAuthUser = (state: AuthState) => state.user;
+
+```
+
+2. selector that derive
+
+> Derive state is state that we can get insight from through existing information we already have whether the user is loggin or not can be derived from the user information that we already have using selector . So this way you don't have to add extra information into your sate because that information is already there 
+
+```ts 
+const selectIsLoggedIn =  createSelector(selectAuthUser, user => !!user);
+
+``` 
+
+## State changes 
+
+> We model state changes through pure reducer functions and these reducer functions are easy to test because for given input you get a consistent output without side effects . Here we're going to visualizing the state transitions going from authenicated user to an authenicated state . We will receive a login success action that we have our reducer and then we would transition to an authenicated state
+
+
+![](../images/state-change.png)
+
+
+With the login page we would so the same state transitions . When the user click the login button we go from a pendding state and in the case of a failure we will return a LOGIN FAILURE action and we would capture that action with an error message to display to the user
+
+![](../images/login-state.png)
+
+## Side effects
+
+> Side effects are where you connect your actions to external requests , these also provide relevant data back to the store based on the result of those requests  . Here we're going to process the authenication from login and handle logging out
+
+1. handle loggin action
+
+```ts
+@Effect()
+login$ = this.actions$
+    .ofType('[Login Page] Login')
+    .pipe(
+        exhaustMap(auth => 
+            this.authService
+                .login(auth)
+                .pipe(
+                    map(user => new LoginSuccess({user})),
+                    catchError(error => of(new LoginFailure(error)))
+                ),
+        )
+    )
 
 
 ```
+
+2. handle loggin out action
+
+> Another question is how to handle dialogues . When user click a logout button you don't immediately log them out , you want to confirm their intent first , so here we're using an effect to prompt the user to confirm logging out , using an angular material dialog service based on the users feed back . If they confirm that action we map it to a new action and start a new state transition to logout the user . If they cancel or dismiss the prompt then we could just consider an empty side effect . 
+
+```ts
+@Effect()
+logoutConfirmation$ = this.actions$.ofType('[Auth] confirm Logout')
+    .pipe(
+        exhaustMap(()=>
+            this.dialogService.open(LogoutPromptCompoent)
+            .afterClosed()
+            .pipe(
+                map(confirmed => {
+                    if(confirmed) {
+                        return new LogoutConfirmed();
+                    } else {
+                        return new LogoutCancelled();
+                    }
+                })
+            )
+        )
+    )
+
+```
+
+
+
+
+
