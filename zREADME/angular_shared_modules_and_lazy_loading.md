@@ -214,3 +214,44 @@ Notice the 'exports ' property which makes components , directives, pipes and ev
 
 Well , you might think that we already declear our golbal services in CoreMoudle, and it's true , but what if the components decleard in the shared module need some services ? what if the module that imports the shred module needs a service from it 
 
+
+If viewing the URL within a web applicationm you'd notice that URL parameters look something along the 
+
+
+You've setup routes for navigating around you application , You have used navigation imperatively and declaratively to many different routes . But like any application , requirements change over time . You've setup links and navigation to /heros and /hero/:id
+
+You also don't want to go and update every link in your application, so redirects makes refacotring routes trival.
+
+
+The Router also supports query parameters and the fragment when using redirects .
+When using absolute redirects , the Router will use the query parameters and the fragment 
+
+This won't work and is by design as the router handles redirects once at rach level of router configration. This prevents cahning of redirects , which can lead to endless redirect loops. 
+
+How is the router really configured?
+
+You can inspect the router's current configuration any time by injecting it and 
+
+You can inspect the router's current configuration any time by injecting it and examining its config property . 
+
+
+A link premeters array hold the dollowing ingredients for router navigation:
+
+For a sample app using the app-wide singleton service that this page describes , see the live example  showcasing all the documentes features of NgModules .
+
+Declare that the service should be provided in the application root.
+Include the service in the AppModule or in a module that is only imported by the AppModule.
+
+
+Beginning with Angular 6.0 , the perfered way to create a singleton services is to specify on the service that it should be provided in the application root . This is done be setting providedIn to root on the service's @Injectable decorator
+
+
+## Passing Complex Data Through The Angular Router With NativeScript 非常重要；
+
+关于 query params and  NavigationExtras
+
+> https://www.thepolyglotdeveloper.com/2016/10/passing-complex-data-angular-2-router-nativescript/
+
+## 关于 fragment ---> 用来 跳向指定的锚节点；Creating A Jump-To-Anchor Fragment Polyfill In Angular 5.2.0
+
+> https://www.bennadel.com/blog/3402-creating-a-jump-to-anchor-fragment-polyfill-in-angular-5-2-0.htm
