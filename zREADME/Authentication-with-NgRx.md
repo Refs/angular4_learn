@@ -220,8 +220,39 @@ logoutRedirect$ = this.actions$
 
 3. Router guards
 
-> Router guard are a way that you can prevent navigation between pages but we don't want to hit the actual API every time a user navigation between pages and so we can intergrate this with the store . So since we can verify that the authenication state will be valid for a certain amount of time , we can check the store first to see if there the user is logged in and this handles when they navigate between pages and on like page reloads . So 
+> Router guard are a way that you can prevent navigation between pages but we don't want to hit the actual API every time a user navigation between pages and so we can intergrate this with the store . So since we can verify that the authenication state will be valid for a certain amount of time , we can check the store first to see if there the user is logged in and this handles when they navigate between pages and on like page reloads . So we check the store fisrt and then as a fallback we hit the actural API defore we redirect the user  
 
 
+```ts
+export class AuthGuardService implements CanActivate {
+    canActivate() {
+        return this.checkStoreAuthentication()
+            .pipe(
+                mergeMap(storeAuth => {
+                    if (storeAuth) return of(true);
 
+                    return this.checkApiAuthentication();
+                }),
+                map(storeOrApiAuth => {
+                    if(!storeOrApiAuth) {
+                        this.router.navigate(['/login'])
+                        return false;
+                    }
 
+                    return true;
+                })
+            )
+    }
+}
+
+```
+
+## DEMO
+
+> Above are steps that we would take to build a authentication within ngrx. So let's see what that looks like 
+
+> https://github.com/brandonroberts/ngrx-ngconf-2018
+
+> detail: http://confsnap.com/#/event/ng-conf-18/103 `oter repositories of ng-conf talks also can be found in this site;`
+
+Recap 
