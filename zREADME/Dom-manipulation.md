@@ -329,6 +329,46 @@ export class AddAttributeDirective implements OnInit {
 ```
 
 
+## Task 2 Remove a child Dom Node
+
+Inside the appComponent we have a child component inside which is Dom element . WHat wee need to do is when the button is clicked ,inside the `remove()` method , we need to remove the <a-comp #c><a-com> from the dom . Kind of the way you do with jquery , that you just remove the dom element from the dom .
+
+1. get a hold to the child element we want to remove
+
+How we can do that ? I'm using a @ViewChildren() query and templete  reference to get access to the dom element.
+
+What the type of @ViewChildren() here ? The type is QueryList. It means that child component variable will contain reference to all elements marked with the template reference . However since there is only one element inside the Dom in the template , we can use the first property of the query list to get access to the component child dom element . `this.childComps.first` will give you access to the elementRef specific to  <a-com>. then we know that to get access to the native element we need to use native element `this.childComps.first.nativeElement` 
+
+The above is how we can get a hold to the child element 
+
+2. inject the Renderer2
+
+If we look at the removeChild() of the renderer we will be using Renderer2 , so we need to inject it `constructor(private r: Renderer2){}` . The renderer has a removeChild method . If we inspect the signature for the method it takes two nodes the parent node and the child node . SO we already know how to access to the child node which will be the second node parameter . So how we get the parent node ？ What the parent node of this is a component which is the host element of the current component exactually and it turn out that in a simliar way to the directive we can inject the host element of the component into the constructor.  
+
+
+```ts
+import { AfterViewChecked, Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <button (click)="remove()">Remove child component</button>
+    <a-comp #c></a-comp>
+  `
+})
+export class AppComponent implements AfterViewChecked {
+  @ViewChildren('c', {read: ElementRef}) childComps: QueryList<ElementRef>;
+
+  ngAfterViewChecked() {
+    console.log('number of child components: ' + this.childComps.length);
+  }
+
+  remove() {
+  }
+}
+
+```
+
 
 
 
