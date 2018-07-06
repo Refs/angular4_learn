@@ -233,12 +233,102 @@ export class AddAttributeDirective {
 
   constructor(private element: ElementRef) {
   }
-
+ 
   ngOnInit() {
     this.element.nativeElement.setAttribute(this.addAttribute, '');
   }
 }
 
 ```
+
+## Correct minset 
+
+* Put presentation logic into components 
+* Put rendering logic into directives
+* Use dataj-binding mechanism for communication
+
+### Benefits
+
+What are benefit s of our split in presentation and render logic ? The first one is that if we put presentation logic in two components this logic anc be reused on platforms other than dom . For example nativescript they have their own implementation of the rendering layer . And if we put a rendering logic into directives angain we can reuse it , we can applu this directive we jsut implemented to any components template . The third benefit is that you always know where to look for, if you got an error right , if you suspect that it's something messes up with the dom you go into directive   
+
+
+But there is another problem however with our solution here and the problem is that we're using the native steAttribute method , so we kind of expect that there's going to be Dom element there but what is we run inside the `web workers` which don't have native dom. In angular to eork around this problem we have something called renderer which is the service that makes changes to existing dom element properties safe its platform independent . It has all the methods that we have on Dom elements setAttribute() etc .
+
+```bash
+Renderer
+# makes direct DOM access safe (platform independent)
+
+Dom element modification methods
+# setAttribute
+# removeAttribute
+# addClass
+# removeClass
+# setStyle
+# removeStyle
+
+```
+
+What we need to do is that we need to replace the logic that we have just implement and instead of calling setAttribute() directly on the native Dom element we need to call this method on the renderer and then pass in the elementRef 
+
+
+### task 1c (t1c branch) change color by adding an attribute #1c
+
+1. Concepts
+
+Renderer2 service injection into a constructor
+
+```ts
+@Directive({...})
+export class AiDAddAttributeDirective implements OnInit {
+    construct(private renderer: Renderer2) {}
+
+    ..
+    renderer.setAttribute(elementRef, attribute, value)
+}
+
+```
+
+2. steps 
+
+* Inject ElementRef & Renderer2 into a constructor of a directive
+
+```ts
+ constructor(private renderer: Renderer2) {}
+```
+
+* Use `SetAttribute` method of the Renderer to add an attribute
+
+```ts
+renderer.setAttribute(elementRef, attribute, value)
+
+```
+
+3. conclusion
+
+```ts
+/* add-attribute.directive.ts */
+
+import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+
+@Directive({
+  selector: '[addAttribute]'
+})
+export class AddAttributeDirective implements OnInit {
+  @Input() addAttribute;
+
+  constructor(private element: ElementRef, private renderer: Renderer2) {
+  }
+
+  ngOnInit() {
+    this.renderer.setAttribute(this.element.nativeElement, this.addAttribute, '');
+  }
+}
+
+
+
+```
+
+
+
 
 
