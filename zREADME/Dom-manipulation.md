@@ -343,7 +343,9 @@ The above is how we can get a hold to the child element
 
 2. inject the Renderer2
 
-If we look at the removeChild() of the renderer we will be using Renderer2 , so we need to inject it `constructor(private r: Renderer2){}` . The renderer has a removeChild method . If we inspect the signature for the method it takes two nodes the parent node and the child node . SO we already know how to access to the child node which will be the second node parameter . So how we get the parent node ？ What the parent node of this is a component which is the host element of the current component exactually and it turn out that in a simliar way to the directive we can inject the host element of the component into the constructor.  
+If we look at the removeChild() of the renderer we will be using Renderer2 , so we need to inject it `constructor(private r: Renderer2){}` . The renderer has a removeChild method . If we inspect the signature for the method it takes two nodes the parent node and the child node . SO we already know how to access to the child node which will be the second node parameter . 
+So how we get the parent node ？ What the parent node of this is a component which is the host element of the current component exactually and it turn out that in a simliar way to the directive we can inject the host element of the component into the constructor.  
+What we will do is on top of the Renderer2 we will inject the host Element like this `constructor(renderer: Renderer2, host: ElementRef)` and then we can pass it as a parent node , again don't forget nativeElement and this code ` renderer.removeChild(this.host.nativeElement, this.childComps.first.nativeElement) ` will go inside the remove method . so once the button is clicked this node is executed and the child component is removed from the Dom   
 
 
 ```ts
@@ -351,7 +353,7 @@ import { AfterViewChecked, Component, ElementRef, QueryList, ViewChildren } from
 
 @Component({
   selector: 'app-root',
-  template: `
+  template: ` 
     <button (click)="remove()">Remove child component</button>
     <a-comp #c></a-comp>
   `
@@ -368,6 +370,182 @@ export class AppComponent implements AfterViewChecked {
 }
 
 ```
+
+2. Steps 
+
+* Use @ViewChildren query and template reference to get an HTML element ;
+
+* Inject host ElementRef & Renderer2 into a constructor  ` constructor (private hostElement: ElementRef, private renderer: Renderer2){} ` 
+
+* Use the `removeChild` method of the renderer to remove a child component  ` renderer.removeChild(this.hostElement.nativeElement, ...) ` 
+
+* Remomeber to use `nativeElement` property
+
+> 关于ElementRef 的自己的理解， 对于一个指令当我们的构造函数中去注入 ElementRef 的时候，我们实际上得到的是 指令所用node 的 引用；而当我们在component 中注入这个类的时候，由于组件 不会作用于其他的标签，其自己就是一个标签，所以注入的 ElementRef 指的就是 组件的 selector 所对应的node 了； 其实不管对于 directive 还是 component 其实 ElementRef 差不多指的是同样一个东西；
+
+
+3. Question why do we use the @ViewChildren instead of @ViewChild ?
+
+* we can also use the @ViewChild if we know that we have only one element to manipulate
+
+4. solution 
+
+```ts
+// app.Component.ts
+import { AfterViewChecked, Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  template: ` 
+    <button (click)="remove()">Remove child component</button>
+    <a-comp #c></a-comp>
+  `
+})
+export class AppComponent implements AfterViewChecked {
+  @ViewChildren('c', {read: ElementRef}) childComps: QueryList<ElementRef>;
+
+
+  constructor (private renderer: Rernderer2, private hostElement: ElementRef) {}
+
+  ngAfterViewChecked() {
+    console.log('number of child components: ' + this.childComps.length);
+  }
+
+  remove() {
+    this.renderer.removeChild(
+      this.hostElement.nativeElement,
+      this.childComps.first.nativeElement
+
+    )
+  }
+}
+
+
+
+```
+
+
+When we click the button the <a-cmp> child component will be removed from the dom tree. but the browser console will still console  ` number of child components 1 ` . The result is because angular does not work with dom directly . It has a concept known as view this is the data strutrue that is created for every components and it holds references to the dom elements found in a component template . Below is the diagram which is illustates this . You can see the the view on the left and the button element on the right in the dom and you see it references it inside the view . The problem is that if we work directly with the dom and remove the button element from the dom , the button view node that sides inside the view is not affected . 
+
+![](../images/domandview.png)
+
+When we move the button node from the dom , it still is inside the view and the reference is retained and that's the problem . So angular stil thinks that there is a hierarchy of views there is a parent app component inside of A component and inside of the B component 
+
+* Component view 
+
+```ts
+@Component({
+  selector:'aid-app',
+  template: ` <button> ..</button> `
+})
+export class AidAppComponent {}
+
+// When angular create and initiates a component , it create the view for the component and the view is only an abstration that binds together component class and the dom nodes wich is HTML dom nodes created for this component 
+
+const AppComponentInstanceView = {
+  component: new AiDAppComponent(),
+  nodes: [
+    renderElement: HTMLButtonElement
+  ]
+}
+
+
+
+```
+
+What if we have child components? Then we get the hierachy of views 
+
+> every component has a dom repredentation which we call host element . 
+
+> For every component angulat create the view . So in the component nested situation , the angular will still create a view for the child view .  In the host component view we will has a reference to the child component view . 
+
+The change detection runs on this herarchy of these views and every single lifecycle hook or @viewChildren query also runs on the hierachy view .
+
+```ts
+@Component({
+  selector: 'aid-app',
+  template: `
+    <aid-a-comp></aid-a-comp>
+  `
+})
+
+export class AiDAppComponent {}
+
+// If we have a child component  inside the host component . then inside the host element view instance we will have a componentView which is reference to the Dom Element which is created by the child component  
+
+const AppComponentInstanceView = {
+  component: new AiDAppComponent (),
+  nodes: [{
+
+      renderElement: HTMLAiDComponentElement,
+      componentView: AiDAComponentInstanceView
+    }
+  ]
+}
+
+```
+
+* The question can be what type of nodes can we delete ?
+
+> Like Jquery plugin , it's not safe to remove every single dom. The general rule is that if you create the dom node , you can delete it . If jquery plugin add some nodes , then they can remove then safe , because angular does not know anything about these dom nodes , so there will be no harm done . However if the nodes created by the angular , it's not safe to delete them without using the tools provided by the framework and there is a tool that angular provide foe us to work directly with the higharchy of the views and the tools is known as `viewContainer`
+
+The viewContainer is the tools that we need to usr if we want to work with the views . 
+
+
+
+* ViewContainer
+
+![](../images/view-container.png) 
+
+If you imagine Dom nodes , one of these nodes can act as a container for other views . so here you can see that the second dom node or view node act as a container for other views . So we can put as many views as we like inside this container and this container implements methods that allow us to manipulate these views to create them , add them to the view container or remove them from a view container. 
+
+> The main purpose for view container is to hold the other views and to privide an API for you to manipulate these views 
+
+
+* View Container (ViewContainerRef) 
+
+> `Makes Dom hierarchy changes safe` which is the view container's purpose . As you may expect there is something called structure of directive in angular which like NgIf, NgFor .... All these directive are based on the view container . Because there is no other way in angular to work with the views . ( The NgStyle , NgClass directives also use Renderer under the hook to make these directive platform independent )
+
+
+
+> API
+  + Create
+  + Destrory
+  + Manipulate
+
+## How do we work with the view container ?
+
+There are a few things we need to do . First we need to define the node that act as the view container . It can be every dom node in a component simple. But usually <ng-container> is use to be the view container . <ng-container> is just html element that angular specific that can act as view container .
+
+To turn the code into a view container , we need to use @ViewChild or @ViewChildren query , but the importanf part is we need to pass 
+
+* Initializing a view container
+
+```
+<ng-container #vc> </ng-container>
+
+@ViewChild('viewContainer', {read: ViewContainerRef}): vc
+```
+* Creating an embeded view
+
+```
+viewContainer.createEmbededView(TemplateRef)
+
+```
+
+* Working with templates
+
+```
+<ng-template #t> <span>I am span element</span> </ng-template>
+
+@ViewChild('t', {read: Template}) template: TemplateRef;
+
+@ViewChild(Template) template: TemplateRef; 
+
+```
+
+
+
 
 
 
