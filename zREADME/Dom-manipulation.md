@@ -517,36 +517,222 @@ If you imagine Dom nodes , one of these nodes can act as a container for other v
 
 There are a few things we need to do . First we need to define the node that act as the view container . It can be every dom node in a component simple. But usually <ng-container> is use to be the view container . <ng-container> is just html element that angular specific that can act as view container .
 
-To turn the code into a view container , we need to use @ViewChild or @ViewChildren query , but the importanf part is we need to pass 
+To turn the code into a view container , we need to use @ViewChild or @ViewChildren query , but the importanf part is we need to pass the   `{ read: ViewContainerRef }` type , that's what actually turns dom node of view node into a ViewContainer 
 
 * Initializing a view container
 
-```
-<ng-container #vc> </ng-container>
+```bash
+<ng-container #viewContainer> </ng-container>
 
+# the second part `read: ViewContainerRef` is what turn dom node into ViewContainer
 @ViewChild('viewContainer', {read: ViewContainerRef}): vc
+
 ```
 * Creating an embeded view
 
-```
+> Then we will have a reference to ViewContainer which we can use to create views , to destory views or move the views anything  
+
+>There are two type of views in angular , the embeded view and the host views . Usually we work with embeded view that are created using templates right 
+
+```bash
+
+# Here we are passing a TemplateRef into a createEmbededView method to create the view and add it to the view container . So actually the mthod do two steps which are create view and add the view to the view container;
 viewContainer.createEmbededView(TemplateRef)
 
 ```
 
 * Working with templates
 
-```
+> The last thing is how to get access to a template ? because we need a template to pass in inside the createEmbededView method to create the view . That is easy , because we have <ng-template> tag in angular , that we can wrap all dom nodes that we want to be part of a template , then we can use a @ViewChild query to get access to the template , and it will return us the templateRef, we will have two ways to do that:
+
+``` ts
 <ng-template #t> <span>I am span element</span> </ng-template>
 
-@ViewChild('t', {read: Template}) template: TemplateRef;
+// the first way
+// we pass a {read: TemplateRef} variable , so it's simliar to how you pass view container. You see angular sees a dom node, but it doesn't know wich one from it .  We pass the read parameter and you say to angular , ` I want it to be a view container or I want it to be a template 
+@ViewChild('t', {read: TemplateRef}) template: TemplateRef;
 
-@ViewChild(Template) template: TemplateRef; 
+// The second way to get access to template 
+@ViewChild(TemplateRef) template: TemplateRef; 
+
+```
+
+### Steps 
+
+1. Wrap Dom nodes into `ng-template` tag 
+2. Query the template using ViewChild/ ViewChildren query 
+3. Initialize a View Container using { read: ViewContainerRef} parameter
+4. Use `createEmbededView` method to create and render a view from a template , the method is excuted in ngAferterViewInit life cycle;
+5. Check the View is created and the component is rendered
+6. Remove the view when clicked a button using `remove` method of a view container
+7. Verify that the child components length is 0;
+
+
+### conclusion
+
+> 当处理  属性 样式 类的处理的时候我们去使用 Renderer2 去操作； 而处理节点的增删改查的时候，我们去使用 ViewContainer 去操作
+
+```ts
+// app.component.ts
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  QueryList,
+  TemplateRef,
+  ViewChild,
+  ViewChildren,
+  ViewContainerRef
+} from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <button (click)="remove()">Remove child component</button>
+    <ng-container #vc></ng-container>
+    <ng-template>
+      <a-comp #c></a-comp>
+    </ng-template>
+  `
+})
+export class AppComponent implements AfterViewInit, AfterViewChecked {
+  @ViewChildren('c', {read: ElementRef}) childComps: QueryList<ElementRef>;
+  @ViewChild('vc', {read: ViewContainerRef}) viewContainer: ViewContainerRef;
+  @ViewChild(TemplateRef) template: TemplateRef<null>;
+
+  ngAfterViewInit() {
+    this.viewContainer.createEmbeddedView(this.template);
+  }
+
+  ngAfterViewChecked() {
+    console.log('number of child components: ' + this.childComps.length);
+  }
+
+  remove() {
+    this.viewContainer.remove();
+  }
+}
 
 ```
 
 
+### The different between the view contianer's remove method and the clear method
+
+The difference is that clear method remove everything , every single view in the container and remove method remove the view that you specify using the index as a parameter , so actually remove method takes index parameter . But since we didn't pass an index , it will remove the last embeded view 
 
 
 
+## T4 Dynamic components rendering 
 
+> Sometimes people ask why do we need dynamic components ? In this case demonstrates it , We don't know which component to render and here I only have two component , but we can have hundreds components from which you can choose . So we can't add them to the HTML inside ng-if , so every single component inside wrapped inside ngif . then they control it using the state of a component which is solution that only have one or two component , but if you have hundreds , you can't add this . In that case we need to use the dynamic component .
+
+```ts
+
+import { Component } from '@angular/core';
+import { AComponent } from './a.component';
+import { BComponent } from './b.component';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <button (click)="show('a')">Show A component</button>
+    <button (click)="show('b')">Show B component</button>
+  `
+})
+export class AppComponent {
+  show(type) {
+    const component = type === 'a' ? AComponent : BComponent;
+  }
+}
+
+```
+
+1. The view container which can hold two types of views , the first type of view which is embeded view means this view should always be part of a view container . the second type of view is the host view which can also be a part of view container , but it can also be stand alone . So if we think about it , the app component , the route component is dynamic component and it is the host view and it's attached directly to the dom , it's not part of a view container . That's is the difference between the host view  and the embeded view.
+
+2. When we work with dynamic components and use the different API provided by the view container whch is createComponent instead of createEmbededView , the view container will create host views 
+
+3. The input data for host views is different. For host view the input data is component factory  
+
+![](../images/hostView.png)
+
+4. We have metadate which is what we defined with a component decorator , then the angular compile will turn this template into viewFactory , the viewFactory is used as an input data for the view .  the viewFactory is something that is used to create the view 
+
+5. How we get the viewFactory ?
+
+> We use something called ComponentFactoryResolver which is the service provided by angular that we can use to get a factory generated by compiler for a particular component 
+
+```ts
+export class RendererComponent {
+  constructor (private resolver: ComponentFactoryResolver) {
+    // in our case the ComponentClass would be either componentA or componentB 
+    const factory = this.resolver.resolveComponentFactory(ComponentClass)
+  }
+}
+
+```
+
+6. How many factory do we need ?
+
+In our case when we have component A and component B , how many factory do we need ?  We should have two factories , one factory is for the component A and one factory is for component B 
+
+```ts
+
+export class AppComponent {
+  show(type) {
+    const component = type === 'a' ? AComponent : BComponent;
+  }
+}
+
+```
+
+7. Once we have the Factory we can call the createComponent method on the view container and pass in the factory . It will be the similar to what we did with the template . It will create the view and add it to the view container 
+
+8. One important thing is to add the components you want to get factories for into the entry components array . That's because angular compier try to optimize things , does not generate factories for components it doesn't find inside templates .  In our case we don't have componentA or componentB in the app.component.ts but we still need factories for them . So we should add componentA and componentB in to the NgModule entryComponent array , so that the compile generate factories for them , then we can resolve them using component factory resolver   
+
+
+8. Steps
+  * Add components which we'll want to add dynamically  to entry components
+  * Add and initialize a view container
+  * Get component factories using ComponentFactoryResolver ` const factory = this.resolver.resolveComponentFactory(ComponentClass) `
+  * Use `CreateComponent` method of a view container to render a dynamic component `viewContainer.createComponent(componentFactory)`
+
+
+
+9. The solution
+
+```ts
+import { Component } from '@angular/core';
+import { AComponent } from './a.component';
+import { BComponent } from './b.component';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <button (click)="show('a')">Show A component</button>
+    <button (click)="show('b')">Show B component</button>
+    <-! 1. we introduced view container ->
+    <ng-container #vc> </ng-container>
+  `
+})
+export class AppComponent {
+  //2. we utilize the ViewChild to query the viewContainer
+  @ViewChild('vc', {read: ViewContainerRef}) vc: ViewContainerRef;
+
+  //3. we inject the ComponentFactoryResolver into thr constructor which we will use in the show method to get access to the relevant factory 
+  constructor(private resolver: ConponentFactoryResolver) {}
+
+  show(type) {
+    const component = type === 'a' ? AComponent : BComponent;
+    // 4. to get the dynamic component factory
+    this.resolver.resolverCoponentFactory(this.component);
+    // 5. cleat every view in the view container , because I don't them to nest 
+    this.vc.clear();
+    // 6. call the createComponent method and pass in component factory 
+    this.vc.createCoponent(factory);
+  }
+}
+
+
+```
 
