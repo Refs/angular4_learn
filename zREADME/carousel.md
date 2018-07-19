@@ -1,6 +1,59 @@
 # Advanced Angular Concepts by Alex Rickabaugh
 > https://www.youtube.com/watch?v=rKbY1t39dHU
 
+## The <ng-template> & template directives
+
+Rather tan do it in kind of an abstrct way , we want to talk about a couple of problems that can make use of these api's for solution , that's designing a left navigation Ui , where the current route can actually control some of the content in the left and then disigning a image carousel ,so we're going to both of those and make use of <ng-template></ng-template> and template directive 
+
+## Left Nav 
+
+Left navigation is a pretty common UX pattern in application ;
+
+This design has kind of a twist to it , because we want the route to be able to dictate some some of the content that shows up in the left nav right outside of the <router-outlet></router-outlet> , you can imagine like a flight search right, where you search for you put in your cities and that happens in the main pane and then these controls move move over to the left nav and kind exist there as long as you're on that route 
+
+![](../images/leftNav.png)
+
+We can do this with [innerHtml], we could have the route have some static HTML that it's going to send the service to the left nav and we just render it with an InnerHTML binding and that works if you want to accpet a couple different constraints , that HTML is static we can't have data binding , we also can't take any advantage of any angular components or directives . 
+
+So we think a better is to use `Templates` for this and achieve the full power of angular . 
+
+> `Templates are instructions on how to render `
+So `template` kind of more formally is a chunk angular HTML that runs through ng see of ahead of time coplication and it gets turned those elements that you declare & the directive and the components and all the data binding gets turned into instructions to our view engine on how to render these things at the runtime 
+
+> We mostly use `templates` indirectly with @Component 
+Every template have a template and that template gets compiled and is used to display the components and so that looks kind of like this:
+
+```ts
+@Component({
+    template: `
+    <h1>This is a template</h1>
+    <some-other-com *ngIf="showOther">...</some-other-cmp>
+    `,
+    ...
+})
+
+```
+
+> there is a second kind of the template in angular and that is the <ng-template>
+We can embed these in your component template and use them to do kind of more advanced things:
+
+```ts 
+@Component({
+    template: `
+        <h1>This is rendered with the component.</h1>
+        <ng-template>
+            <h2>This is a template. It's not rendered right away</h2>
+        </ng-template>
+    `
+})
+
+``` 
+
+When we actually render the component that `<h2>` is nowhere to be found , it's not part of the instruction to display this <ng-component> and is keeping it for us on the side and we can tell it when and where we want to render that content;
+
+
+
+
 ## Designing a image carousel
 
 In particular we want to design a directive that implements the logic of the carousel , we leave the UI up to the user , we only want to encode the mechanism of the carousel , let the user figure our how they want to display images , how the want to reat to next or previous events . So let's start by sketching this :
