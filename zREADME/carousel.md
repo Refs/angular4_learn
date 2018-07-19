@@ -1,4 +1,5 @@
 # Advanced Angular Concepts by Alex Rickabaugh
+> https://www.youtube.com/watch?v=rKbY1t39dHU
 
 ## Designing a image carousel
 
