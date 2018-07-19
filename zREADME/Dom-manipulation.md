@@ -111,7 +111,7 @@ There is one problem with our solution now and the problem is that we mixing tog
 
 What is presentation logic ? because presentation logict defines how business data should be presentated to a user . For example a set of task can be split into two columns with all tasks in left column and completed tasks in right column . So the presentation logic would define two arrays with different set of tasks . 
 
-What is rendering logic ? THe rendering logic actually manipulates the Dom . It arranges dom node in a particular order , so that we can actually can see these tasks . In here we working directly with the dom , so we're using rendering logic , but right now it's implemented inside the component . But the general recommendation is to put presentation logic into components adn rendering logic into directives .
+What is rendering logic ? THe rendering logic actually manipulates the Dom . It arranges dom node in a particular order , so that we can actually can see these tasks . In here we working directly with the dom , so we're using rendering logic , but right now it's implemented inside the component . But the general recommendation is to put presentation logic into components and rendering logic into directives .
 
 Okay we can use data binding mechanism to communicate between components and directives , so what we need to do this will be our next task
 
@@ -119,7 +119,7 @@ Okay we can use data binding mechanism to communicate between components and dir
 
 We need to implement a directive that will do exactly tha same work we've done inside the component that will set the attribute on a dom element 
 
-So what do we need  to know ? If we put this rendering logic into component , we need to use @ViewChild() of your child queies and template references to get a hold of the Dom element . If we use  a directive we don't to do that because we can inject a dom element that the directive is applied to  directly into the directives constructor , so we don't longer need to use @ViewChild or template references  
+So what do we need to know ? If we put this rendering logic into component , we need to use @ViewChild() of your child queies and template references to get a hold of the Dom element . If we use  a directive we don't have to do that because we can inject a dom element' that the directive is applied to ' directly into the directives constructor , so we don't longer need to use @ViewChild or template references  
 
 
 1. concepts 
@@ -245,14 +245,14 @@ export class AddAttributeDirective {
 
 * Put presentation logic into components 
 * Put rendering logic into directives
-* Use dataj-binding mechanism for communication
+* Use data-binding mechanism for communication
 
 ### Benefits
 
-What are benefit s of our split in presentation and render logic ? The first one is that if we put presentation logic in two components this logic anc be reused on platforms other than dom . For example nativescript they have their own implementation of the rendering layer . And if we put a rendering logic into directives angain we can reuse it , we can applu this directive we jsut implemented to any components template . The third benefit is that you always know where to look for, if you got an error right , if you suspect that it's something messes up with the dom you go into directive   
+What are benefit s of our split in presentation and render logic ? The first one is that if we put presentation logic in to components this logic can be reused on platforms other than dom . For example nativescript they have their own implementation of the rendering layer . And if we put a rendering logic into directives angain we can reuse it , we can apply this directive we jsut implemented to any components template . The third benefit is that you always know where to look for, if you got an error right , if you suspect that it's something messes up with the dom you go into directive   
 
 
-But there is another problem however with our solution here and the problem is that we're using the native steAttribute method , so we kind of expect that there's going to be Dom element there but what is we run inside the `web workers` which don't have native dom. In angular to eork around this problem we have something called renderer which is the service that makes changes to existing dom element properties safe its platform independent . It has all the methods that we have on Dom elements setAttribute() etc .
+But there is another problem however with our solution here and the problem is that we're using the native steAttribute method , so we kind of expect that there's going to be Dom element there but what is we run inside the `web workers` which don't have native dom. In angular to work around this problem we have something called renderers which is the service that makes changes to existing dom element properties safe its platform independent . It has all the methods that we have on Dom elements setAttribute() etc .
 
 ```bash
 Renderer
@@ -279,7 +279,7 @@ Renderer2 service injection into a constructor
 
 ```ts
 @Directive({...})
-export class AiDAddAttributeDirective implements OnInit {
+export class AddAttributeDirective implements OnInit {
     construct(private renderer: Renderer2) {}
 
     ..
