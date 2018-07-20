@@ -147,6 +147,64 @@ This is great , it will work . there is one problem with it and that's that it's
 We want to find a way to abstract this logic into a service or a component or in this case we're actually put it in a directive 
 
 
+### <ng-template> + Directives = template directive
+
+So it turns out that if you combine templates and directives , you get this nice thing called a `template directive`  , we've used before because that is `*NgIf` ; 
+
+
+```html
+
+<div *ngIf = "!hide">
+    <p> Hidden? </p>
+</div>
+
+<!-- 等于 下面 -->
+
+<ng-template [ngIf]="!hide" > 
+    <div>
+        <p> Hidden? </p>
+    </div>
+
+</ng-template>
+
+
+```
+
+What angular is actually seeing is the code blower , so we're actually declaring a <ng-template> that's what * means in `*ngIf` and the <ng-template> has the directive on it , and the directive gets to control what happens to this template:  `does it  get rendered or not ` | `does it get sent to some other part of the application  ` so we can do the same thing 
+
+Our directive has to get access to the template somehow , but we don't have a way to query for it . Because the directive is on the template itself , angular knows we can just inject it , angular will provide it for us .
+
+So we can imagine we create a left nav directive that's used the same way , all it does is inject the templateRef and send it to our left nav component 
+
+```ts
+// *leftNav Directive
+@Directive({selector: '[leftNav]'})
+export class LeftNavDirective {
+    constructor(tmpl: TemplateRef) {
+        // send tmpl to left Nav component.
+    }
+}
+
+```
+
+We create a `*LeftNav Directive` that's used the same way . All it does is inject the templateRef and send it to our leftNav component , and then all we have to do in the route component is actually annotate some content within leftNav and that content will automatically get rendered in the left nav instead of in the <router-outlet> . That's much easier to use especially for someone who doesn't understand how all this works , if you have other developers on your team who weren't part of building this system , they just want to be able to use it , this is really nice API
+
+```ts
+// route component
+@Component({
+    template: `
+    <h1> This is the route content. </h1>
+
+    <div *leftNav>
+        <h2> This content shows up in the left nav. </h2>
+    </div>
+
+    `
+})
+
+export class SomeRoute {}
+
+```
 
 
 
@@ -168,7 +226,7 @@ In particular we want to design a directive that implements the logic of the car
 <div *carousel="?" >
     <img [src] ="? " >
     <button (click) ="?" > Next </button>
-</div>
+</>
 
 ``` 
 
@@ -293,3 +351,6 @@ So that we build an image carousel as a template directive
 ## How to stop an interval on an Observable in RxJS
 
 > https://stackoverflow.com/questions/46963486/how-to-stop-an-interval-on-an-observable-in-rxjs
+
+carousel 的 url 切换事件出发，以及 启动 停止 ， 各种事件的相应 都是靠 rxjs 来控制的；要有这种控制的意识，这是一个流的控制；
+setInterval clearInterval 等 原来 js 里面的操作，都可以利用 rxjs 来操作；
