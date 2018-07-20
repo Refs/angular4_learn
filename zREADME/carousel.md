@@ -51,6 +51,25 @@ We can embed these in your component template and use them to do kind of more ad
 
 When we actually render the component that `<h2>` is nowhere to be found , it's not part of the instruction to display this <ng-component> and is keeping it for us on the side and we can tell it when and where we want to render that content;
 
+![](../images/template.png)
+
+The template even doesn't have to be in the same component that declares the template . One component can say I have this `h2` which is a template that I'm going have on the side and I'm sending it to some other component and render it once or even more times . `We're in complete control of where and when this content gets shown `
+
+How do we do that ? Well in order send the template around from one component to another , we need a way to talk about it in code and with angular that's called a `templateRef`
+
+A temlateRef is a reference a handle to the template which we can send , and we get the TemplateRef through a two-step process:
+
+```ts
+@Component({
+    template:  `
+        <h1> This is rendered with the component. </h1>
+        <ng-template #myTemplate>
+            <h2> This is a template. It's not rendered right away. </h2>
+        </ng-template>
+    `
+})
+
+```
 
 
 
