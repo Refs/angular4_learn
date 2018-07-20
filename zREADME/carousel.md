@@ -76,11 +76,86 @@ A temlateRef is a reference a handle to the template which we can send , and we 
 
 If you done @ViewChild() before , you probably know we can't access this field in the constructor , it won't be set until a view exists . We do that by using the `ngAfterVIewInit` lifecycle hook. So once that hook fires ,that reference is okay and we can then go and use it to tranmit to leftNav , and left nav go ahead and render it ;
 
- 
+ ![](../images/left-nav.png)
+
+ We're going to have routes and our routes will declare a template , then send them somehow to the left nav by a templateRef and the left nav will render it 
+
+### View Containers
+
+rendering a template and angular involves the creation of a view , a view is a rendered bit of html
+
+you'd create views dynamically in angular with things called view containers which is a location in the Dom that lets you go ahead and instantiate templates or components insides of it . and it'll keep track of them to make sure change detection works and when it's time to remove them it knows how to do that 
+
+> get a view container
+
+we get a view container by indicting to angular where in the DOM , where in your component Dom you would like to be able to in sert things dynamically `#tag an element` and then query for it with `@ViewChild` . But there's one in particular that's really useful for it which is `<ng-container>`
+
+`<ng-cotainer>` is kind of like an invisible div, it exists to organize your code , you can place other elements, other components inside the `<ng-container>` 
+
+![](../images/container.png)
+
+But at runtime when it's rendered , their children are rendered , but the container itself is non-existent in the runtime DOM .
+
+We can actually place logic on this container, we can add *ngIf , *NgFor so we can repeat the section inside of it and that lets us kind of organize our code without resorting to a bunch of nested 
+
+But the <ng-container> doesn't exist at runtime that makes it really nice for indicating that `here is a location in the Dom ` where I would like to be able to insert things later :
+
+```ts
+@Component({
+    template: `
+        <h1>The container is a placeholder between here</h1>
+        <--! In between these two `<h1>`, we've declare a <ng-container> with a name so we can query for it , and then inside the class itself wo can go ahead do that  -->
+        <ng-contianer #myContainer>
+        <ng-contianer>
+        <h1>and here</h1>
+    `
+})
+export class MyComponent implements AfterViewInit {
+    // Unlike with the template we have to tell angular we're actually interested in a ViewContainer , so please give us a ViewContainerRef
+    // This is the action of asking for it , and tell angular `here is the location we want to be able to insert content at runtime `
+    @ViewChild('myContainer', {read: ViewContainerRef}) 
+    vcr: ViewContainerRef;
+
+    // We wait for ngAfterViewInit then we can call the createEmbeddedView method , then pass it an TemplateRef , angular will go ahead and instantiate the template in the Dom 
+    ngAfterViewInit(): void {
+        // get a reference to a TemplateRef from somewhere
+        const ref : EmbededViewRef = this.vcr.createEmbeddedView(someTemplate);
+        // When it comes time to remove it ,we can actually get the reference returned from createEmbeddedView method and then destory it 
+        // For example , when we navigate away from one route , we probably want to remove that rendered template , before the next route loads   
+        ref.destroy();
+    }
+}
+
+```
+
+So above is our design , write an routes component we'll specify an <ng-template>, then we'll send that templateRef via a service over to the left nav and the left nav will use the view container to render it dynamically at runtime 
+
+```ts
+// in one Route component
+export class SomeRoute implements NgAfterViewInit {
+    @ViewChild('myTemplate') tmpl: TemplateRef;
+
+    ngAfterViewInit() : void {
+        this.navSerivice.setTemplate(this.tmpl);
+    }
+}
+
+```
+
+This is great , it will work . there is one problem with it and that's that it's actually pretty complex inside the route , we have to wait for the lifecycle event to communicate to the service and we have to repeat this code for every `route component` that's really not acceptable .
+
+We want to find a way to abstract this logic into a service or a component or in this case we're actually put it in a directive 
+
+
+
+
+
 
 
 
 ## Designing a image carousel
+
+> 自己若真想 自己来，需要使用 rxjs 的operator --- timer interval  ，  angular 一般都是 靠 rxjs 来驱动的；要有使用 rxjs 的意识； 
 
 > https://stackblitz.com/edit/adv-ng-carousel?file=app%2Fcarousel.directive.ts
 
@@ -214,3 +289,7 @@ export class Carousel {
 We have a `carouselFrom` @input, we create an embedded view , we pass the $implicit to indicate what the current url is . When we pass this controller object which has a function on it that knows how to advance the carousel .
 
 So that we build an image carousel as a template directive 
+
+## How to stop an interval on an Observable in RxJS
+
+> https://stackoverflow.com/questions/46963486/how-to-stop-an-interval-on-an-observable-in-rxjs
