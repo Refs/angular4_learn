@@ -71,9 +71,18 @@ A temlateRef is a reference a handle to the template which we can send , and we 
 
 ```
 
+* First of all , we have to give the template a name which is some way to refer to it and we do that with a `#myTemplate`
+* Second, we can use the @ViewChild() to go and tell angular to query for it and angular will find that template for us and give us a reference to it in code 
+
+If you done @ViewChild() before , you probably know we can't access this field in the constructor , it won't be set until a view exists . We do that by using the `ngAfterVIewInit` lifecycle hook. So once that hook fires ,that reference is okay and we can then go and use it to tranmit to leftNav , and left nav go ahead and render it ;
+
+ 
+
 
 
 ## Designing a image carousel
+
+> https://stackblitz.com/edit/adv-ng-carousel?file=app%2Fcarousel.directive.ts
 
 In particular we want to design a directive that implements the logic of the carousel , we leave the UI up to the user , we only want to encode the mechanism of the carousel , let the user figure our how they want to display images , how the want to reat to next or previous events . So let's start by sketching this :
 
