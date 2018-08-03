@@ -237,7 +237,7 @@ To answer above questions we can actually turn another built in angular directiv
 ```ts 
 // We have to identifiers here as I mentioned and they're serving very different purpose 
 
-// On the right we have values , which is a list of value that we're passing in that we want ngFor to iterate over and that's actually the input of the directive 
+// On the right we have values , which is a list of value that we're passing in that we want ngFor to iterate over and that's actually the @input property of the directive 
 
 // the identifier on the left value is completely different , it's actually a variable declaration right , we're taking some value out of the directive that we can bind to or display inside our template 
 
@@ -354,3 +354,7 @@ So that we build an image carousel as a template directive
 
 carousel 的 url 切换事件出发，以及 启动 停止 ， 各种事件的相应 都是靠 rxjs 来控制的；要有这种控制的意识，这是一个流的控制；
 setInterval clearInterval 等 原来 js 里面的操作，都可以利用 rxjs 来操作；
+
+## 关于 template directive 的拓展与补充； 很精彩！
+
+> https://blog.mgechev.com/2017/10/01/angular-template-ref-dynamic-scoping-custom-templates/

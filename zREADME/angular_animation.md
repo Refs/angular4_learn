@@ -93,3 +93,6 @@ export class AppComponent {
 
 
 > 会使用基本的 animation , 会使用 ng- animation 动画库；一般情况，都能解决了；
+
+
+<mat-cell *matCellDef= "let user"> {{user.name}}</mat-cell>
