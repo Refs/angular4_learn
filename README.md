@@ -1,5 +1,7 @@
 # angular4_learn
 
+> https://www.youtube.com/watch?v=djsHG6thIlQ&list=PL67QbqrRRyyTAMKgM_kFcGRFjSBMchKc3&index=10&t=3s
+
 ## 如何让代码写的更优雅
 
 * 公共的服务 http.server.ts  http.server.route.js
