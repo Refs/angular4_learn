@@ -2,6 +2,8 @@
 
 > https://www.youtube.com/watch?v=djsHG6thIlQ&list=PL67QbqrRRyyTAMKgM_kFcGRFjSBMchKc3&index=10&t=3s
 
+http://xiaoshuangtech.com/accounts/profile?to=KVeCvM88xD1cLdfZLq5layNUVNLjI77JE5bkecoPA70pUfAw8UZawaVNEAZUt%2FCtJ68GBwZ0o%2FtByifXutA7%2Bg%3D%3D&from=win
+
 ## 如何让代码写的更优雅
 
 * 公共的服务 http.server.ts  http.server.route.js
